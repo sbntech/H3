@@ -1,0 +1,194 @@
+<html>
+<head>
+<title>[% ContextProject.PJ_Description %] - report</title>
+<link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css" rel="Stylesheet" />	
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+<!--[if IE]><script language="javascript" type="text/javascript" src="../flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="../flot/jquery.flot.js"></script>   
+<script language="javascript" type="text/javascript" src="../flot/jquery.flot.stack.js"></script>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<script>
+
+var pjdata = [
+
+[% TRY %]
+	[% INSERT "projplot-${PJ_Number}.json" %]
+	[% PlotDataFound = 1 %]
+[% CATCH %]
+	[% PlotDataFound = 0 %]
+[% END %]
+
+];
+
+</script>
+</head><body class="subpage">
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<div class="buttonBar">
+<button onclick="document.location.href='/pg/ProjectList?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'">Back</button>
+</div><div class="mainPage">
+<h1>Report for: [% ContextProject.PJ_Description %]</h1>
+[% IF PlotDataFound == 1 %]
+<h2>Current Day Charts</h2>
+<table cellspacing=7>
+<tr><td><h3>Press-1 Rate as Percent of Live</h3>
+<div id="plotDivP1Rate" style="width:500px;height:200px;"></div>
+</td><td><h3>Live Connect Rate as Percent of Dials</h3>
+<div id="plotDivLiveConnectRate" style="width:500px;height:200px;"></div>
+</td><tr>
+<tr><td><h3>Agent Transfers</h3>
+<div id="plotDivTransfers" style="width:500px;height:200px;"></div>
+</td><td><h3>Calls per hour</h3>
+<div id="plotDivCallsPerHour" style="width:500px;height:200px;"></div>
+</td><tr>
+</table>
+<h2>History</h2>
+[% END %]
+<table><tr>
+[% FOREACH colhdr IN [ 'Who', 'Date', 'Calls', 'Busy', 'No Answer', 'Bad', 'Fax', 'Answer Machine', 'Hangup During', 'Hangup After', 'Connected Agent', 'Agent No Answer', 'Agent Busy', 'Hangup Before Conn', '0-14s','15-29s','30-59s','1-2m','2-3m','3-5m','5-10m','10-15m','15+','Mins','Live Mins', 'Mach Mins', 'AS Mins', 'Tot Cost' ] %]
+<th class="basiclist-col">[% colhdr %]</th>
+[% END %]
+[% IF Session.L_Level > 4 %]<th class="basiclist-col">Reseller Cost</th>[% END %]
+</tr>
+[% FOREACH row IN List %]
+[% TotMinutes = row.RE_Tot_Sec / 60 %]
+[% LiveMinutes = row.RE_Tot_Live_Sec / 60 %]
+[% MachMinutes = row.RE_Tot_Mach_Sec / 60 %]
+[% AgentStandbyMinutes = row.RE_AS_Seconds / 60 %]
+<tr>
+<td class="basiclist" title="RE_Agent=[% row.RE_Agent %]">
+[% IF row.RE_Agent == 9999 %]Prospect
+[% ELSIF row.RE_Agent == 1111 %]Call Ctr
+[% ELSE %][% row.AG_Name %]
+[% END %]
+</td>
+<td class="basiclist" nowrap="true">[% row.RE_Date %]</td>
+<td class="basiclist">[% row.RE_Calls %]</td>
+<td class="basiclist">[% row.RE_Bussy %]</td>
+<td class="basiclist">[% row.RE_Noanswer %]</td>
+<td class="basiclist">[% row.RE_Badnumber %]</td>
+<td class="basiclist">[% row.RE_Faxmachine %]</td>
+<td class="basiclist">[% row.RE_Ansrmachine %]</td>
+<td class="basiclist">[% row.RE_Hungupduringmsg %]</td>
+<td class="basiclist">[% row.RE_Aftermessage %]</td>
+<td class="basiclist">[% row.RE_Connectedagent %]</td>
+<td class="basiclist">[% row.RE_Agentnoanswer %]</td>
+<td class="basiclist">[% row.RE_Agentbusy %]</td>
+<td class="basiclist">[% row.RE_Hungupb4connect %]</td>
+<td class="basiclist">[% row.RE_0_14_seconds %]</td>
+<td class="basiclist">[% row.RE_15_29_seconds %]</td>
+<td class="basiclist">[% row.RE_30_59_seconds %]</td>
+<td class="basiclist">[% row.RE_1_2_minutes %]</td>
+<td class="basiclist">[% row.RE_2_3_minutes %]</td>
+<td class="basiclist">[% row.RE_3_5_minutes %]</td>
+<td class="basiclist">[% row.RE_5_10_minutes %]</td>
+<td class="basiclist">[% row.RE_10_15_minutes %]</td>
+<td class="basiclist">[% row.RE_15_over_minutes %]</td>
+<td class="basiclist" style="text-align:right">[% FILTER format('%1.1f') %][% TotMinutes %][% END %]</td>
+<td class="basiclist" style="text-align:right">[% FILTER format('%1.1f') %][% LiveMinutes %][% END %]</td>
+<td class="basiclist" style="text-align:right">[% FILTER format('%1.1f') %][% MachMinutes %][% END %]</td>
+<td class="basiclist" style="text-align:right">[% FILTER format('%1.1f') %][% AgentStandbyMinutes %][% END %]</td>
+<td class="basiclist" style="text-align:right">[% FILTER format('%1.2f') %][% row.RE_Tot_cost %][% END %]</td>
+[% IF Session.L_Level > 4 %]<td class="basiclist" style="text-align:right">[% FILTER format('%1.2f') %][% row.RE_Res_Tot_cost %][% END %]</td>[% END %]
+</tr>
+[% END %]
+</table>
+<br/>
+<form action="/pg/ProjectReport" method="post" enctype="multipart/form-data">
+<input type="hidden" name="CO_Number" value="[% CO_Number %]"/>
+<input type="hidden" name="PJ_Number" value="[% PJ_Number %]"/>
+<table class="editForm" cellspacing="2">
+<tr>
+	<td class="editFormLabel">Text Report for Date</td>
+	<td class="editFormInput"><select name="TextReportDate">[% SET oneSelected = 0 %]
+		[% FOREACH emdate IN DistinctDateList %]
+		<option value="[% emdate.RE_Date %]" [% IF oneSelected == 0 %][% SET oneSelected = 1 %]selected="true"[% END%]>[% emdate.RE_Date %]</option>
+		[% END %]
+	</select></td>
+</tr>
+<tr><td colspan="2" class="editFormButtons"><input name="method" type="submit" value="Get Report"></input></td></tr>
+</table></form>
+</div>
+<script id="source" language="javascript" type="text/javascript">
+var dataTransfers = [];
+var dataLostTransfers = [];
+var dataCallsPerHour = [];
+var dataP1Rate = [];
+var dataLiveConnectRate = [];
+
+for (var i in pjdata) {
+	var rdat = pjdata[i];
+	var t = rdat[0] - (3600000 * 5);
+	var Calls = rdat[1];
+	var Lives = rdat[4];
+	var Transfers = rdat[5];
+	var LostTransfers = rdat[6];
+	var CallsPerHour = Calls * 60;
+	var P1Rate = 0;
+	if (Lives > 0) {
+		P1Rate = (100 * (Transfers + LostTransfers)) / Lives;
+	}
+	var LiveConnectRate = 0;
+	if (Calls > 0) {
+		LiveConnectRate = (100 * Lives) / Calls;
+	}
+
+	// P1Rate
+	dataP1Rate.push([t, P1Rate]);
+
+	// LiveConnectRate
+	dataLiveConnectRate.push([t, LiveConnectRate]);
+
+	// Transfers
+	dataTransfers.push([t, Transfers]);
+	dataLostTransfers.push([t, LostTransfers]);
+
+	// CallsPerHour
+	dataCallsPerHour.push([t, CallsPerHour]);
+}
+
+$(function(){
+
+	if ([% PlotDataFound %] == 0) { return; }
+
+   $.plot($("#plotDivP1Rate"), [ dataP1Rate ], {
+		colors: [ "#0000ff" ],
+		xaxis: { mode: "time" },
+		series: {
+                stack: 0,
+                lines: { show: 1 }
+            }
+	});
+
+   $.plot($("#plotDivLiveConnectRate"), [ dataLiveConnectRate ], {
+		colors: [ "#006600" ],
+		xaxis: { mode: "time" },
+		series: {
+                stack: 0,
+                lines: { show: 1 }
+            }
+	});
+
+   $.plot($("#plotDivCallsPerHour"), [ dataCallsPerHour ], {
+		colors: [ "#550088" ],
+		xaxis: { mode: "time" },
+		series: {
+                stack: 0,
+                lines: { show: 1 }
+            }
+	});
+
+
+    $.plot($("#plotDivTransfers"), [ dataTransfers, dataLostTransfers ], {
+		colors: [ "#00cc33", "#ee1122" ],
+		xaxis: { mode: "time" },
+		series: {
+                stack: 1,
+                bars: { show: 1, barWidth: 1 }
+            }
+
+	});
+});
+</script>
+[% END %]
+</body></html>

@@ -1,0 +1,30 @@
+<!--#include virtual="/help/_header.html" -->
+<script>
+	useHeight = 50;
+	if (document.screen) { useHeight = screen.availHeight }
+	var bannerX = 5; var bannerY = useHeight - 10;
+	window.open('/help/popupsample.shtml', '_blank', 'resizeable=no,scrollbars=no,width=600,height=130,innerWidth=600,innerHeight=130,titlebar=no,screenX='+bannerX+',screenY='+bannerY+',left='+bannerX+',top='+bannerY);
+</script>
+<h1>Simple Browser Popup Test</h1>
+<p>This is a simple test page that opens a new window. It can sometimes diagnose a browser configuration problem, in the case where the browser may be blocking popups.</p>
+<p>If you did not see a page with pop up with the sentence "This page popped up." on it, then perhaps you have popup blocking on.</p>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h3>Popup configuration guides for</h3>
+<ul>
+<li><a href="http://support.mozilla.com/en-US/kb/Pop-up+blocker" target="_blank">Firefox</a></li>
+<li><a href="http://windows.microsoft.com/en-us/Windows-vista/Internet-Explorer-Pop-up-Blocker-frequently-asked-questions" target="_blank">Internet Explorer</a></li>
+</ul>
+<br>
+<br>
+<br>
+<h3>3rd Party Popup testers</h3>
+<ul>
+<li><a href="http://www.popuptest.com/popuptest1.html" target="win1">popuptest.com</a></li>
+<li><a href="http://www.auditmypc.com/freescan/popup-blocking.asp" target="win2">auditmypc.com</a></li>
+<li><a href="http://www.popupcheck.com/popup_test.asp" target="win3">popupcheck.com</a></li>
+</ul>
+<!--#include virtual="/help/_footer.html" -->

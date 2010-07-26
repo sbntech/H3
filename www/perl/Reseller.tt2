@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>Reseller</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body>
+<h1>Reseller</h1>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<form action="/pg/Reseller?RS_Number=[% RS_Number %]" method="post" enctype="multipart/form-data">
+[% BLOCK formtextrow %]
+	<tr>
+		<td class="editFormLabel">[% label %]</td>
+		<td class="editFormInput"><input class="editForm" type="text" 
+			size="[% size %]" 
+			name="[% varname %]"
+			value="[% varval %]"></input>[% IF estr %]<div class="editFormError">[% estr %]</div>[% END %]</td>
+	</tr>
+[% END %]
+[% IF Processing_Error %]<p class="error">[% Processing_Error %]</p>[% END %]
+<table class="editForm" cellspacing="2">
+<tr><td class="editFormLabel">Number</td><td class="editFormInput">[% RS_Number %]</td></tr>
+[% PROCESS formtextrow label='Name' size='35' varname='RS_Name' varval=RS_Name estr=RS_Name_ERROR %]
+[% PROCESS formtextrow label='Password' size='10' varname='RS_Password' varval=RS_Password estr=RS_Password_ERROR %]
+[% PROCESS formtextrow label='Contact' size='35' varname='RS_Contact' varval=RS_Contact estr=RS_Contact_ERROR %]
+[% PROCESS formtextrow label='Address' size='40' varname='RS_Address' varval=RS_Address estr=RS_Address_ERROR %]
+[% PROCESS formtextrow label='Address2' size='40' varname='RS_Address2' varval=RS_Address2 estr=RS_Address2_ERROR %]
+[% PROCESS formtextrow label='City' size='25' varname='RS_City' varval=RS_City estr=RS_City_ERROR %]
+[% PROCESS formtextrow label='Zipcode' size='12' varname='RS_Zipcode' varval=RS_Zipcode estr=RS_Zipcode_ERROR %]
+[% PROCESS formtextrow label='State' size='15' varname='RS_State' varval=RS_State estr=RS_State_ERROR %]
+[% PROCESS formtextrow label='Tel' size='20' varname='RS_Tel' varval=RS_Tel estr=RS_Tel_ERROR %]
+[% PROCESS formtextrow label='Fax' size='20' varname='RS_Fax' varval=RS_Fax estr=RS_Fax_ERROR %]
+[% PROCESS formtextrow label='Email' size='80' varname='RS_Email' varval=RS_Email estr=RS_Email_ERROR %]
+	<tr><td class="editFormLabel">Credit</td><td class="editFormInput">[% FILTER format('%0.2f') %][% RS_Credit %][% END %]</td></tr>
+[% PROCESS formtextrow label='Add Credit' size='12' varname='X_AddCredit' varval=X_AddCredit estr=X_AddCredit_ERROR %]
+[% PROCESS formtextrow label='Agent Monthly Charge' size='10' varname='RS_AgentCharge' varval=RS_AgentCharge estr=RS_AgentCharge_ERROR %]
+[% PROCESS formtextrow label='Agent Sharing Percent' size='15' varname='RS_AgentChargePerc' varval=RS_AgentChargePerc estr=RS_AgentChargePerc_ERROR %]
+[% PROCESS formtextrow label='Rate' size='15' varname='RS_Rate' varval=RS_Rate estr=RS_Rate_ERROR %]
+[% PROCESS formtextrow label='Agent IP Rate' size='15' varname='RS_AgentIPRate' varval=RS_AgentIPRate estr=RS_AgentIPRate_ERROR %]
+	<tr>
+		<td class="editFormLabel">Status</td>
+		<td class="editFormInput">
+			<input type="radio" name="RS_Status" value="A" [% IF RS_Status != 'B' %]checked="true"[% END %]>Active</input>
+			<input type="radio" name="RS_Status" value="B" [% IF RS_Status == 'B' %]checked="true"[% END %]>Blocked</input>
+			[% IF RS_Status_ERROR %]<div class="editFormError">[% RS_Status_ERROR %]</div>[% END %]</td>
+	</tr>
+[% PROCESS formtextrow label='RoundBy' size='5' varname='RS_RoundBy' varval=RS_RoundBy estr=RS_RoundBy_ERROR %]
+[% PROCESS formtextrow label='Min_Duration' size='5' varname='RS_Min_Duration' varval=RS_Min_Duration estr=RS_Min_Duration_ERROR %]
+[% PROCESS formtextrow label='Priority' size='5' varname='RS_Priority' varval=RS_Priority estr=RS_Priority_ERROR %]
+	<tr>
+		<td class="editFormLabel">Time Zone</td>
+		<td class="editFormInput"><select name="RS_Timezone">
+		<option value="0" [% IF RS_Timezone == 0 %]selected="true"[% END %]>Eastern</option>
+		<option value="-1" [% IF RS_Timezone == -1 %]selected="true"[% END %]>Central</option>
+		<option value="-2" [% IF RS_Timezone == -2 %]selected="true"[% END %]>Mountain</option>
+		<option value="-3" [% IF RS_Timezone == -3 %]selected="true"[% END %]>Pacific</option>
+		</select>[% IF RS_Timezone_ERROR %]<div class="editFormError">[% RS_Timezone_ERROR %]</div>[% END %]</td>
+	</tr>
+[% PROCESS formtextrow label='Maxlines' size='5' varname='RS_Maxlines' varval=RS_Maxlines estr=RS_Maxlines_ERROR %]
+	<tr>
+		<td class="editFormLabel">Only Cold Calling Allowed</td>
+		<td class="editFormInput"><select name="RS_OnlyColdCall">
+		<option value="Y" [% IF RS_OnlyColdCall == 'Y' %]selected="true"[% END %]>Yes</option>
+		<option value="N" [% IF RS_OnlyColdCall == 'N' %]selected="true"[% END %]>No</option>
+		<option value="M" [% IF RS_OnlyColdCall == 'M' %]selected="true"[% END %]>Manage</option>
+		</select>[% IF RS_OnlyColdCall_ERROR %]<div class="editFormError">[% RS_OnlyColdCall_ERROR %]</div>[% END %]</td>
+	</tr>
+	<tr>
+		<td class="editFormLabel">DNC Management</td>
+		<td class="editFormInput"><select name="RS_DNC_Flag">
+		<option value="Y" [% IF RS_DNC_Flag == 'Y' %]selected="true"[% END %]>Permitted</option>
+		<option value="N" [% IF RS_DNC_Flag == 'N' %]selected="true"[% END %]>Denied</option>
+		</select>[% IF RS_DNC_Flag_ERROR %]<div class="editFormError">[% RS_DNC_Flag_ERROR %]</div>[% END %]</td>
+	</tr>
+[% PROCESS formtextrow label='Distributor Code' size='42' varname='RS_DistribCode' varval=RS_DistribCode estr=RS_DistribCode_ERROR %]
+[% PROCESS formtextrow label='Distributor Factor' size='15' varname='RS_DistribFactor' varval=RS_DistribFactor estr=RS_DistribFactor_ERROR %]
+	<tr>
+		<td class="editFormButtons"></td>
+		[% IF X_Method == 'Insert' %]
+		<td class="editFormButtons"><input name="X_Method" type="submit" value="Insert"></input>
+		[% ELSE %]
+		<td class="editFormButtons"><input name="X_Method" type="submit" value="Update"></input>
+		[% END %]
+		<input type="button" onclick="window.location='/pg/ResellerList'" value="Cancel"></input></td>
+	</tr>
+</table></form>
+[% END %]
+</body></html>

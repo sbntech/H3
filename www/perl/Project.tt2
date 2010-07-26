@@ -1,0 +1,244 @@
+<html>
+<head>
+<title>Project</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css" rel="Stylesheet" />	
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>
+<link type="text/css" href=/jquery.timeentry.css"/> 
+<script type="text/javascript" src="/jquery.timeentry.js"></script>
+<script>
+ $(document).ready(function(){
+    $("#PJ_DateStart").datepicker({ dateFormat: 'yy-mm-dd', maxDate: '+1m' });
+    $("#PJ_DateStop").datepicker({ dateFormat: 'yy-mm-dd', defaultDate: '+7', maxDate: '+6m' });
+    $("#PJ_WorkdayStart").timeEntry({ spinnerImage: '' });
+    $("#PJ_ProspectStart").timeEntry({ spinnerImage: '' });
+    $("#PJ_WorkdayStop").timeEntry({ spinnerImage: '' });
+    $("#PJ_ProspectStop").timeEntry({ spinnerImage: '' });
+  });
+
+	function disableField(fid) {
+		$("#" + fid).attr('disabled', 'true');
+	}
+
+	function enableField(fid) {
+		$("#" + fid).removeAttr('disabled');
+	}
+	
+	$(window).load(function() {
+		var e = $("#PJ_Type").get(0);
+		arrangeFields(e);
+	});
+
+	function arrangeFields(e) {
+[% FOREACH DCode IN [ 0 1 2 3 4 5 6 7 8 9 ] %]
+			disableField('X_Disposition[% DCode %]');
+[% END %]
+		if (e.value == 'C') {
+			disableField('PJ_PhoneCallC');
+			disableField('PJ_Maxline');
+			disableField('PJ_Maxday');
+			enableField('PJ_Record');
+			enableField('PJ_CallScript');
+[% FOREACH DCode IN [ 0 1 2 3 4 5 6 7 8 9 ] %]
+			enableField('X_Disposition[% DCode %]');
+[% END %]
+		} else if ((e.value == 'A') || (e.value == 'S')) {
+			disableField('PJ_Record');
+			disableField('PJ_CallScript');
+			disableField('PJ_PhoneCallC');
+			enableField('PJ_Maxline');
+			enableField('PJ_Maxday');
+		} else if (e.value == 'P') {
+			disableField('PJ_Record');
+			disableField('PJ_CallScript');
+			enableField('PJ_PhoneCallC');
+			enableField('PJ_Maxline');
+			enableField('PJ_Maxday');
+		}
+	}
+</script>
+</head><body class="subpage">
+<div class="buttonbar">
+<button onclick="location ='/pg/ProjectList?CO_Number=[% PJ_CustNumber %]&PJ_Number=[% PJ_Number %]'">Back</button
+><button onclick="window.open('/scripts/help/editproject.htm')">Help</button>
+</div>
+<div class="mainPage">
+<h2>Project</h2>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<form action="/pg/Project?CO_Number=[% PJ_CustNumber %]&PJ_Number=[% PJ_Number %]" method="post" enctype="multipart/form-data">
+[% BLOCK formtextrow %]
+	<tr>
+		<td class="editFormLabel">[% label %]</td>
+		<td class="editFormInput"><input class="editForm" type="text" 
+			size="[% size %]" 
+			id="[% varname %]"
+			name="[% varname %]"
+			value="[% varval %]"></input>[% IF estr %]<div class="editFormError">[% estr %]</div>[% END %]</td>
+	</tr>
+[% END %]
+[% IF Processing_Error %]<p class="error">[% Processing_Error %]</p>[% END %]
+<input type="hidden" name="PJ_CustNumber" value="[% PJ_CustNumber %]"></input>
+<input type="hidden" name="PJ_Number" value="[% PJ_Number %]"></input>
+<table class="editForm" cellspacing="2">
+[% PROCESS formtextrow label='Description' size='30' varname='PJ_Description' varval=PJ_Description estr=PJ_Description_ERROR %]
+<tr>
+	<td class="editFormLabel">Status</td>
+	<td class="editFormInput">
+		<input type="radio" name="PJ_Status" value="A" [% IF PJ_Status != 'B' %]checked="true"[% END %]>Active</input>
+		<input type="radio" name="PJ_Status" value="B" [% IF PJ_Status == 'B' %]checked="true"[% END %]>Blocked</input>
+		[% IF PJ_Status_ERROR %]<div class="editFormError">[% PJ_Status_ERROR %]</div>[% END %]</td>
+</tr>
+<tr><td class="editFormLabel">Test Call Approved</td><td class="editFormInput">[% PJ_Testcall %]</td></tr>
+<tr>
+	<td class="editFormLabel">Start Date</td>
+	<td class="editFormInput">
+		<input id="PJ_DateStart" name="PJ_DateStart" value="[% PJ_DateStart %]" type="text" size="10"></input>
+		[% IF PJ_DateStart_ERROR %]<div class="editFormError">[% PJ_DateStart_ERROR %]</div>[% END %]</td>
+</tr>
+<tr>
+	<td class="editFormLabel">Stop Date</td>
+	<td class="editFormInput">
+		<input id="PJ_DateStop" name="PJ_DateStop" value="[% PJ_DateStop %]" type="text" size="10"></input>
+		[% IF PJ_DateStop_ERROR %]<div class="editFormError">[% PJ_DateStop_ERROR %]</div>[% END %]</td>
+</tr>
+<tr>
+	<td class="editFormLabel">Workday</td>
+	<td class="editFormInput">
+		<input id="PJ_WorkdayStart" name="PJ_WorkdayStart" value="[% PJ_WorkdayStart %]" type="text" size="10"></input> ..
+		<input id="PJ_WorkdayStop" name="PJ_WorkdayStop" value="[% PJ_WorkdayStop %]" type="text" size="10"></input> [% X_TZ_String %]
+		[% IF PJ_Workday_ERROR %]<div class="editFormError">[% PJ_Workday_ERROR %]</div>[% END %]
+	</td>
+</tr>
+<tr>
+	<td class="editFormLabel">Call Prospects</td>
+	<td class="editFormInput">
+		<input id="PJ_ProspectStart" name="PJ_ProspectStart" value="[% PJ_ProspectStart %]" type="text" size="10"></input> ..
+		<input id="PJ_ProspectStop" name="PJ_ProspectStop" value="[% PJ_ProspectStop %]" type="text" size="10"></input> their time zone
+		[% IF PJ_Prospect_ERROR %]<div class="editFormError">[% PJ_Prospect_ERROR %]</div>[% END %]
+	</td>
+</tr>
+<tr>
+	<td class="editFormLabel">Type</td>
+	<td class="editFormInput"><select id="PJ_Type" name="PJ_Type" onchange="arrangeFields(this)">
+	<option value="C" [% IF PJ_Type == 'C' %]selected="true"[% END %]>Cold Calling</option>
+[% IF OnlyColdCall != 'Y' %]
+	<option value="S" [% IF PJ_Type == 'S' %]selected="true"[% END %]>Survey</option>
+	<option value="P" [% IF PJ_Type == 'P' %]selected="true"[% END %]>Press 1</option>
+	<option value="A" [% IF PJ_Type == 'A' %]selected="true"[% END %]>Message Delivery</option>
+[% END %]
+	</select>[% IF PJ_Type_ERROR %]<div class="editFormError">[% PJ_Type_ERROR %]</div>[% END %]</td>
+</tr>
+<tr>
+	<td class="editFormLabel">Message Type</td>
+	<td class="editFormInput"><select name="PJ_Type2">
+	<option value="L" [% IF PJ_Type2 == 'L' %]selected="true"[% END %]>Live Only</option>
+	<option value="B" [% IF PJ_Type2 == 'B' %]selected="true"[% END %]>Live & Machines</option>
+	</select>[% IF PJ_Type2_ERROR %]<div class="editFormError">[% PJ_Type2_ERROR %]</div>[% END %]</td>
+</tr>
+[% IF OnlyColdCall != 'Y' %]
+<tr>
+	<td class="editFormLabel">Call Center Phone</td>
+	<td class="editFormInput"><input id="PJ_PhoneCallC" class="editForm" type="text"
+		size="20" 
+		name="PJ_PhoneCallC"
+		value="[% PJ_PhoneCallC %]"></input>[% IF PJ_PhoneCallC_ERROR %]<div class="editFormError">[% PJ_PhoneCallC_ERROR %]</div>[% END %]
+		</td>
+</tr>
+[% END %]
+<tr>
+	<td class="editFormLabel">Caller Id</td>
+	<td class="editFormInput">
+		<select name="PJ_OrigPhoneNr">
+[% CID_count = 0 %]
+[% CID_selected = 0 %]
+[% FOREACH CID_Option IN X_CustomerCIDs %]
+[% CID_count = 1 %]
+<option value="[% CID_Option %]"
+	[% IF CID_Option == PJ_OrigPhoneNr %][% CID_selected = 1 %] selected="true" [% END %]
+>[% CID_Option %]</option>
+[% END %]
+		</select> <span class="highlight">
+	[% IF CID_count == 0 %] Using system default
+	[% ELSIF CID_selected == 0 %] Choose one to replace system default
+	[% END %]
+</span>
+	</td>
+</tr>
+[% IF OnlyColdCall != 'Y' %]
+[% PROCESS formtextrow label='Max Lines' size='5' varname='PJ_Maxline' varval=PJ_Maxline estr=PJ_Maxline_ERROR %]
+[% PROCESS formtextrow label='Maximum Calls Per Day' size='5' varname='PJ_Maxday' varval=PJ_Maxday estr=PJ_Maxday_ERROR %]
+[% END %]
+<tr>
+	<td class="editFormLabel">Dial on weekends</td>
+	<td class="editFormInput"><select name="PJ_Weekend">
+	<option value="0" [% IF PJ_Weekend == '0' %]selected="true"[% END %]>Never</option>
+	<option value="1" [% IF PJ_Weekend == '1' %]selected="true"[% END %]>Saturday Only</option>
+	<option value="2" [% IF PJ_Weekend == '2' %]selected="true"[% END %]>Sunday Only</option>
+	<option value="3" [% IF PJ_Weekend == '3' %]selected="true"[% END %]>Both Days</option>
+	</select>[% IF PJ_Weekend_ERROR %]<div class="editFormError">[% PJ_Weekend_ERROR %]</div>[% END %]</td>
+</tr>
+<tr>
+	<td class="editFormLabel">User</td>
+	<td class="editFormInput">
+[% IF Session.L_Level >= 3 %]
+		<select name="PJ_User"><option value="0">Supervisor</option>
+[% FOREACH CustUser IN X_Users %]
+<option value="[% CustUser.us_number %]"
+	[% IF CustUser.us_number == PJ_User %] selected="true" [% END %]
+>[% CustUser.us_name %]</option>
+[% END %]
+		</select>
+[% ELSE %]
+	&nbsp;
+	[% FOREACH CustUser IN X_Users %]
+		[% IF CustUser.us_number == PJ_User %] [% CustUser.us_name %]
+		<input type="hidden" name="PJ_User" value=[% PJ_User %]></input>
+		[% END %]
+	[% END %]
+[% END %]
+	</td>
+</tr>
+<tr>
+	<td style="vertical-align:top" class="editFormLabel">Recording</td>
+	<td class="editFormInput"><input type="checkbox" id="PJ_Record" name="PJ_Record" value="Y" [% IF PJ_Record == 'Y' %]checked="true"[% END %]></input><label for="PJ_Record">&nbsp;Record cold calling calls</label>&nbsp;
+		[% IF PJ_Record_ERROR %]<div class="editFormError">[% PJ_Record_ERROR %]</div>[% END %]</td>
+	</td>
+</tr>
+<tr>
+	<td style="vertical-align:top" class="editFormLabel">Call Script</td>
+	<td class="editFormInput"><textarea rows="5" cols="65" name="PJ_CallScript" id="PJ_CallScript">[% PJ_CallScript %]</textarea>
+	</td>
+</tr>
+<tr>
+	<td style="vertical-align:top" class="editFormLabel">Disposition Codes</td>
+	<td class="editFormInput">
+		<table cellspacing=1 cellpadding=0>
+		<tr><th></th><th style="text-align:left">Description</th></tr>
+[% FOREACH DCode IN [ 0 1 2 3 4 5 6 7 8 9 ] %]
+[% DispoValue = "X_Disposition$DCode" %]
+	<tr><td>[% DCode %]</td><td>
+	<input id="X_Disposition[% DCode %]" class="editForm" type="text"
+		size="30" 
+		name="X_Disposition[% DCode %]"
+		value="[% $DispoValue %]"></input>
+		</td></tr>
+[% END %]
+		</table>
+
+	</td>
+</tr>
+<tr>
+	<td class="editFormButtons"></td>
+	[% IF X_Method == 'Insert' %]
+	<td class="editFormButtons"><input name="X_Method" type="submit" value="Insert"></input>
+	[% ELSE %]
+	<td class="editFormButtons"><input name="X_Method" type="submit" value="Update"></input>
+	[% END %]
+	<input type="button" onclick="window.location='/pg/ProjectList?CO_Number=[% PJ_CustNumber %]&PJ_Number=[% PJ_Number %]'" value="Cancel"></input></td>
+</tr>
+</table></form>
+[% END %]
+</div>
+</body></html>

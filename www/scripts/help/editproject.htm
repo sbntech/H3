@@ -1,0 +1,145 @@
+<HTML>
+<HEAD>
+<TITLE>Edit Project</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" href="/glm.css">
+</HEAD>
+<BODY>
+<!-- change the header here -->
+<h1>Project</h1><BR>
+<!-- place help/instructions below this line -->
+The Project Definition form is used to edit or change project information.<br>
+<br>
+When changing project information, it is recommended that an Active project be blocked from processing.<br>
+<br>
+<br>
+<h2><b>Field Definitions</b></h2>
+<h3>Description</h3>
+<P>A Unique name of the project.  Up to 20 alphanumaric characters including a-z, 0-9, dash(&quot;-&quot;) and underscore(&quot;_&quot;) characters can be used.<br>
+</P>
+
+<h3>Status</h3>
+<P>Shows the current state of the project.
+<UL>
+	<LI><b>Active</b> - Project will be processed at the specified date and time.</LI>
+	<LI><b>Blocked</b> - Project is currently suspended or blocked from processing.</LI>
+</UL>
+</P>
+
+<h3>Testcall Approved</h3>
+<P>Displays the date and time of the last testcall approved.  At least one testcall must be approved before the project can be set to Active.
+</P>
+
+<h3>Start/Stop Date</h3>
+<P>Defines the dates on which the project must start and stop.  Projects can be setup to span multiple days, weeks or even months.  If a project spans more than one day, dialing will start and stop each day using the Callcenter time start/stop and the Local Customer Time start/stop times.
+</P>
+<h3>Max Lines to Use</h3>
+<P>Defines the maximum number of lines to be used when dialing lead phone numbers for the project.  The time it takes to complete a project is a product of the length of the message in seconds, the number of leads to dial and the number of lines used.<br>
+<br>
+Using more lines will result in the project completing sooner.  For example, with a message length of 45 seconds, we recommend estimating 64 dials per hour per line.  With 100,000 leads to be dialed over a 5 hour period (i.e. 9am-2pm), use this equation to calculate the number of lines required:<br>
+<br>
+Maxlines = 100,000 / 5 hrs / 64 calls per hour = 313 lines required<br>
+<br>
+RECOMMENDATION: Check the number of completed dials after the first hour, and increase the number of Maxlines to speed up the project, or decrease the value to slow the project down.</P>
+
+<h3>Max Calls Per Day</h3>
+<P>Defines the maximum number of calls to be made per day for this project.  Applicable only to projects that span more than one day.  Dialing will continue through the day until the number of calls in this field have been completed.  When this limit is reached, the  dialing will stop for the day, the project will remain active, and dialing will continue on the next scheduled day.</P>
+
+<h3>Workday Start/Stop Time</h3>
+<P>The times (expressed in your time zone) that define your workday. This is particularly important for Press-1 type projects and should correspond to the call center's operating hours. If your project is not a press-1 type, then some suitable wide period (e.g. 07:00 - 23:00) should be used.
+</P>
+
+<h3>Prospect timezone start/stop</h3>
+<P>These are the times (expressed in the timezone of the party being called) that define the period that the prospects will be called (in the prospects local timezone as determined from the area code).
+<br>
+<b>For example:</b> if you wish to call prospects between 4:00pm and 8:00pm and you are in the eastern time zone, then you should define your workday as 16:00-23:00 and prospects start 16:00 and stop at 20:00. Note that the workday ends at 23:00 Eastern since that is 8pm pacific, because you might be calling pacific-based prospects.
+<br/>
+It is rarely necessary (and sometimes illegal) to call prospects after 21:00
+</P>
+
+<h3>Delivery type</h3>
+<P>Selects the type of dial project to be performed.  Use the radio buttons to select one of the options:
+<UL>
+	<LI><b>Voice Delivery</b> plays a pre-recorded message</LI>
+	<LI><b>Press 1</b> Allows Live answered prospects to press the “1” key on their phone to be forwarded to the project Callcenter and placed in contact with a live agent.  Pressing the “2” key places the phone number in a local customer Do-Not-Call list.</LI>
+	<LI><b>Survey</b> permits the live answered calls to answer a series of questions using their keypad. Each answer is a single digit keypress.</LI>
+	<LI><b>Cold Calling</b> every connect is immediately bridged to the call center</LI>
+</UL>
+</P>
+
+<h3>Message Type</h3>
+<P>Selects the tpe of call process handling to be performed based on how the call is answered:
+<UL>
+	<LI><b>Voicemail</b> Voicemail message delivery for all machine answered calls.  Live answered calls are detected and dropped.</LI>
+	<LI><b>Live</b> Message delivery to only live answered calls.  Machine answered calls are detected and dropped.</LI>
+	<LI><b>Both</b> The appropriate message is played to the answered call based on a detected live or machine answered status.</LI>
+</UL>
+</P>
+
+<h3>Phone Number of Callcenter</h3>
+<P>10-digit phone number of the Callcenter to be used by dialers when processing &quot;Press 1&quot; projects.  This is the phone number used by the dialers to connect interested lead contacts that have pressed &quot;1&quot; on their telephone keypads.<br>
+<br>
+Press 1 Senario:  When the project starts dialing, each answered call will have the appropriate pre-recorded message played.  The message should contain a phrase similar to &quot;press 1 to be connected to one of our agents now&quot;.  Upon pressing the &quot;1&quot;, the dialer will detect the tone, and automatically dial the &quot;Phone Number of Callcenter&quot; where an available Customer Agent will pick up the phone and be connected to the interested lead.  This process is repeated until all agents are busy on the phone with responding leads.  When all Agents are busy, the dialers will suspend dialing.  When an Agent hangs up, or finishes with a lead, the dialers will sense this termination of the call and once again begin dialing in search of another interested lead.
+</P>
+
+<h3>Number of Customer Agents</h3>
+<P>Defines to the dialers the number of Customer Agents, at the Callcenter, available to take &quot;Press 1&quot; responding lead contacts.</P>
+
+<h3>Lines per Agent</h3>
+<P>Defines to the dialers the number of telephone lines that each Customer Agent can handle simultaneously.  The value entered should be one plus the number of lines that can be placed on hold.</P>
+
+<h3>Weekend</h3>
+<P>Defines to the dialers how a project is to be processed over the weekend days, Saturday and Sunday.
+<UL>
+	<LI><b>No</b> - No dialing to take place over the weekend.  For projects that span multiple weeks and only on M-F.</LI>
+	<LI><b>Only Saturday</b> - Dialing will take place on Saturday only.  Use this option for Saturday Only projects or projects that are to be dialed Monday through Saturday.</LI>
+	<LI><b>Only Sunday</b> - Dialing will take place on Sunday.</LI>
+	<LI><b>Both</b> - Dialing will occur on both Saturday and Sunday.</LI>
+</UL>
+</P>
+
+<h3>User</h3>
+<P>Shows the assigned user who created the project.</P>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</BODY>
+</HTML>

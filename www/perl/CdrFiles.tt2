@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>CDR</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body class="subpage">
+<div class="buttonBar">
+<button onclick="document.location.href='/pg/ProjectList?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'">Back</button>
+</div><div class="mainPage">
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<h1>Project: '[% ContextProject.PJ_Description %]' CDR</h1>
+<form action="/pg/CDR?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]" method="post" enctype="multipart/form-data">
+<p>Search for: <input type="text" name="searchstr" size="20"></input><input type="submit" value="Go"></input> (max 100 results returned)</p>
+</form></br>
+<form action="/pg/CDR/cdr-today-snapshot.zip?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]" method="post" enctype="multipart/form-data">
+<input name="cdrfilename" type="hidden" value="today.txt"></input>
+<a href='/scripts/help/cdr.htm'>CDR format descriptions</a>&nbsp;&nbsp;&nbsp;
+<input type="submit" value="Today's Snapshot"></input></form><br/>
+<h2>Previous Days</h2>
+<table class="filelist">
+<tr>
+<th class="filelist-col">File Name</th>
+<th class="filelist-col">Download Time</th>
+<th class="filelist-col">Size</th>
+<th class="filelist-col">Action</th>
+</tr>
+[% count = 0 %]
+[% FOREACH trow IN trows.nsort('Modified').reverse %]
+	[% count = count + 1 %]
+	<tr><th class="filelist-row">[% trow.FileName %]</th>
+		<td class="filelist">[% trow.DownloadTime %]</td>
+		<td class="filelist" style="text-align: right" title="[% trow.Size %]">[% trow.SizeStr %]</td>
+	<td class="filelist"><form action="/pg/CDR/[% trow.FileName %]?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]" method="post" enctype="multipart/form-data"><input name="cdrfilename" type="hidden" value="[% trow.FileName %]"></input><input type="submit" value="Download" ></input></form></td>
+	</tr>
+[% END %]
+</table>
+[% END %]
+</div>
+</body></html>

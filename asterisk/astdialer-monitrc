@@ -1,0 +1,24 @@
+# http://www.tildeslash.com/monit/doc/
+
+set daemon 60
+set mailserver 10.9.2.1
+set alert grant@sbndials.com { timeout nonexist }
+	mail-format {
+		from: root@w0.sbndials.com
+		subject: [$HOST monit] $SERVICE $EVENT at $DATE
+		message: $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION.
+	}
+set logfile "/var/log/monit.log"
+set httpd port 2812 and use address localhost
+    allow localhost   # Allow localhost to connect
+
+check process astdialer
+    pidfile /var/run/astdialer.pid
+    start = "/home/grant/sbn-git/convert/AsteriskDialer.pl"
+    stop = "/usr/bin/killall AsteriskDialer.pl"
+
+check process asterisk
+    pidfile /var/run/asterisk.pid
+    start = "/usr/sbin/asterisk"
+    stop = "/usr/bin/killall asterisk"
+

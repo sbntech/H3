@@ -1,0 +1,22 @@
+# http://www.tildeslash.com/monit/doc/
+
+set mailserver 10.9.2.1
+set alert grant@sbndials.com
+	mail-format {
+		from: root@w0.sbndials.com
+		subject: [$HOST monit] $SERVICE $EVENT at $DATE
+		message: $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION.
+	}
+set logfile "/var/log/monit.log"
+set httpd port 2812 and use address localhost
+    allow localhost   # Allow localhost to connect
+
+check file monitrc-git 
+    with path "/home/grant/sbn-git/asterisk/monitrc"
+    if changed checksum then exec "/usr/bin/install -o root -g root -m 0600 /home/grant/sbn-git/asterisk/monitrc /etc/monit/monitrc"
+
+check process asterisk
+    pidfile /var/run/asterisk.pid
+    start = "/usr/sbin/asterisk"
+    stop = "/usr/bin/killall asterisk"
+

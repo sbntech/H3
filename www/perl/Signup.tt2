@@ -1,0 +1,45 @@
+[%- IF Page == 'Response' -%]
+	[%- IF Profile.Response == 'API' -%]
+		[%- IF ErrStr -%]
+ERROR [%- ErrStr -%]
+		[%- ELSE -%]
+SUCCESS
+		[%- END -%]
+	[%- ELSE -%]
+<html><head><title>Thanks</title><body>
+		[% IF ErrStr %]
+<p>Failed: [% ErrStr %]</p>
+		[% ELSE %]
+<p>Thanks for signing up.</p>
+<p>Check you email account [%- CO_Email -%] for your system assigned password.</p>
+<a href="[%- Profile.LoginURL -%]">Login here</a>
+</body></html>
+		[%- END -%]
+	[%- END -%]
+[%- ELSE -%]
+<html>
+<head>
+[%- BLOCK formtextrow -%]
+<tr><td>[% label %]</td><td>
+<input type="text" size="[% size %]" name="[% varname %]"></input></td></tr>
+[%- END -%]
+</head><body>
+<p>Enter all of the following required fields so that we can create an account for you.  Your login password will be emailed to the email address provided</p>
+<form action="/pg/Signup?Profile=[% ProfileName %]" method="post" enctype="multipart/form-data">
+<table cellspacing="2">
+[% PROCESS formtextrow label='Name' size='35' varname='CO_Name' varval=CO_Name %]
+[% PROCESS formtextrow label='Address' size='40' varname='CO_Address' varval=CO_Address %]
+[% PROCESS formtextrow label='Address2' size='40' varname='CO_Address2' varval=CO_Address2 %]
+[% PROCESS formtextrow label='City' size='25' varname='CO_City' varval=CO_City %]
+[% PROCESS formtextrow label='Zipcode' size='12' varname='CO_Zipcode' varval=CO_Zipcode %]
+[% PROCESS formtextrow label='State Code' size='3' varname='CO_State' varval=CO_State %]
+[% PROCESS formtextrow label='Tel' size='20' varname='CO_Tel' varval=CO_Tel %]
+[% PROCESS formtextrow label='Fax' size='20' varname='CO_Fax' varval=CO_Fax %]
+[% PROCESS formtextrow label='Email' size='40' varname='CO_Email' varval=CO_Email %]
+[% PROCESS formtextrow label='Contact' size='35' varname='CO_Contact' varval=CO_Contact %]
+<tr><td colspan="2"><br/><p>By submitting this application you agree that you have read, understood and agree to abide by the <a style="text-decoration: underline; cursor:pointer;" onclick="window.open('[% Profile.TermsURL %]');">Terms and Conditions</a>.</p>
+<input type="submit" value="Signup"></input></td>
+</tr>
+</table></form>
+[% END %]
+</body></html>

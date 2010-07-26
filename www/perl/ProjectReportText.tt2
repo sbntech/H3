@@ -1,0 +1,90 @@
+<html>
+<head>
+<title>[% ContextProject.PJ_Description %] - report</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body class="subpage">
+<div class="buttonBar">
+<button onclick="document.location.href='/pg/ProjectReport?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'">Back</button>
+</div><div class="mainPage">
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<h1 style="font-size:14pt;font-weight:bolder">[% TextReportDate %] Dialing Report: [% ContextProject.PJ_Description %]</h1>
+<h2 style="font-size:12pt;font-weight:bolder">Summary</h2>
+[% SET TotalMinutes = Summary.TotalSeconds div 60 %]
+<table>
+<tr><td style="width: 200px">Total Calls</td><td style="text-align:right; width:25px">[% Summary.TotalCalls %]</td></tr>
+<tr><td>Total Minutes</td><td style="text-align:right; width:25px">[% TotalMinutes %]</td></tr>
+</table>
+<h2 style="font-size:12pt;font-weight:bolder">Prospect Activity</h2>
+<table>
+<tr><td style="width: 200px">Call Attempts</td><td style="text-align:right; width:25px">[% Prospect.RE_Calls %]</td><td style="width: 70px"/></tr>
+[% SET ProspectMinutes = Prospect.RE_Tot_Sec div 60 %]
+<tr><td style="width: 200px">Total Minutes</td><td style="text-align:right">[% ProspectMinutes %]</td><td></td></tr>
+[% SET PressedOne = Prospect.Transfers + Prospect.LostTransfers %]
+[% SET LiveAnswered =  Prospect.RE_Hungupduringmsg + Prospect.RE_Aftermessage + Prospect.RE_Hungupb4connect %]
+[% IF LiveAnswered > 0 %][% SET ResponsePercent = (100 * Prospect.Transfers) / LiveAnswered %]
+[% ELSE %][% SET ResponsePercent = 0 %][% END %]
+[% IF PressedOne > 0 %][% SET AbandonPercent = (100 * Prospect.LostTransfers) / PressedOne %]
+[% ELSE %][% SET AbandonPercent = 0 %][% END %]
+[% SET LiveMinutes = Prospect.RE_Tot_Live_Sec div 60 %]
+[% SET MachAnswered =  Prospect.RE_Ansrmachine + Prospect.RE_Faxmachine %]
+[% SET MachMinutes = Prospect.RE_Tot_Mach_Sec div 60 %]
+[% SET OtherResult = Prospect.RE_Calls - MachAnswered - LiveAnswered %]
+[% IF Prospect.RE_Calls > 0 %]
+[% SET LivePercent = (100 * LiveAnswered) / Prospect.RE_Calls %]
+[% SET MachPercent = (100 * MachAnswered) / Prospect.RE_Calls %]
+[% SET OtherPercent = (100 * OtherResult) / Prospect.RE_Calls %]
+[% ELSE %]
+[% SET LivePercent = 0 %]
+[% SET MachPercent = 0 %]
+[% SET OtherPercent = 0 %]
+[% END %]
+<tr><td>Live Humans Answered</td><td style="text-align:right">[% LiveAnswered %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% LivePercent %][% END %]%</td></tr>
+[% IF PressedOne > 0 %]
+<tr><td>Connected With Agent</td><td style="text-align:right">[% Prospect.Transfers %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% ResponsePercent %][% END %]%</td></tr>
+<tr><td>Lost Transfers</td><td style="text-align:right">[% Prospect.LostTransfers %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% AbandonPercent %][% END %]%</td></tr>
+[% END %]
+<tr><td>Live Humans Minutes</td><td style="text-align:right">[% LiveMinutes %]</td><td></td></tr>
+<tr><td>Machine Answered</td><td style="text-align:right">[% MachAnswered %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% MachPercent %][% END %]%</td></tr>
+<tr><td>Machine Minutes</td><td style="text-align:right">[% MachMinutes %]</td><td></td></tr>
+<tr><td>Others (Busy, No-answer etc)</td><td style="text-align:right">[% OtherResult %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% OtherPercent %][% END %]%</td></tr>
+</table>
+[% FOREACH ag IN AgentList %]
+<h2 style="font-size:12pt;font-weight:bolder">[% ag.AG_Name %] Activity</h2>
+<table>
+<tr><td style="width: 200px">Call Attempts</td><td style="text-align:right; width:25px">[% ag.RE_Calls %]</td><td style="width: 70px"/></tr>
+[% SET AgentMinutes = ag.RE_Tot_Sec div 60 %]
+[% SET StandbyMinutes = ag.RE_AS_Minutes div 60 %]
+[% IF ag.RE_Calls > 0 %]
+[% SET ConnPercent = (100 * ag.RE_Connectedagent) / ag.RE_Calls %]
+[% SET ANPercent = (100 * ag.RE_Agentnoanswer) / ag.RE_Calls %]
+[% SET ABPercent = (100 * ag.RE_Agentbusy) / ag.RE_Calls %]
+[% SET DAPercent = (100 * ag.RE_Hungupb4connect) / ag.RE_Calls %]
+[% ELSE %]
+[% SET ConnPercent = 0 %]
+[% SET ANPercent = 0 %]
+[% SET ABPercent = 0 %]
+[% SET DAPercent = 0 %]
+[% END %]
+<tr><td style="width: 200px">Talking Minutes</td><td style="text-align:right">[% AgentMinutes %]</td><td></td></tr>
+<tr><td style="width: 200px">Standby Minutes</td><td style="text-align:right">[% StandbyMinutes %]</td><td></td></tr>
+<tr><td>Connected</td><td style="text-align:right">[% ag.RE_Connectedagent %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% ConnPercent %][% END %]%</td></tr>
+<tr><td>No Answer</td><td style="text-align:right">[% ag.RE_Agentnoanswer %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% ANPercent %][% END %]%</td></tr>
+<tr><td>Busy</td><td style="text-align:right">[% ag.RE_Agentbusy %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% ABPercent %][% END %]%</td></tr>
+<tr><td>Hangup before Connect</td><td style="text-align:right">[% ag.RE_Hungupb4connect %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% DAPercent %][% END %]%</td></tr>
+[% IF ag.RE_Calls > 0 %]
+<tr><td>0-14 seconds</td><td style="text-align:right">[% ag.RE_0_14_seconds %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% 100 * ag.RE_0_14_seconds / ag.RE_Calls %][% END %]%</td></tr>
+<tr><td>15-29 seconds</td><td style="text-align:right">[% ag.RE_15_29_seconds %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% 100 * ag.RE_15_29_seconds / ag.RE_Calls %][% END %]%</td></tr>
+<tr><td>30-59 seconds</td><td style="text-align:right">[% ag.RE_30_59_seconds %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% 100 * ag.RE_30_59_seconds / ag.RE_Calls %][% END %]%</td></tr>
+<tr><td>1-2 minutes</td><td style="text-align:right">[% ag.RE_1_2_minutes %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% 100 * ag.RE_1_2_minutes / ag.RE_Calls %][% END %]%</td></tr>
+<tr><td>2-3 minutes</td><td style="text-align:right">[% ag.RE_2_3_minutes %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% 100 * ag.RE_2_3_minutes / ag.RE_Calls %][% END %]%</td></tr>
+<tr><td>3-5 minutes</td><td style="text-align:right">[% ag.RE_3_5_minutes %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% 100 * ag.RE_3_5_minutes / ag.RE_Calls %][% END %]%</td></tr>
+<tr><td>5-10 minutes</td><td style="text-align:right">[% ag.RE_5_10_minutes %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% 100 * ag.RE_5_10_minutes / ag.RE_Calls %][% END %]%</td></tr>
+<tr><td>10-15 minutes</td><td style="text-align:right">[% ag.RE_10_15_minutes %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% 100 * ag.RE_10_15_minutes / ag.RE_Calls %][% END %]%</td></tr>
+<tr><td>15+ minutes</td><td style="text-align:right">[% ag.RE_15_over_minutes %]</td><td style="text-align:right">[% FILTER format('%0.2f') %][% 100 * ag.RE_15_over_minutes / ag.RE_Calls %][% END %]%</td></tr>
+[% END %]
+</table>
+[% END %]
+[% END %]
+</div>
+</body></html>

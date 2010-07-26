@@ -1,0 +1,14 @@
+<!--#include virtual="/help/_header.html" -->
+<h1>Users</h1>
+<p>Users are people who can login like a customer (supervisor) can with optionally limited rights.</p>
+<p>Users can be created with the follow levels of responsibility:
+<ol>
+	<li>Only View Own Projects - Can only view and manage the projects created under own user number.</li>
+	<li>View Other Projects - Can view projects created by others, but cannot make changes to them.  Can change only his/her own projects.</li>
+	<li>Edit Other Projects - Can view and change projects created by others. (but cannot create other users)</li>
+	<li>Supervisor - Can view manage and change any project for Customer account.</li>
+</ol>
+</p>
+<p>Users are managed at supervisor level only.</p>
+
+<!--#include virtual="/help/_footer.html" -->

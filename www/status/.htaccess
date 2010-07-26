@@ -1,0 +1,5 @@
+AuthName "Access"
+AuthType Basic
+AuthUserFile /dialer/www/htpasswd.sbn
+require valid-user
+

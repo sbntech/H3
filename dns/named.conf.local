@@ -1,0 +1,16 @@
+include "/etc/bind/zones.rfc1918";
+
+zone "sbndials.com" IN {
+        type master;
+        file "/etc/bind/sbndials.zone";
+        allow-update { none; };
+        notify no;
+};
+
+zone "jannekesmit.com" IN {
+        type master;
+        file "/etc/bind/jannekesmit.zone";
+        allow-update { none; };
+        notify no;
+};
+

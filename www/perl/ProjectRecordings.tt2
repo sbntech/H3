@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>Recordings - [% PJ_Number %] - [% ContextProject.PJ_Description %]</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body class="subpage">
+<div class="buttonBar">
+<button onclick="document.location.href='/pg/ProjectList?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'">Back</button>
+<button onclick="document.location.href='/pg/Recordings?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'">Reload</button>
+</div><div class="mainPage">
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<h1>Recordings - [% ContextProject.PJ_Description %]</h1>
+<table><tr><td style="vertical-align: top">
+<h2>Current Day</h2>
+<table class="filelist">
+<tr>
+<th class="filelist-col">File Name</th>
+<th class="filelist-col">Size</th>
+<th class="filelist-col">Action</th>
+</tr>
+[% FOREACH wavRow IN wavList.nsort('Modified').reverse %]
+	<tr><th class="filelist-row">[% wavRow.FileName %]</th>
+		<td class="filelist" style="text-align: right" title="[% wavRow.Size %]">[% wavRow.SizeStr %]</td>
+	<td class="filelist"><form action="/pg/Recordings/[% wavRow.FileName %]?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]" method="post" enctype="multipart/form-data"><input name="recfilename" type="hidden" value="[% wavRow.FileName %]"></input><input type="submit" value="Download" ></input></form></td>
+	</tr>
+[% END %]
+</table>
+</td><td style="vertical-align: top; padding-left: 5mm;">
+<h2>Previous Days</h2>
+<table class="filelist">
+<tr>
+<th class="filelist-col">File Name</th>
+<th class="filelist-col">Size</th>
+<th class="filelist-col">Action</th>
+</tr>
+[% FOREACH wavRow IN zipList.nsort('Modified').reverse %]
+	<tr><th class="filelist-row">[% wavRow.FileName %]</th>
+		<td class="filelist" style="text-align: right" title="[% wavRow.Size %]">[% wavRow.SizeStr %]</td>
+	<td class="filelist"><form action="/pg/Recordings/[% wavRow.FileName %]?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]" method="post" enctype="multipart/form-data"><input name="recfilename" type="hidden" value="[% wavRow.FileName %]"></input><input type="submit" value="Download" ></input></form></td>
+	</tr>
+[% END %]
+</table>
+</td></tr></table>
+[% END %]
+</div>
+</body></html>

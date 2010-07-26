@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>Agent</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body class="subpage">
+<div class="buttonbar">
+<button onclick="location ='/scripts/cust/table.php?table=agent&CO_Number=[% CO_Number %]&ItemId=[% AG_Number %]'">Back</button
+></div>
+<div class="mainPage">
+<h2>Agent</h2>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>[% END %]
+<form action="/pg/AgentRow?CO_Number=[% CO_Number %]" method="post" enctype="multipart/form-data">
+<input type="hidden" name="AG_Cutomer" value="[% CO_Number %]"></input>
+[% BLOCK formtextrow %]
+	<tr>
+		<td class="editFormLabel">[% label %]</td>
+		<td class="editFormInput"><input class="editForm" type="text" 
+			size="[% size %]" 
+			id="[% varname %]"
+			name="[% varname %]"
+			value="[% varval %]"></input>[% IF estr %]<div class="editFormError">[% estr %]</div>[% END %]</td>
+	</tr>
+[% END %]
+<table class="editForm" cellspacing="2">
+<tr>
+	<td class="editFormLabel">Number</td>
+	[% IF X_Method == 'Insert' %]
+	<td class="editFormInput"> New</input>
+	[% ELSE %]
+	<td class="editFormInput"> [% AG_Number %]
+	<input type="hidden" name="AG_Number" value="[% AG_Number %]"></input>
+	[% END %]
+	[% IF AG_Number_ERROR %]<div class="editFormError">[% AG_Number_ERROR %]</div>[% END %]
+	</td>
+</tr>
+[% PROCESS formtextrow label='Name' size='30' varname='AG_Name' varval=AG_Name estr=AG_Name_ERROR %]
+[% PROCESS formtextrow label='Password' size='30' varname='AG_Password' varval=AG_Password estr=AG_Password_ERROR %]
+[% PROCESS formtextrow label='Email' size='35' varname='AG_Email' varval=AG_Email estr=AG_Email_ERROR %]
+[% PROCESS formtextrow label='Call Back Number' size='60' varname='AG_CallBack' varval=AG_CallBack estr=AG_CallBack_ERROR %]
+<tr>
+	<td class="editFormLabel">Project</td>
+	<td class="editFormInput"><select name="AG_Project">
+[% pjmatch = 0 %]
+[% FOREACH pjrow IN ProjectList %]
+	<option value="[% pjrow.PJ_Number %]" [% IF AG_Project == pjrow.PJ_Number %]
+		[% pjmatch = 1 %]selected="true"[% END %]>[% pjrow.PJ_Description %]</option>
+[% END %]
+	<option value="" disabled="true" [% IF pjmatch == 0 %]selected="true"[% END %]>Choose ...</option>
+	</select>[% IF AG_Project_ERROR %]<div class="editFormError">[% AG_Project_ERROR %]</div>[% END %]</td>
+</tr>
+<tr>
+	<td class="editFormLabel">Status</td>
+	<td class="editFormInput">
+		<input type="radio" name="AG_Status" value="A"[% IF AG_Status == 'A' %] checked="true" [% END %]>Active</input>
+		<input type="radio" name="AG_Status" value="B"[% IF AG_Status == 'B' %] checked="true" [% END %]>Blocked</input>
+	</td>
+</tr>
+<tr>
+	<td class="editFormLabel">Must Login</td>
+	<td class="editFormInput">
+		<input type="radio" name="AG_MustLogin" value="Y"[% IF AG_MustLogin == 'Y' %] checked="true" [% END %]>Yes</input>
+		<input type="radio" name="AG_MustLogin" value="N"[% IF AG_MustLogin == 'N' %] checked="true" [% END %]>No</input>
+	</td>
+</tr>
+<tr>
+	<td class="editFormButtons"></td>
+	[% IF X_Method == 'Insert' %]
+	<td class="editFormButtons"><input name="X_Method" type="submit" value="Insert"></input>
+	[% ELSE %]
+	<td class="editFormButtons"><input name="X_Method" type="submit" value="Update"></input>
+	[% END %]
+	<input type="button" onclick="window.location='/scripts/cust/table.php?table=agent&CO_Number=[% CO_Number %]&ItemId=[% AG_Number %]'" value="Cancel"></input></td>
+</tr>
+</table></form>
+</div>
+</body></html>

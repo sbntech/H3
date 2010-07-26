@@ -1,0 +1,82 @@
+# keeps the nvr and the watcher running
+# http://www.tildeslash.com/monit/doc/
+
+set mailserver 10.9.2.1
+set alert grant@sbndials.com
+	mail-format {
+		from: root@w0.sbndials.com
+		subject: [monit] $SERVICE $EVENT at $DATE
+		message: $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION.
+	}
+set logfile "/var/log/monit.log"
+set httpd port 2812 and use address localhost
+    allow localhost   # Allow localhost to connect
+
+# install -o root -g root -m 0600 /home/grant/sbn-git/convert/monitrc /etc/"
+
+check process nvr-1
+    pidfile /var/run/nvr-10.9.2.1.pid
+    start = "/dialer/convert/nvr2.pl 10.9.2.1 F"
+    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.1.pid"
+
+check process nvr-2
+    pidfile /var/run/nvr-10.9.2.2.pid
+    start = "/dialer/convert/nvr2.pl 10.9.2.2 F"
+    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.2.pid"
+
+check process nvr-4
+    pidfile /var/run/nvr-10.9.2.4.pid
+    start = "/dialer/convert/nvr2.pl 10.9.2.4 F"
+    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.4.pid"
+
+check process nvr-6
+    pidfile /var/run/nvr-10.9.2.6.pid
+    start = "/dialer/convert/nvr2.pl 10.9.2.6 A"
+    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.6.pid"
+
+check process nvr-8
+    pidfile /var/run/nvr-10.9.2.8.pid
+    start = "/dialer/convert/nvr2.pl 10.9.2.8 F"
+    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.8.pid"
+
+check process nvr-10
+    pidfile /var/run/nvr-10.9.2.10.pid
+    start = "/dialer/convert/nvr2.pl 10.9.2.10 A"
+    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.10.pid"
+
+check process nvr-11
+    pidfile /var/run/nvr-10.9.2.11.pid
+    start = "/dialer/convert/nvr2.pl 10.9.2.11 A"
+    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.11.pid"
+
+check process nvr-9
+    pidfile /var/run/nvr-10.9.2.9.pid
+    start = "/dialer/convert/nvr2.pl 10.9.2.9 A"
+    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.9.pid"
+
+check process number-helper
+    pidfile /var/run/number-helper.pid
+    start = "/dialer/convert/number-helper.pl"
+    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/number-helper.pid"
+
+check process allocator
+    pidfile /var/run/allocator.pid
+    start = "/dialer/convert/start_allocator.sh"
+    stop = "/usr/bin/killall -KILL allocator.pl"
+	if cpu usage > 90% for 3 cycles then restart
+
+check process CallResultProcessing
+    pidfile /var/run/CallResultProcessing.pid
+    start = "/dialer/convert/CallResultProcessing.pl"
+    stop = "/usr/bin/killall -KILL CallResultProcessing.pl"
+
+check process FastAgiServer
+    pidfile /var/run/FastAgiServer.pid
+    start = "/dialer/convert/FastAgiServer.pm"
+    stop = "/usr/bin/killall -KILL FastAgiServer.pm"
+
+check process SecretServer
+    pidfile /var/run/SecretService.pid
+
+check host sbnDNS with address 216.66.234.2
+    if failed port 53 type udp protocol dns timeout 3 seconds then alert

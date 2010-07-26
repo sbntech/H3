@@ -1,0 +1,10 @@
+set autoindent
+set nobk
+set hlsearch
+set tabstop=4
+set shiftwidth=4
+set laststatus=2
+set statusline=%<%F%=\ [%1*%M%*%n%R%H]\ %-19(%3l,%02c%03V%)
+syntax on
+set makeprg=perl\ -c\ %
+set errorformat=%m\ line\ %l.

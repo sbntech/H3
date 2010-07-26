@@ -1,0 +1,41 @@
+<!--#include virtual="/help/_header.html" -->
+<h1>Project List Page</h1>
+<h2>Menu Button Explanation</h2>
+<dl>
+<dt>Back</dt>
+<dd>Returns to the customer page<dd>
+<dt>New</dt>
+<dd>Create a new project<dd>
+<dt>Edit</dt>
+<dd>Make changes to the selected project in the list.<dd>
+<dt>Remove</dt>
+<dd>Remove the selected project in the list.<dd>
+<dt>Agent Activity</dt>
+<dd>Displays real time activity of the agents on the selected cold calling project.<dd>
+<dt>Report</dt>
+<dd>Displays daily history of dialing activity and costs of the selected project in the list.<dd>
+<dt>Leads</dt>
+<dd>Opens the leads page for uploading and maintaining lead files.<dd>
+<dt>Voice</dt>
+<dd>Opens the Voice file Management page for the selected project.<dd>
+<dt>CDR</dt>
+<dd>Opens the Call Detail Records page for the selected project.<dd>
+<dt>Recordings</dt>
+<dd>Displays the list of recordings made for the selected cold calling project.<dd>
+<dt>Test Call</dt>
+<dd>Opens the test call control page to make a test call using the currently selected, and defined project parameters<dd>
+<dt>Pause/Resume</dt>
+<dd>Blocks all active projects / Resumes previously paused projects<dd>
+<dt>Support</dt>
+<dd>Opens the support page for the selected project.<dd>
+</dl>
+<h2>Columns in the list</h2>
+<dl>
+<dt>Sel</dt>
+<dd>Use this column to select a project as a context for the menu button.<dd>
+<dt>? Support</dt>
+<dd>This column, titled with a question mark, shows any support issues that maybe outstanding for the project. Clicking on this cell opens the support page for that project.<dd>
+<dt>Run Info</dt>
+<dd>The process that allocates lines to projects runs every few minutes and updates this column. (So it can be a few minutes behind reality)  It displays a short status message on the project, if the message is not "Running" then it shows the reason why the project is not running.<dd>
+</dl>
+<!--#include virtual="/help/_footer.html" -->

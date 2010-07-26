@@ -1,0 +1,38 @@
+$TTL 10800
+
+@  IN        SOA        ns-hk-1.us.to. tech.sbndials.com. (
+                        2010030501        ; Serial
+                        28800             ; Refresh
+                        3600              ; Retry
+                        604800            ; Expire
+                        86400 )           ; SOA TTL
+                IN      NS        ns-hk-1.us.to.
+     900        IN      MX        100    mail
+                IN      TXT        "Asia Pacific Telecom"
+
+mail            IN      A       216.66.234.250
+                IN      MX      100     mail
+
+www             IN      CNAME   w0
+
+secure          IN      A       216.66.234.250
+w0              IN      A       216.66.234.250
+worker0         IN      CNAME   w0
+
+agoura          IN      A       69.17.103.227
+w7				IN		A		216.66.234.201
+db0				IN		A		216.66.234.205
+db1				IN		A		216.66.234.206
+w4				IN		A		216.66.234.207
+w5 				IN		A		216.66.234.209
+w8				IN		A		216.66.234.210
+w9 				IN		A		216.66.234.211
+w6 				IN		A		216.66.234.212
+w10				IN		A		216.66.234.213
+w11				IN		A		216.66.234.214
+w13				IN		A		216.66.234.215
+w14				IN		A		216.66.234.216
+w15				IN		A		216.66.234.217
+kvm             IN      A       216.66.234.251
+w2 				IN		A		216.66.234.252
+w3              IN      A       216.66.234.253

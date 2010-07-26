@@ -1,0 +1,271 @@
+<html>[% CustomFieldsMax = 20 %]
+<head>
+<title>Agent Online - [% PJ_Description %]</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css" />
+<script type="text/javascript" src="/glm.js"></script>
+<script>
+
+var polling_interval = 1000; /* miliseconds */
+var polling_period = 0; 
+var polling_url = "/pg/Agent?method=poll&AG_SessionId=[% AG_SessionId %]&LastNumber=0000000000";
+var last_connected_number = "0000000000";
+
+var pdata = {
+	AG_Project:[% AG_Project %],
+	PJ_Description:"[% PJ_Description %]",
+	AG_Number:[% AG_Number %],
+	AG_Name:"[% AG_Name %]",
+	AG_CallBack:"[% AG_CallBack %]"
+};
+
+var popdata;
+
+function repoll(msg) {
+
+	if (polling_period > 5 * 60 * 1000) {
+		window.location = '/pg/Agent?method=login';
+		alert("Timed out: " + msg);
+		return;
+	}
+
+	polling_url = "/pg/Agent?method=poll&AG_SessionId=[% AG_SessionId %]&LastNumber=" + last_connected_number;
+	$("#statusBlock").html(msg + " (" + polling_period / 1000 + " seconds)");
+	setTimeout(poll, polling_interval);
+	polling_period += polling_interval;
+}
+
+function do_popup(dataString) {
+
+	popdata = $.parseJSON(dataString);
+
+	/* X_ProspectPhone */
+	$("#statusBlock").html("Connected to: " + popdata.AG_BridgedTo);
+	$("#X_ProspectPhone_DISPLAY").html(popdata.AG_BridgedTo);
+	$("#X_ProspectPhone").val(popdata.AG_BridgedTo);
+
+	/* PN_Disposition */
+	$("#PN_Disposition").val(popdata.PN_Disposition);
+
+	/* DoNotCall - no need to set this */
+
+	/* PN_CallDT */
+	if (popdata.PN_CallDT != undefined) {
+		$("#PN_CallDT").html(popdata.PN_CallDT + " Eastern");
+	}
+	
+	/* Prev_AG_Name */
+	if (popdata.Prev_AG_Name != undefined) {
+		$("#Prev_AG_Name").html(popdata.Prev_AG_Name);
+	}
+
+	/* PN_Notes */
+	$("#PN_Notes").html(popdata.PN_Notes);	
+	
+	/* X_TransferTo */
+	var xfer = getCookie("X_TransferTo");
+	if (xfer != "") {
+		$('#X_TransferTo').val(xfer);
+	}
+
+	var tmp = $("#OriginalCallScript").html();
+	var callScript = tmp.replace(/</gm, "&lt;");
+	tmp = callScript;
+	callScript = tmp.replace(/>/gm, "&gt;");
+
+	/* Custom Headings (PopLabeln) and Values (PopFieldn) as well as CallScript */
+	for (var n = 0; n < popdata.Loaded_Headings.length; n++) {
+		$("#PopLabel" + n).html(popdata.Loaded_Headings[n]);
+		$("#PopField" + n).val(popdata.Loaded_Data[n]);
+		
+		var popval = "undefined";
+		tmp = popdata.Loaded_Data[n];
+		if ((tmp != undefined) && (tmp.length > 1)) {
+			popval = tmp.replace(/</gm, "&lt;");
+			tmp = popval;
+			popval = tmp.replace(/>/gm, "&gt;");
+		}
+
+		tmp = callScript;
+		callScript = tmp.replace(RegExp("\\x5B" + popdata.Loaded_Headings[n] + "\\x5D", "gm"),
+			"<span class=\"CallScriptData\">" + popval + "</span>");
+
+		if (n == [% CustomFieldsMax %]) {
+			break;
+		}
+	}
+	for (var x = popdata.Loaded_Headings.length; x < [% CustomFieldsMax %]; x++) {
+		$("#PopRow" + x).hide();
+	}
+
+	tmp = callScript;
+	callScript = tmp.replace(/\n/gm, "<br/>");
+
+	$("#CallScript").html(callScript);
+
+	$("#Popup").show();
+	last_connected_number = popdata.AG_BridgedTo;
+	polling_period = 0;
+}
+
+function checkProgress(data) {
+
+	var sec = polling_period / 1000;
+
+	if (data.charAt(0) == '-') {
+		/* non JSON data */
+		var tmp = data;
+		data = tmp.replace("\n", "");
+
+		if (data == "-logged off-") {
+			window.location = '/pg/Agent?method=login';
+			return;
+		} else if (data == '-not ready-') {
+			[%- IF AG_CallBack == 'call-in' %]
+			repoll("Waiting for you to call-in to 213-233-5390, your agent number is [% AG_Number %]");
+			[%- ELSE %]
+			repoll("Standby for a call to [% AG_CallBack %]");
+			[%- END %]
+		} else if (data == '-waiting-') {
+			last_connected_number = '0000000000';
+			repoll("Waiting for prospect");
+		} 
+	} else { 
+		/* JSON popdata received */
+		do_popup(data);
+	}
+}
+
+function do_transfer() {
+
+	// get value of X_TransferTo
+	var TransferTo = $('#X_TransferTo').val();
+	
+	// validate that it is a valid phone number
+	var phRE = /^\d{10}$/;
+	var mstr = phRE.exec(TransferTo);
+
+	if (TransferTo != mstr) {
+		$('#TransferStatus').html('Not a valid phone number');
+		return;
+	}
+
+	// save X_TransferTo as a cookie
+	setCookie("X_TransferTo",TransferTo,365);
+
+	$.ajax({	url:		"/pg/Agent?method=transfer&X_ProspectPhone=" + popdata.AG_BridgedTo + "&X_TransferTo=" + TransferTo, 
+				type:		"GET",
+				dataType:	"text",
+				timeout:	3000,
+				global:		false,
+				cache:		false
+		});
+
+	
+
+	$('#TransferStatus').html('Transfer initiated. Dial * to complete. ');
+}
+
+function do_hangup() {
+
+	$.ajax({	url:		"/pg/Agent?method=hangup&X_ProspectPhone=" + popdata.AG_BridgedTo, 
+				type:		"GET",
+				dataType:	"text",
+				timeout:	3000,
+				global:		false,
+				cache:		false
+		});
+
+	$('#HangupStatus').html('Hangup command sent');
+}
+
+function poll() {
+	$.ajax({	url:		polling_url, 
+				type:		"GET",
+				dataType:	"text",
+				timeout:	10000,
+				global:		false,
+				cache:		false,
+				error:		function(xmlhttp, errstr, excep) {
+								alert("Polling AJAX error: " + errstr);
+								window.location = '/pg/Agent?method=logoff';
+							},
+				success:	function(data) {
+								checkProgress(data);
+							}
+		});
+}
+
+function do_logout() {
+
+	window.location = "/pg/Agent?method=logout";
+
+}
+
+
+</script>
+</head><body class="subpage">
+<div class="mainPage">
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<p id="statusBlock" class="message" style="font-size: 125%; margin-bottom: 5mm">Attempting to contact the server ...</p>
+<table class="editForm" cellspacing="2">
+<tr><td class="editFormLabel">Agent [% AG_Number %]</td><td class="editFormTextDisplay">[% AG_Name %]</td>
+</tr>
+<tr><td class="editFormLabel" style="width:100px">Project [% AG_Project %]</td><td style="width:525px" class="editFormTextDisplay">[% PJ_Description %]</td></tr>
+<tr><td class="editFormLabel"></td><td class="editFormButtons">
+<input type="button" value="Logout" onclick="do_logout()"></input>
+</td></tr>
+</table>
+<div id="Popup" style="margin-top:5mm; display: none">
+<form action="/pg/Agent" method="POST">
+<input type="hidden" name="method" value="process"></input>
+<input type="hidden" name="AG_Project" value="[% AG_Project %]"></input>
+<input type="hidden" name="AG_Number" value="[% AG_Number %]"></input>
+<table class="editForm" cellspacing="2">
+<tr><td class="editFormLabel">Call Script</td><td class="editFormTextDisplay" id="CallScript"><pre id="OriginalCallScript">[% PJ_CallScript %]</pre></td></tr>
+<tr>
+	<td class="editFormLabel" style="width:100px">Called Number</td>
+	<td style="width:525px" class="editFormTextDisplay"><span id="X_ProspectPhone_DISPLAY" style="font-size:150%;font-weight:bolder;">Unknown</span>
+	<input type="hidden" id="X_ProspectPhone" name="X_ProspectPhone" value=""></input>
+	</td>
+</tr>
+<tr><td class="editFormLabel">DNC</td><td class="editFormInput"><input type="checkbox" id="DoNotCall" name="DoNotCall" value="DNC"></input><label for="DoNotCall">&nbsp;Add this number to the Do-Not-Call list</label>&nbsp;</td></tr>
+<tr><td class="editFormLabel">Disposition</td><td class="editFormInput"><select id="PN_Disposition" name="PN_Disposition">
+[% dCount = 0 %]
+[% FOREACH dispo IN X_Dispositions %]
+		[% IF dispo.length > 0 %]
+			<option value="[% dCount %]">[% dCount %] - [% dispo %]</option>
+		[% END %]
+	[% dCount = dCount + 1 %]
+[% END %]
+</select></td></tr>
+<tr><td class="editFormLabel">Previously Called</td><td class="editFormTextDisplay"><span id="PN_CallDT">Unknown</span></td></tr>
+<tr><td class="editFormLabel">Previously talked to</td><td class="editFormTextDisplay"><span id="Prev_AG_Name">Unknown</span></td></tr>
+<tr><td class="editFormLabel">Notes</td><td class="editFormInput"><textarea cols="53" rows="5" id="PN_Notes" name="PN_Notes"></textarea></td></tr>
+[% popindex = 0 %]
+[% WHILE popindex < CustomFieldsMax %]
+<tr id="PopRow[% popindex %]"><td class="editFormLabel" id="PopLabel[% popindex %]">No label</span></td>
+<td class="editFormInput"><input size="55" type="text" value="" id="PopField[% popindex %]" name="PopField[% popindex %]"></input></td></tr>
+[% popindex = popindex + 1 %]
+[% END %]
+<tr><td class="editFormLabel"></td><td class="editFormButtons">
+<input type="submit" value="[% IF PJ_Type == 'C' %]Next Call[% ELSE %]Save[% END %]"></input>&nbsp;
+<input type="button" value="Print" onclick="window.print()"></input>&nbsp;
+[%- IF PJ_Type == 'C' %]
+<input type="button" value="Hang Up" onclick="do_hangup()"></input>&nbsp;<span class="highlight" id="HangupStatus"></span>
+<tr><td class="editFormLabel"></td><td class="editFormButtons">
+<input type="text" size="14" name="X_TransferTo" id="X_TransferTo""></input>&nbsp;
+<input type="button" value="Transfer" onclick="do_transfer()"></input>&nbsp;<span class="highlight" id="TransferStatus"></span>
+</td></tr>
+[%- END %]
+</td></tr>
+</table>
+</form>
+</div>
+<script>
+	poll();
+</script>
+[% END %]
+</div>
+</body></html>

@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>[% ContextProject.PJ_Description %] - test call</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body class="subpage">
+[% IF ErrStr %]<p class="error">[% ErrStr %]  Cust=[% CO_Number %]</p>
+[% ELSE %]
+<div class="buttonBar">
+<button onclick="document.location.href='/pg/ProjectList?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'">Back</button>
+</div><div class="mainPage">
+<h1>Test Call for: [% ContextProject.PJ_Description %]</h1>
+<p class="error">[% Message %]</p>
+<form action="/pg/ProjectTestCall?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]" method="POST">
+<input name="PJ_Number" value="[% PJ_Number %]" type="hidden"></input>
+<table class="editForm" cellspacing=2>
+    <tr><td class="editFormLabel">Type</td><td class="editFormInput">
+	<input name="X_TestType" type="radio" value="T" checked="true"></input>Test
+	<input name="X_TestType" type="radio" value="S"></input>Sample
+	</td></tr>
+    <tr><td class="editFormLabel">Number to Call</td><td class="editFormInput"><input name="X_TestPhone" value="[% X_TestPhone %]" size="12"></input></td></tr>
+	[% IF ContextProject.PJ_Type == 'P' %]
+    <tr><td class="editFormLabel">Agent Callback Number</td><td class="editFormInput"><input name="X_PhoneCallC" value="[% X_PhoneCallC %]" size="12"></input></td></tr>
+	[% END %]
+    <tr><td class="editFormLabel">Caller Id</td><td class="editFormInput"><input name="X_OrigPhoneNr" value="[% X_OrigPhoneNr %]" size="12"></input></td></tr>
+	[% IF Session.L_Level == 6 %]
+    <tr><td class="editFormLabel">Switch</td><td class="editFormInput"><select name="X_Switch">
+	<option value="any">Any</option>
+	[% FOREACH sw IN SwitchList %]
+	<option value="[% sw.SW_ID %]">[% sw.SW_ID %]-[% sw.SW_StatusDesc %]</option>
+	[% END %]
+	</select></td></tr>
+    <tr><td class="editFormLabel">Board</td><td class="editFormInput"><select name="X_Board">
+	    <option value="-1">Any</option>
+	    <option value="1">1</option>
+	    <option value="2">2</option>
+	    <option value="3">3</option>
+	    <option value="4">4</option>
+	    <option value="5">5</option>
+	    <option value="6">6</option>
+	    <option value="7">7</option>
+	    <option value="8">8</option>
+	    <option value="9">9</option>
+	    <option value="10">10</option>
+	    <option value="11">11</option>
+	    <option value="12">12</option>
+	    <option value="13">13</option>
+	    <option value="14">14</option>
+	    <option value="15">15</option>
+	    <option value="16">16</option>
+	    <option value="17">17</option>
+	    <option value="18">18</option>
+	    <option value="19">19</option>
+	    <option value="20">20</option>
+	    <option value="21">21</option>
+		<option value="22">22</option>
+		<option value="23">23</option>
+		<option value="24">24</option>
+		<option value="25">25</option>
+		<option value="26">26</option>
+		<option value="27">27</option>
+		<option value="28">28</option>
+	 </select></td></tr>
+    <tr><td class="editFormLabel">Line</td><td class="editFormInput"><select name="X_Channel">
+	    <option value="-1">Any</option>
+	    <option value="1">1</option>
+	    <option value="2">2</option>
+	    <option value="3">3</option>
+	    <option value="4">4</option>
+	    <option value="5">5</option>
+	    <option value="6">6</option>
+	    <option value="7">7</option>
+	    <option value="8">8</option>
+	    <option value="9">9</option>
+	    <option value="10">10</option>
+	    <option value="11">11</option>
+	    <option value="12">12</option>
+	    <option value="13">13</option>
+	    <option value="14">14</option>
+	    <option value="15">15</option>
+	    <option value="16">16</option>
+	    <option value="17">17</option>
+	    <option value="18">18</option>
+	    <option value="19">19</option>
+	    <option value="20">20</option>
+	    <option value="21">21</option>
+		<option value="22">22</option>
+		<option value="23">23</option>
+	 </select></td></tr>
+	[% END %]
+    <tr><td class="editFormLabel"></td><td class="editFormButtons"><input type="submit" value="Run"></td></tr>
+</table></form>
+</div>
+[% END %]
+</body></html>

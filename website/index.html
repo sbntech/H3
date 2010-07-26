@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>SBN Dials</title>
+<style>
+
+body {
+	padding: 0;
+	margin: 0;
+	background-image: url('/images/background.jpg');
+	background-repeat:no-repeat;
+}
+
+h1.sbn-title {
+	font-size: 25px;
+	padding-top: 21px;
+	padding-bottom: 20px;
+	padding-left: 50px;
+	margin: 0;
+	background-color: #326c92;
+	font-family: sans,helvetica;
+	font-weight: bold;
+	color: white;
+}
+
+td.nav-left {
+	background-color: #326c92;
+	font-family: sans,helvetica;
+	font-weight: bold;
+	color: white;
+	vertical-align: top;
+}
+
+ul.nav-menu {
+	padding-top: 40px;
+	padding-bottom: 40px;
+	list-style-type: none;
+}
+
+a.nav-menuitem {
+	padding-left: 10px;
+	padding-right: 10px;
+	font-size: 4mm;
+	font-family: sans,helvetica;
+	text-decoration: none;
+	color: white;
+}
+
+a.nav-menuitem:hover {
+	color: #FFF;
+	background-color: #990000;
+}
+
+td.main-right {
+	padding-left: 20px;
+	vertical-align: top;
+}
+
+p.emph {
+	color: #990000;
+	font-weight: bold;
+	font-size: 16px;
+}
+
+div.shown {
+	display: block;
+}
+
+div.hidden {
+	display: none;
+}
+
+</style>
+<script>
+
+	var mainDivs = [ "divHOME", "divSIGNUP" ];
+
+	function setClass(elemId, cName) {
+		var d = document.getElementById(elemId);
+		d.className = cName;
+	}
+
+	function showDiv(elemId) {
+
+		for (var dName in mainDivs) { 
+
+			var curName = mainDivs[dName];
+
+			if (elemId != curName) {
+				setClass(curName, "hidden");
+			}
+		}
+
+		setClass(elemId, "show");
+	}
+		
+</script>
+</head>
+<body>
+<h1 class="sbn-title">SBN DIALS</h1>
+<table cellspacing=0 cellpadding=0>
+<tr>
+<td class="nav-left">
+<ul class="nav-menu">
+	<li><a class="nav-menuitem" onclick="showDiv('divHOME')">Home</a></li>
+	<li><a class="nav-menuitem" onclick="showDiv('divSIGNUP')">Sign Up</a></li>
+	<li><a class="nav-menuitem" href="http://w0.sbndials.com/start.html">Login</a></li>
+	<li><a class="nav-menuitem" href="http://w0.sbndials.com/terms.html">Terms and Conditions</a></li>
+</ul>
+<img src="/images/telephone.jpg"/><br/>
+<img src="/images/addy.jpg"/>
+</td>
+<td class="main-right" comment="This is the main screen area">
+<div id="divHOME" class="shown" style="width:600px">
+<p class="emph">The premium IVR and Voice Broadcast service provider</p>
+<ol>
+<li>Voice broadcast ( commercial message delivery)</li>
+<li>Notification services, emergency and otherwise.</li>
+<li>Predictive dialing (press 1)</li>
+<li>Predictive cold calling</li>
+<li>Surveys </li>
+</ol>
+<p>Our service allows anyone to immediately have a small or  large scale dialer system available to them without any investment in people, equipment, software or long term contracts with telecom providers. Whether you need 5 or 5000 lines to deliver your messages, we are the easy and scalable cost effective solution.</p>
+<p>We provide our services worldwide to small and large  marketing companies and political consulting firms through our state of the art  platform that has proven its reliability and consistent results for almost 10 years. We have a proven track record of  performing in the toughest conditions such as multiple presidential election  days.</p>
+<p>The easy to use web interface allows our customers real time  full control of their projects, our full featured XML interface allows easy  integration in other applications.<br />
+Our services have a total capacity of several million call  attempts per hour. <br />
+We are the provider of choice to larger resellers and  political promotion firms nationwide.</p>
+<p>Our systems are located in a first class Telecom building, with power backup and redundancy in just about every critical area, to guarantee the highest possible uptime to our customers. Our annual downtime has  been less than 3 hours a year.</p>
+</div>
+<div id="divSIGNUP" class="hidden" style="width:600px; padding-top:20px;">
+	<iframe src="http://w0.sbndials.com/pg/Signup?Profile=SBN" width="100%" height="648px" frameborder="0"></iframe>
+</div>
+</td>
+</tr>
+</table>
+</body>
+</html>

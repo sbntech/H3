@@ -1,0 +1,19 @@
+<html>
+<head>
+<title>Militants</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body>
+<div class='buttonBar'>
+<button onclick="location = '/scripts/beh/beheer.php'">Back</button>
+</div>
+<div class='mainPage'>
+<h2>Adding Militants</h2>
+<form action="/pg/Militant" method="post">
+<p>Militant Phone Numbers<br>(one per line)</p>
+<textarea name="MilitantPhone" cols="20" rows="10"></textarea><br>
+<input type="submit" value="Add"></input>
+</form>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>[% END %]
+[% IF MessageStr %]<p class="message">[% MessageStr %]</p>[% END %]
+</div>
+</body></html>

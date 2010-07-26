@@ -1,0 +1,72 @@
+
+
+
+
+* From: "Mark R. Lindsey" <lindsey@acm.org>
+* Date: Mon, 11 Sep 2006 11:51:54 -0400
+* Cc: "SAGE mailing list" <sage-members@sage.org>, "LOPSA Discuss List" <discuss@lopsa.org>
+* In-Reply-To: <bb075cdf0609102037o7016a31ai3126d81f13f27490@mail.gmail.com>
+
+> Anyone know of a service that can provide phone number to provider
+> mappings? say for example if I submit the number 555-555-5555 t would
+> let me know that Cingular is the carrier for that number.
+>
+> I have an little idea where this could be very useful and was
+> wondering if anyone know of such a service thanks.
+
+
+The other guys have mentioned a few good ideas, and brought up number  
+portability. There's a way to get there from here.
+
+In the NANPA region, Telcordia maintains the "BIRDS" database (I may  
+have that spelled wrong); it maintains the list of NPANXX's (i.e.,  
+the first six digits of NANPA telephone numbers) and the associated  
+carrier codes. Each of those NPANXX's has a sort of "home carrier",  
+but that home carrier might only have one or two numbers out of the  
+entire block. This database is published in a few forms, including  
+the LERG and NNACL. Telephone companies have to buy these; you can  
+get started somewhere around $1500/year, I think.
+
+A lot of the free sources are hacks off of this real data. They're  
+less accurate. The data in the Telcordia database *controls*  
+telephone call routing; the other sources just try to mirror the  
+routing databases. There's also CCMI, who makes data of a good  
+quality, and competes with Telcordia.
+
+One of those numbers within an NPANXX is the LRN -- Local Routing  
+Number. Usually the LRN will be the "1000" number within the block;  
+e.g., 404-446-1000 might be an LRN. From the LRN, you can find the  
+OCN -- the Operating Company Number. The OCN can be dereferenced to  
+an actual carrier name and address.
+
+When you place a telephone call to a number that may be ported, your  
+telephone switch does an SS7 LNP (Local Number Portability) "database  
+dip" to find the LRN of the home switch. If there's an LRN, it needs  
+to route the call "as if" the LRN were the real called-party number.  
+It does "global title translation"  (GTT) to put in the LRN in the  
+called-party-number, and routes as usual. When it reaches the final  
+switch where the user is "homed", it does GTT to translate the number  
+back, and delivers the call.
+
+If there was no LRN, then it can route the call according to the  
+standard tables, like the LERG.
+
+If you want to know which carrier actually has a specific telephone  
+number, you'd first do an SS7 dip to get the LRN; if there's no LRN,  
+the number's not ported, and you can use one of the simple sources,  
+like the LERG directly. From there you can get the OCN, and the  
+company name.
+
+If you get an LRN, then lookup the owner of the LRN in the LERG; from  
+there, you can get the OCN, and the company name.
+
+To do this, you need a way to do SS7 dips. That ain't cheap, although  
+I think you can probably get it via SIGTRAN or SIP-T via the Internet  
+from Telcordia or a high-end SS7 database provider. You're probably  
+talking at least $2k/month for an SS7 database provider connectivity.  
+Plus, each SS7 dip costs money on top of that -- typically well under  
+$0.01.
+
+Mark
+
+

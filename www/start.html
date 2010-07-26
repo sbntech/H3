@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>login</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<link rel="P3Pv1" href="http://216.66.234.250/w3c/p3p.xml" />
+</head>
+<BODY onload="document.Form.username.focus()">
+<Form Name=Form Action="checkpwd.php" METHOD=POST>
+<table border=0 cellspacing=1 cellpadding=1>
+    <tr><td colspan="2"><div id="divMessage" style="color:red;"></div></td></tr>
+    <tr><td>Username:</td><td><input id=username name=username></td></tr>
+    <tr><td>Password:</td><td><input id=password type=password name=password></td></tr>
+    <tr><td colspan="2" align=right><input id=submit1 type=submit value=Submit name=submit1></td></tr>
+</table>
+</form>
+<script>
+    var msg = location.search;
+    var d = document.getElementById("divMessage");
+    if (msg.length < 10) {
+        d.innerHTML = "Login:";
+    }
+    else {
+        msg = msg.substr(msg.indexOf("message=") + 8);
+		d.innerHTML = "<b>" + decodeURI(msg) + "</b>";
+    }
+</script>
+</body>
+</html>

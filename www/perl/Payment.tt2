@@ -1,0 +1,397 @@
+<html>
+<head>
+<title>Payment</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body>
+[% IF ShowPeriodicDetails == 'Yes' %]
+<h2>Periodic Payment</h2>
+[% ELSE %]
+<h2>Payment</h2>
+[% END %]
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSIF SuccessStr %]
+<h1>Transaction Record</h1>
+<p class="message">Your credit card was successfully charged.</p>
+<table>
+<tr><td>Date:</td><td>[% SuccessStr %]</td></tr>
+<tr><td>Amount:</td><td>[% CC_Amount %]</td></tr>
+<tr><td>Approval Code:</td><td>[% API_result.approval %]</td></tr>
+<tr><td>Transaction Id:</td><td>[% API_result.anatransid %]</td></tr>
+<tr><td>Message Id:</td><td>[% API_result.messageid %]</td></tr>
+</table>
+<br/><input type="button" onclick="window.close()" value="Close"></input>
+[% ELSE %]
+[% IF PPayStr %]<p class="message">[% PPayStr %]</p>[% END %]
+<form 
+[% IF CO_Number %] 
+ action="https://[% HTTP_Host %]/pg/Payment?CO_Number=[% CO_Number %]&HTTP_Host=[% HTTP_Host %]"
+[% ELSIF RS_DistribCode %]
+ action="https://[% HTTP_Host %]/pg/Payment?RS_Number=[% RS_Number %]&RS_DistribCode=[% RS_DistribCode %]&HTTP_Host=[% HTTP_Host %]"
+[% ELSE %]
+ action="https://[% HTTP_Host %]/pg/Payment?RS_Number=[% RS_Number %]&HTTP_Host=[% HTTP_Host %]"
+[% END %]
+ method="post" enctype="multipart/form-data">
+<input type="hidden" value="[% SessionId %]" name="SessionId"/>
+[% BLOCK formdisplayrow %]
+       <tr>
+               <td class="editFormLabel">[% label %]</td>
+               <td class="editFormTextDisplay">[% varval %]</td>
+       </tr>
+[% END %]
+[% BLOCK formtextrow %]
+	<tr>
+		<td class="editFormLabel">[% label %]</td>
+		<td class="editFormInput"><input class="editForm" type="text" 
+			size="[% size %]" 
+			name="[% varname %]"
+			value="[% varval %]"></input>[% IF estr %]<div class="editFormError">[% estr %]</div>[% END %]</td>
+	</tr>
+[% END %]
+[% IF Processing_Error %]<p class="error" style="width:550px">[% Processing_Error %]</p>[% END %]
+<table class="editForm" cellspacing="2">
+[% PROCESS formdisplayrow label='Name' varval=PY_Name %]
+<tr>
+	<td class="editFormLabel">Balance</td>
+	<td class="editFormTextDisplay">$[% FILTER format('%0.2f') %][% PY_Credit %][% END %]</td>
+</tr>
+[% IF ShowPeriodicDetails == 'Yes' %]
+[% PROCESS formdisplayrow label='Authorized Agents' varval=ContextCustomer.CO_AuthorizedAgents %]
+[% PROCESS formdisplayrow label='Agent Charge' varval=ContextCustomer.CO_AgentCharge %]
+	[% IF PeriodicPay.PP_Last4.length == 4 %]
+		[% PROCESS formdisplayrow label='Initial Setup' varval=PeriodicPay.PP_SetupDT %]
+		[% PROCESS formdisplayrow label='Last Payment' varval=PeriodicPay.PP_LastPayDT %]
+		[% PROCESS formdisplayrow label='CC Last 4 digits' varval=PeriodicPay.PP_Last4 %]
+	[% END %]
+	[% IF PeriodicPay.PP_Error %]
+		[% PROCESS formdisplayrow label='Periodic Payment Error' varval=PeriodicPay.PP_Error %]
+	[% END %]
+[% END %]
+[% PROCESS formtextrow label='Amount' size='14' varname='CC_Amount' varval=CC_Amount estr=CC_Amount_ERROR %]
+[% IF ShowCardDetails == 'Yes' %]
+	<tr>
+		<td class="editFormLabel">Card Type</td>
+		<td class="editFormInput"><select name="CC_Type">
+			<option value="amex" [% IF CC_Type == 'amex' %] selected="true"[% END %]>American Express</option>
+			<option value="visa" [% IF CC_Type == 'visa' %] selected="true"[% END %]>Visa</option>
+			<option value="mc" [% IF CC_Type == 'mc' %] selected="true"[% END %]>MasterCard</option>
+			<option value="discover" [% IF CC_Type == 'discover' %] selected="true"[% END %]>Discover</option>
+			<option value="diners" [% IF CC_Type == 'diners' %] selected="true"[% END %]>Diners</option>
+			<option value="jcb" [% IF CC_Type == 'jcb' %] selected="true"[% END %]>JCB</option>
+			</select> <div class="editFormError">[% CC_Type_ERROR %]</div>
+		</td>
+	</tr>
+[% PROCESS formtextrow label='Credit Card Number' size='25' varname='CC_Number' varval=CC_Number estr=CC_Number_ERROR %]
+	<tr>
+		<td class="editFormLabel">Expires</td>
+		<td class="editFormInput"><select name="CC_ExpiresMonth">
+			<option value="01" selected="true">01 - January</option>
+			<option value="02">02 - February</option>
+			<option value="03">03 - March</option>
+			<option value="04">04 - April</option>
+			<option value="05">05 - May</option>
+			<option value="06">06 - June</option>
+			<option value="07">07 - July</option>
+			<option value="08">08 - August</option>
+			<option value="09">09 - September</option>
+			<option value="10">10 - October</option>
+			<option value="11">11 - November</option>
+			<option value="12">12 - December</option>
+			</select><select name="CC_ExpiresYear">
+			<option value="09">2009</option>
+			<option value="10" selected="true">2010</option>
+			<option value="11">2011</option>
+			<option value="12">2012</option>
+			<option value="13">2013</option>
+			<option value="14">2014</option>
+			<option value="15">2015</option>
+			<option value="16">2016</option>
+			<option value="17">2017</option>
+			<option value="18">2018</option>
+			</select> <div class="editFormError">[% PY_expires_ERROR %]</div>
+		</td>
+	</tr>
+[% PROCESS formtextrow label='CVV2/CVC2/CID' size='5' varname='CC_CVV' varval=CC_CVV estr=CC_CVV_ERROR %]
+[% PROCESS formtextrow label='Name on Card' size='51' varname='CC_NameOnCard' varval=CC_NameOnCard estr=CC_NameOnCard_ERROR %]
+[% PROCESS formtextrow label='Billing Address 1' size='61' varname='CC_BillingAddress' varval=CC_BillingAddress estr=CC_BillingAddress_ERROR %]
+[% PROCESS formtextrow label='Billing Address 2' size='61' varname='CC_BillingAddress1' varval=CC_BillingAddress1 estr=CC_BillingAddress1_ERROR %]
+[% PROCESS formtextrow label='Billing City' size='61' varname='CC_BillingCity' varval=CC_BillingCity estr=CC_BillingCity_ERROR %]
+[% PROCESS formtextrow label='Billing State' size='6' varname='CC_BillingState' varval=CC_BillingState estr=CC_BillingState_ERROR %]
+[% PROCESS formtextrow label='Billing ZIP' size='12' varname='CC_BillingZip' varval=CC_BillingZip estr=CC_BillingZip_ERROR %]
+	<tr>
+		<td class="editFormLabel">Billing Country</td>
+		<td class="editFormInput"><select name="CC_BillingCountry">
+<option value="AF" [% IF CC_BillingCountry == 'AF' %] selected="true"[% END %]>Afghanistan</option>
+
+<option value="AX" [% IF CC_BillingCountry == 'AX' %] selected="true"[% END %]>Aland Islands</option>
+<option value="AL" [% IF CC_BillingCountry == 'AL' %] selected="true"[% END %]>Albania</option>
+<option value="DZ" [% IF CC_BillingCountry == 'DZ' %] selected="true"[% END %]>Algeria</option>
+<option value="AS" [% IF CC_BillingCountry == 'AS' %] selected="true"[% END %]>American Samoa</option>
+<option value="AD" [% IF CC_BillingCountry == 'AD' %] selected="true"[% END %]>Andorra</option>
+<option value="AO" [% IF CC_BillingCountry == 'AO' %] selected="true"[% END %]>Angola</option>
+<option value="AI" [% IF CC_BillingCountry == 'AI' %] selected="true"[% END %]>Anguilla</option>
+<option value="AQ" [% IF CC_BillingCountry == 'AQ' %] selected="true"[% END %]>Antarctica</option>
+<option value="AG" [% IF CC_BillingCountry == 'AG' %] selected="true"[% END %]>Antigua and Barbuda</option>
+<option value="AR" [% IF CC_BillingCountry == 'AR' %] selected="true"[% END %]>Argentina</option>
+<option value="AM" [% IF CC_BillingCountry == 'AM' %] selected="true"[% END %]>Armenia</option>
+<option value="AW" [% IF CC_BillingCountry == 'AW' %] selected="true"[% END %]>Aruba</option>
+<option value="AC" [% IF CC_BillingCountry == 'AC' %] selected="true"[% END %]>Ascension Island</option>
+<option value="AU" [% IF CC_BillingCountry == 'AU' %] selected="true"[% END %]>Australia</option>
+<option value="AT" [% IF CC_BillingCountry == 'AT' %] selected="true"[% END %]>Austria</option>
+<option value="AZ" [% IF CC_BillingCountry == 'AZ' %] selected="true"[% END %]>Azerbaijan</option>
+<option value="BS" [% IF CC_BillingCountry == 'BS' %] selected="true"[% END %]>Bahamas</option>
+<option value="BH" [% IF CC_BillingCountry == 'BH' %] selected="true"[% END %]>Bahrain</option>
+<option value="BB" [% IF CC_BillingCountry == 'BB' %] selected="true"[% END %]>Barbados</option>
+<option value="BD" [% IF CC_BillingCountry == 'BD' %] selected="true"[% END %]>Bangladesh</option>
+<option value="BY" [% IF CC_BillingCountry == 'BY' %] selected="true"[% END %]>Belarus</option>
+<option value="BE" [% IF CC_BillingCountry == 'BE' %] selected="true"[% END %]>Belgium</option>
+<option value="BZ" [% IF CC_BillingCountry == 'BZ' %] selected="true"[% END %]>Belize</option>
+<option value="BJ" [% IF CC_BillingCountry == 'BJ' %] selected="true"[% END %]>Benin</option>
+<option value="BM" [% IF CC_BillingCountry == 'BM' %] selected="true"[% END %]>Bermuda</option>
+<option value="BT" [% IF CC_BillingCountry == 'BT' %] selected="true"[% END %]>Bhutan</option>
+<option value="BW" [% IF CC_BillingCountry == 'BW' %] selected="true"[% END %]>Botswana</option>
+<option value="BO" [% IF CC_BillingCountry == 'BO' %] selected="true"[% END %]>Bolivia</option>
+<option value="BA" [% IF CC_BillingCountry == 'BA' %] selected="true"[% END %]>Bosnia and Herzegovina</option>
+<option value="BV" [% IF CC_BillingCountry == 'BV' %] selected="true"[% END %]>Bouvet Island</option>
+<option value="BR" [% IF CC_BillingCountry == 'BR' %] selected="true"[% END %]>Brazil</option>
+<option value="IO" [% IF CC_BillingCountry == 'IO' %] selected="true"[% END %]>British Indian Ocean Territory</option>
+<option value="BN" [% IF CC_BillingCountry == 'BN' %] selected="true"[% END %]>Brunei Darussalam</option>
+<option value="BG" [% IF CC_BillingCountry == 'BG' %] selected="true"[% END %]>Bulgaria</option>
+<option value="BF" [% IF CC_BillingCountry == 'BF' %] selected="true"[% END %]>Burkina Faso</option>
+<option value="BI" [% IF CC_BillingCountry == 'BI' %] selected="true"[% END %]>Burundi</option>
+<option value="KH" [% IF CC_BillingCountry == 'KH' %] selected="true"[% END %]>Cambodia</option>
+<option value="CM" [% IF CC_BillingCountry == 'CM' %] selected="true"[% END %]>Cameroon</option>
+<option value="CA" [% IF CC_BillingCountry == 'CA' %] selected="true"[% END %]>Canada</option>
+<option value="CV" [% IF CC_BillingCountry == 'CV' %] selected="true"[% END %]>Cape Verde</option>
+<option value="KY" [% IF CC_BillingCountry == 'KY' %] selected="true"[% END %]>Cayman Islands</option>
+<option value="CF" [% IF CC_BillingCountry == 'CF' %] selected="true"[% END %]>Central African Republic</option>
+<option value="TD" [% IF CC_BillingCountry == 'TD' %] selected="true"[% END %]>Chad</option>
+<option value="CL" [% IF CC_BillingCountry == 'CL' %] selected="true"[% END %]>Chile</option>
+<option value="CN" [% IF CC_BillingCountry == 'CN' %] selected="true"[% END %]>China</option>
+<option value="CX" [% IF CC_BillingCountry == 'CX' %] selected="true"[% END %]>Christmas Island</option>
+<option value="CC" [% IF CC_BillingCountry == 'CC' %] selected="true"[% END %]>Cocos (Keeling) Islands</option>
+<option value="CO" [% IF CC_BillingCountry == 'CO' %] selected="true"[% END %]>Colombia</option>
+<option value="KM" [% IF CC_BillingCountry == 'KM' %] selected="true"[% END %]>Comoros</option>
+<option value="CG" [% IF CC_BillingCountry == 'CG' %] selected="true"[% END %]>Congo</option>
+<option value="CD" [% IF CC_BillingCountry == 'CD' %] selected="true"[% END %]>Congo, Democratic Republic</option>
+<option value="CK" [% IF CC_BillingCountry == 'CK' %] selected="true"[% END %]>Cook Islands</option>
+<option value="CR" [% IF CC_BillingCountry == 'CR' %] selected="true"[% END %]>Costa Rica</option>
+<option value="CI" [% IF CC_BillingCountry == 'CI' %] selected="true"[% END %]>Cote D'Ivoire (Ivory Coast)</option>
+<option value="HR" [% IF CC_BillingCountry == 'HR' %] selected="true"[% END %]>Croatia (Hrvatska)</option>
+<option value="CU" [% IF CC_BillingCountry == 'CU' %] selected="true"[% END %]>Cuba</option>
+<option value="CY" [% IF CC_BillingCountry == 'CY' %] selected="true"[% END %]>Cyprus</option>
+<option value="CZ" [% IF CC_BillingCountry == 'CZ' %] selected="true"[% END %]>Czech Republic</option>
+<option value="CS" [% IF CC_BillingCountry == 'CS' %] selected="true"[% END %]>Czechoslovakia (former)</option>
+<option value="DK" [% IF CC_BillingCountry == 'DK' %] selected="true"[% END %]>Denmark</option>
+<option value="DJ" [% IF CC_BillingCountry == 'DJ' %] selected="true"[% END %]>Djibouti</option>
+<option value="DM" [% IF CC_BillingCountry == 'DM' %] selected="true"[% END %]>Dominica</option>
+<option value="DO" [% IF CC_BillingCountry == 'DO' %] selected="true"[% END %]>Dominican Republic</option>
+<option value="TP" [% IF CC_BillingCountry == 'TP' %] selected="true"[% END %]>East Timor</option>
+<option value="EC" [% IF CC_BillingCountry == 'EC' %] selected="true"[% END %]>Ecuador</option>
+<option value="EG" [% IF CC_BillingCountry == 'EG' %] selected="true"[% END %]>Egypt</option>
+<option value="SV" [% IF CC_BillingCountry == 'SV' %] selected="true"[% END %]>El Salvador</option>
+<option value="GQ" [% IF CC_BillingCountry == 'GQ' %] selected="true"[% END %]>Equatorial Guinea</option>
+<option value="ER" [% IF CC_BillingCountry == 'ER' %] selected="true"[% END %]>Eritrea</option>
+<option value="EE" [% IF CC_BillingCountry == 'EE' %] selected="true"[% END %]>Estonia</option>
+<option value="ET" [% IF CC_BillingCountry == 'ET' %] selected="true"[% END %]>Ethiopia</option>
+<option value="FK" [% IF CC_BillingCountry == 'FK' %] selected="true"[% END %]>Falkland Islands (Malvinas)</option>
+<option value="FO" [% IF CC_BillingCountry == 'FO' %] selected="true"[% END %]>Faroe Islands</option>
+<option value="FJ" [% IF CC_BillingCountry == 'FJ' %] selected="true"[% END %]>Fiji</option>
+<option value="FI" [% IF CC_BillingCountry == 'FI' %] selected="true"[% END %]>Finland</option>
+<option value="FR" [% IF CC_BillingCountry == 'FR' %] selected="true"[% END %]>France</option>
+<option value="FX" [% IF CC_BillingCountry == 'FX' %] selected="true"[% END %]>France, Metropolitan</option>
+<option value="GF" [% IF CC_BillingCountry == 'GF' %] selected="true"[% END %]>French Guiana</option>
+<option value="PF" [% IF CC_BillingCountry == 'PF' %] selected="true"[% END %]>French Polynesia</option>
+<option value="TF" [% IF CC_BillingCountry == 'TF' %] selected="true"[% END %]>French Southern Territories</option>
+<option value="MK" [% IF CC_BillingCountry == 'MK' %] selected="true"[% END %]>F.Y.R.O.M. (Macedonia)</option>
+<option value="GA" [% IF CC_BillingCountry == 'GA' %] selected="true"[% END %]>Gabon</option>
+<option value="GM" [% IF CC_BillingCountry == 'GM' %] selected="true"[% END %]>Gambia</option>
+<option value="GE" [% IF CC_BillingCountry == 'GE' %] selected="true"[% END %]>Georgia</option>
+<option value="DE" [% IF CC_BillingCountry == 'DE' %] selected="true"[% END %]>Germany</option>
+<option value="GH" [% IF CC_BillingCountry == 'GH' %] selected="true"[% END %]>Ghana</option>
+<option value="GI" [% IF CC_BillingCountry == 'GI' %] selected="true"[% END %]>Gibraltar</option>
+<option value="GB" [% IF CC_BillingCountry == 'GB' %] selected="true"[% END %]>Great Britain (UK)</option>
+<option value="GR" [% IF CC_BillingCountry == 'GR' %] selected="true"[% END %]>Greece</option>
+<option value="GL" [% IF CC_BillingCountry == 'GL' %] selected="true"[% END %]>Greenland</option>
+<option value="GD" [% IF CC_BillingCountry == 'GD' %] selected="true"[% END %]>Grenada</option>
+<option value="GP" [% IF CC_BillingCountry == 'GP' %] selected="true"[% END %]>Guadeloupe</option>
+<option value="GU" [% IF CC_BillingCountry == 'GU' %] selected="true"[% END %]>Guam</option>
+<option value="GT" [% IF CC_BillingCountry == 'GT' %] selected="true"[% END %]>Guatemala</option>
+<option value="GN" [% IF CC_BillingCountry == 'GN' %] selected="true"[% END %]>Guinea</option>
+<option value="GW" [% IF CC_BillingCountry == 'GW' %] selected="true"[% END %]>Guinea-Bissau</option>
+<option value="GY" [% IF CC_BillingCountry == 'GY' %] selected="true"[% END %]>Guyana</option>
+<option value="HT" [% IF CC_BillingCountry == 'HT' %] selected="true"[% END %]>Haiti</option>
+<option value="HM" [% IF CC_BillingCountry == 'HM' %] selected="true"[% END %]>Heard and McDonald Islands</option>
+<option value="HN" [% IF CC_BillingCountry == 'HN' %] selected="true"[% END %]>Honduras</option>
+<option value="HK" [% IF CC_BillingCountry == 'HK' %] selected="true"[% END %]>Hong Kong</option>
+<option value="HU" [% IF CC_BillingCountry == 'HU' %] selected="true"[% END %]>Hungary</option>
+<option value="IS" [% IF CC_BillingCountry == 'IS' %] selected="true"[% END %]>Iceland</option>
+<option value="IN" [% IF CC_BillingCountry == 'IN' %] selected="true"[% END %]>India</option>
+<option value="ID" [% IF CC_BillingCountry == 'ID' %] selected="true"[% END %]>Indonesia</option>
+<option value="IR" [% IF CC_BillingCountry == 'IR' %] selected="true"[% END %]>Iran</option>
+<option value="IQ" [% IF CC_BillingCountry == 'IQ' %] selected="true"[% END %]>Iraq</option>
+<option value="IE" [% IF CC_BillingCountry == 'IE' %] selected="true"[% END %]>Ireland</option>
+<option value="IL" [% IF CC_BillingCountry == 'IL' %] selected="true"[% END %]>Israel</option>
+<option value="IM" [% IF CC_BillingCountry == 'IM' %] selected="true"[% END %]>Isle of Man</option>
+<option value="IT" [% IF CC_BillingCountry == 'IT' %] selected="true"[% END %]>Italy</option>
+<option value="JE" [% IF CC_BillingCountry == 'JE' %] selected="true"[% END %]>Jersey</option>
+<option value="JM" [% IF CC_BillingCountry == 'JM' %] selected="true"[% END %]>Jamaica</option>
+<option value="JP" [% IF CC_BillingCountry == 'JP' %] selected="true"[% END %]>Japan</option>
+<option value="JO" [% IF CC_BillingCountry == 'JO' %] selected="true"[% END %]>Jordan</option>
+<option value="KZ" [% IF CC_BillingCountry == 'KZ' %] selected="true"[% END %]>Kazakhstan</option>
+<option value="KE" [% IF CC_BillingCountry == 'KE' %] selected="true"[% END %]>Kenya</option>
+<option value="KI" [% IF CC_BillingCountry == 'KI' %] selected="true"[% END %]>Kiribati</option>
+<option value="KP" [% IF CC_BillingCountry == 'KP' %] selected="true"[% END %]>Korea (North)</option>
+<option value="KR" [% IF CC_BillingCountry == 'KR' %] selected="true"[% END %]>Korea (South)</option>
+<option value="KW" [% IF CC_BillingCountry == 'KW' %] selected="true"[% END %]>Kuwait</option>
+<option value="KG" [% IF CC_BillingCountry == 'KG' %] selected="true"[% END %]>Kyrgyzstan</option>
+<option value="LA" [% IF CC_BillingCountry == 'LA' %] selected="true"[% END %]>Laos</option>
+<option value="LV" [% IF CC_BillingCountry == 'LV' %] selected="true"[% END %]>Latvia</option>
+<option value="LB" [% IF CC_BillingCountry == 'LB' %] selected="true"[% END %]>Lebanon</option>
+<option value="LI" [% IF CC_BillingCountry == 'LI' %] selected="true"[% END %]>Liechtenstein</option>
+<option value="LR" [% IF CC_BillingCountry == 'LR' %] selected="true"[% END %]>Liberia</option>
+<option value="LY" [% IF CC_BillingCountry == 'LY' %] selected="true"[% END %]>Libya</option>
+<option value="LS" [% IF CC_BillingCountry == 'LS' %] selected="true"[% END %]>Lesotho</option>
+<option value="LT" [% IF CC_BillingCountry == 'LT' %] selected="true"[% END %]>Lithuania</option>
+<option value="LU" [% IF CC_BillingCountry == 'LU' %] selected="true"[% END %]>Luxembourg</option>
+<option value="MO" [% IF CC_BillingCountry == 'MO' %] selected="true"[% END %]>Macau</option>
+<option value="MG" [% IF CC_BillingCountry == 'MG' %] selected="true"[% END %]>Madagascar</option>
+<option value="MW" [% IF CC_BillingCountry == 'MW' %] selected="true"[% END %]>Malawi</option>
+<option value="MY" [% IF CC_BillingCountry == 'MY' %] selected="true"[% END %]>Malaysia</option>
+<option value="MV" [% IF CC_BillingCountry == 'MV' %] selected="true"[% END %]>Maldives</option>
+<option value="ML" [% IF CC_BillingCountry == 'ML' %] selected="true"[% END %]>Mali</option>
+<option value="MT" [% IF CC_BillingCountry == 'MT' %] selected="true"[% END %]>Malta</option>
+<option value="MH" [% IF CC_BillingCountry == 'MH' %] selected="true"[% END %]>Marshall Islands</option>
+<option value="MQ" [% IF CC_BillingCountry == 'MQ' %] selected="true"[% END %]>Martinique</option>
+<option value="MR" [% IF CC_BillingCountry == 'MR' %] selected="true"[% END %]>Mauritania</option>
+<option value="MU" [% IF CC_BillingCountry == 'MU' %] selected="true"[% END %]>Mauritius</option>
+<option value="YT" [% IF CC_BillingCountry == 'YT' %] selected="true"[% END %]>Mayotte</option>
+<option value="MX" [% IF CC_BillingCountry == 'MX' %] selected="true"[% END %]>Mexico</option>
+<option value="FM" [% IF CC_BillingCountry == 'FM' %] selected="true"[% END %]>Micronesia</option>
+<option value="MD" [% IF CC_BillingCountry == 'MD' %] selected="true"[% END %]>Moldova</option>
+<option value="MC" [% IF CC_BillingCountry == 'MC' %] selected="true"[% END %]>Monaco</option>
+<option value="ME" [% IF CC_BillingCountry == 'ME' %] selected="true"[% END %]>Montenegro</option>
+<option value="MS" [% IF CC_BillingCountry == 'MS' %] selected="true"[% END %]>Montserrat</option>
+<option value="MA" [% IF CC_BillingCountry == 'MA' %] selected="true"[% END %]>Morocco</option>
+<option value="MZ" [% IF CC_BillingCountry == 'MZ' %] selected="true"[% END %]>Mozambique</option>
+<option value="MM" [% IF CC_BillingCountry == 'MM' %] selected="true"[% END %]>Myanmar</option>
+<option value="NA" [% IF CC_BillingCountry == 'NA' %] selected="true"[% END %]>Namibia</option>
+<option value="NR" [% IF CC_BillingCountry == 'NR' %] selected="true"[% END %]>Nauru</option>
+<option value="NP" [% IF CC_BillingCountry == 'NP' %] selected="true"[% END %]>Nepal</option>
+<option value="NL" [% IF CC_BillingCountry == 'NL' %] selected="true"[% END %]>Netherlands</option>
+<option value="AN" [% IF CC_BillingCountry == 'AN' %] selected="true"[% END %]>Netherlands Antilles</option>
+<option value="NT" [% IF CC_BillingCountry == 'NT' %] selected="true"[% END %]>Neutral Zone</option>
+<option value="NC" [% IF CC_BillingCountry == 'NC' %] selected="true"[% END %]>New Caledonia</option>
+<option value="NZ" [% IF CC_BillingCountry == 'NZ' %] selected="true"[% END %]>New Zealand (Aotearoa)</option>
+<option value="NI" [% IF CC_BillingCountry == 'NI' %] selected="true"[% END %]>Nicaragua</option>
+<option value="NE" [% IF CC_BillingCountry == 'NE' %] selected="true"[% END %]>Niger</option>
+<option value="NG" [% IF CC_BillingCountry == 'NG' %] selected="true"[% END %]>Nigeria</option>
+<option value="NU" [% IF CC_BillingCountry == 'NU' %] selected="true"[% END %]>Niue</option>
+<option value="NF" [% IF CC_BillingCountry == 'NF' %] selected="true"[% END %]>Norfolk Island</option>
+<option value="MP" [% IF CC_BillingCountry == 'MP' %] selected="true"[% END %]>Northern Mariana Islands</option>
+<option value="NO" [% IF CC_BillingCountry == 'NO' %] selected="true"[% END %]>Norway</option>
+<option value="OM" [% IF CC_BillingCountry == 'OM' %] selected="true"[% END %]>Oman</option>
+<option value="PK" [% IF CC_BillingCountry == 'PK' %] selected="true"[% END %]>Pakistan</option>
+<option value="PW" [% IF CC_BillingCountry == 'PW' %] selected="true"[% END %]>Palau</option>
+<option value="PS" [% IF CC_BillingCountry == 'PS' %] selected="true"[% END %]>Palestinian Territory, Occupied</option>
+<option value="PA" [% IF CC_BillingCountry == 'PA' %] selected="true"[% END %]>Panama</option>
+<option value="PG" [% IF CC_BillingCountry == 'PG' %] selected="true"[% END %]>Papua New Guinea</option>
+<option value="PY" [% IF CC_BillingCountry == 'PY' %] selected="true"[% END %]>Paraguay</option>
+<option value="PE" [% IF CC_BillingCountry == 'PE' %] selected="true"[% END %]>Peru</option>
+<option value="PH" [% IF CC_BillingCountry == 'PH' %] selected="true"[% END %]>Philippines</option>
+<option value="PN" [% IF CC_BillingCountry == 'PN' %] selected="true"[% END %]>Pitcairn</option>
+<option value="PL" [% IF CC_BillingCountry == 'PL' %] selected="true"[% END %]>Poland</option>
+<option value="PT" [% IF CC_BillingCountry == 'PT' %] selected="true"[% END %]>Portugal</option>
+<option value="PR" [% IF CC_BillingCountry == 'PR' %] selected="true"[% END %]>Puerto Rico</option>
+<option value="QA" [% IF CC_BillingCountry == 'QA' %] selected="true"[% END %]>Qatar</option>
+<option value="RE" [% IF CC_BillingCountry == 'RE' %] selected="true"[% END %]>Reunion</option>
+<option value="RO" [% IF CC_BillingCountry == 'RO' %] selected="true"[% END %]>Romania</option>
+<option value="RU" [% IF CC_BillingCountry == 'RU' %] selected="true"[% END %]>Russian Federation</option>
+<option value="RW" [% IF CC_BillingCountry == 'RW' %] selected="true"[% END %]>Rwanda</option>
+<option value="GS" [% IF CC_BillingCountry == 'GS' %] selected="true"[% END %]>S. Georgia and S. Sandwich Isls.</option>
+<option value="KN" [% IF CC_BillingCountry == 'KN' %] selected="true"[% END %]>Saint Kitts and Nevis</option>
+<option value="LC" [% IF CC_BillingCountry == 'LC' %] selected="true"[% END %]>Saint Lucia</option>
+<option value="VC" [% IF CC_BillingCountry == 'VC' %] selected="true"[% END %]>Saint Vincent and the Grenadines</option>
+<option value="WS" [% IF CC_BillingCountry == 'WS' %] selected="true"[% END %]>Samoa</option>
+<option value="SM" [% IF CC_BillingCountry == 'SM' %] selected="true"[% END %]>San Marino</option>
+<option value="ST" [% IF CC_BillingCountry == 'ST' %] selected="true"[% END %]>Sao Tome and Principe</option>
+<option value="SA" [% IF CC_BillingCountry == 'SA' %] selected="true"[% END %]>Saudi Arabia</option>
+<option value="SN" [% IF CC_BillingCountry == 'SN' %] selected="true"[% END %]>Senegal</option>
+<option value="RS" [% IF CC_BillingCountry == 'RS' %] selected="true"[% END %]>Serbia</option>
+<option value="SC" [% IF CC_BillingCountry == 'SC' %] selected="true"[% END %]>Seychelles</option>
+<option value="SL" [% IF CC_BillingCountry == 'SL' %] selected="true"[% END %]>Sierra Leone</option>
+<option value="SG" [% IF CC_BillingCountry == 'SG' %] selected="true"[% END %]>Singapore</option>
+<option value="SI" [% IF CC_BillingCountry == 'SI' %] selected="true"[% END %]>Slovenia</option>
+<option value="SK" [% IF CC_BillingCountry == 'SK' %] selected="true"[% END %]>Slovak Republic</option>
+<option value="SB" [% IF CC_BillingCountry == 'SB' %] selected="true"[% END %]>Solomon Islands</option>
+<option value="SO" [% IF CC_BillingCountry == 'SO' %] selected="true"[% END %]>Somalia</option>
+<option value="ZA" [% IF CC_BillingCountry == 'ZA' %] selected="true"[% END %]>South Africa</option>
+<option value="GS" [% IF CC_BillingCountry == 'GS' %] selected="true"[% END %]>S. Georgia and S. Sandwich Isls.</option>
+<option value="ES" [% IF CC_BillingCountry == 'ES' %] selected="true"[% END %]>Spain</option>
+<option value="LK" [% IF CC_BillingCountry == 'LK' %] selected="true"[% END %]>Sri Lanka</option>
+<option value="SH" [% IF CC_BillingCountry == 'SH' %] selected="true"[% END %]>St. Helena</option>
+<option value="PM" [% IF CC_BillingCountry == 'PM' %] selected="true"[% END %]>St. Pierre and Miquelon</option>
+<option value="SD" [% IF CC_BillingCountry == 'SD' %] selected="true"[% END %]>Sudan</option>
+<option value="SR" [% IF CC_BillingCountry == 'SR' %] selected="true"[% END %]>Suriname</option>
+<option value="SJ" [% IF CC_BillingCountry == 'SJ' %] selected="true"[% END %]>Svalbard and Jan Mayen Islands</option>
+<option value="SZ" [% IF CC_BillingCountry == 'SZ' %] selected="true"[% END %]>Swaziland</option>
+<option value="SE" [% IF CC_BillingCountry == 'SE' %] selected="true"[% END %]>Sweden</option>
+<option value="CH" [% IF CC_BillingCountry == 'CH' %] selected="true"[% END %]>Switzerland</option>
+<option value="SY" [% IF CC_BillingCountry == 'SY' %] selected="true"[% END %]>Syria</option>
+<option value="TW" [% IF CC_BillingCountry == 'TW' %] selected="true"[% END %]>Taiwan</option>
+<option value="TJ" [% IF CC_BillingCountry == 'TJ' %] selected="true"[% END %]>Tajikistan</option>
+<option value="TZ" [% IF CC_BillingCountry == 'TZ' %] selected="true"[% END %]>Tanzania</option>
+<option value="TH" [% IF CC_BillingCountry == 'TH' %] selected="true"[% END %]>Thailand</option>
+<option value="TG" [% IF CC_BillingCountry == 'TG' %] selected="true"[% END %]>Togo</option>
+<option value="TK" [% IF CC_BillingCountry == 'TK' %] selected="true"[% END %]>Tokelau</option>
+<option value="TO" [% IF CC_BillingCountry == 'TO' %] selected="true"[% END %]>Tonga</option>
+<option value="TT" [% IF CC_BillingCountry == 'TT' %] selected="true"[% END %]>Trinidad and Tobago</option>
+<option value="TN" [% IF CC_BillingCountry == 'TN' %] selected="true"[% END %]>Tunisia</option>
+<option value="TR" [% IF CC_BillingCountry == 'TR' %] selected="true"[% END %]>Turkey</option>
+<option value="TM" [% IF CC_BillingCountry == 'TM' %] selected="true"[% END %]>Turkmenistan</option>
+<option value="TC" [% IF CC_BillingCountry == 'TC' %] selected="true"[% END %]>Turks and Caicos Islands</option>
+<option value="TV" [% IF CC_BillingCountry == 'TV' %] selected="true"[% END %]>Tuvalu</option>
+<option value="UG" [% IF CC_BillingCountry == 'UG' %] selected="true"[% END %]>Uganda</option>
+<option value="UA" [% IF CC_BillingCountry == 'UA' %] selected="true"[% END %]>Ukraine</option>
+<option value="AE" [% IF CC_BillingCountry == 'AE' %] selected="true"[% END %]>United Arab Emirates</option>
+<option value="UK" [% IF CC_BillingCountry == 'UK' %] selected="true"[% END %]>United Kingdom</option>
+<option value="US" [% IF CC_BillingCountry == 'US' %] selected="true"[% END %]>United States</option>
+<option value="UM" [% IF CC_BillingCountry == 'UM' %] selected="true"[% END %]>US Minor Outlying Islands</option>
+<option value="UY" [% IF CC_BillingCountry == 'UY' %] selected="true"[% END %]>Uruguay</option>
+<option value="SU" [% IF CC_BillingCountry == 'SU' %] selected="true"[% END %]>USSR (former)</option>
+<option value="UZ" [% IF CC_BillingCountry == 'UZ' %] selected="true"[% END %]>Uzbekistan</option>
+<option value="VU" [% IF CC_BillingCountry == 'VU' %] selected="true"[% END %]>Vanuatu</option>
+<option value="VA" [% IF CC_BillingCountry == 'VA' %] selected="true"[% END %]>Vatican City State (Holy See)</option>
+<option value="VE" [% IF CC_BillingCountry == 'VE' %] selected="true"[% END %]>Venezuela</option>
+<option value="VN" [% IF CC_BillingCountry == 'VN' %] selected="true"[% END %]>Viet Nam</option>
+<option value="VG" [% IF CC_BillingCountry == 'VG' %] selected="true"[% END %]>British Virgin Islands</option>
+<option value="VI" [% IF CC_BillingCountry == 'VI' %] selected="true"[% END %]>Virgin Islands (U.S.)</option>
+<option value="WF" [% IF CC_BillingCountry == 'WF' %] selected="true"[% END %]>Wallis and Futuna Islands</option>
+<option value="EH" [% IF CC_BillingCountry == 'EH' %] selected="true"[% END %]>Western Sahara</option>
+<option value="YE" [% IF CC_BillingCountry == 'YE' %] selected="true"[% END %]>Yemen</option>
+<option value="YU" [% IF CC_BillingCountry == 'YU' %] selected="true"[% END %]>Yugoslavia (former)</option>
+<option value="ZM" [% IF CC_BillingCountry == 'ZM' %] selected="true"[% END %]>Zambia</option>
+<option value="ZW" [% IF CC_BillingCountry == 'ZW' %] selected="true"[% END %]>Zimbabwe </option>
+			</select> <div class="editFormError">[% CC_BillingCountry_ERROR %]</div>
+		</td>
+	</tr>
+[% PROCESS formtextrow label='Phone' size='21' varname='CC_BillingPhone' varval=CC_BillingPhone estr=CC_BillingPhone_ERROR %]
+[% PROCESS formtextrow label='Email Address' size='61' varname='CC_BillingEmail' varval=CC_BillingEmail estr=CC_BillingEmail_ERROR %]
+[% END %]
+	<tr>
+		<td class="editFormButtons"></td>
+		<td class="editFormButtons">
+[% IF ShowPeriodicDetails == 'Yes' %]
+	[% IF PeriodicPay.PP_Last4.length == 4 %]
+		<input type="submit" name="X_Method" value="Update"></input>
+		<input type="submit" name="X_Method" value="Delete"></input>
+	[% ELSE %]
+		<input type="submit" name="X_Method" value="Create"></input>
+	[% END %]
+[% ELSE %]
+		<input type="submit" name="X_Method" value="Send Payment"></input>
+[% END %]
+		<input type="button" onclick="window.close()" value="Cancel"></input>
+		</td></tr>
+</table></form>
+[% END %]
+</body></html>

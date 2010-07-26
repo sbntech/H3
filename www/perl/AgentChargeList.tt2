@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>Agent Charges</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+[% BLOCK formtextrow %]
+	<tr>
+		<td class="editFormLabel">[% label %]</td>
+		<td class="editFormInput"><input class="editForm" type="text" 
+			size="[% size %]" 
+			name="[% varname %]"
+			value="[% varval %]"></input></td>
+	</tr>
+[% END %]
+[% IF Processing_Error %]<p class="error">[% Processing_Error %]</p>[% END %]
+<h2>Agent Charge List</h2>
+<!-- [% X_Sql %] --!>
+<form action="/pg/AgentChargeList" method="post" enctype="multipart/form-data">
+<table class="editForm" cellspacing="2">
+<tr><td class="editFormLabel">Of Reseller</td>
+	<td class="editFormInput">
+[% IF Session.L_Level == 6 %]
+<select name="RS_Number">
+[% FOREACH row IN X_ResellerList %]
+<option value="[% row.RS_Number %]"
+[% IF row.RS_Number == RS_Number %] selected="1"[% END %]>[% row.RS_Number %] - [% row.RS_Name %]</option>
+[% END %]
+<option value="0" [% IF RS_Number == 0 %] selected="1"[% END %]>All of the above</option></select>
+[% ELSE %]
+<p>[% X_ResellerList.0.RS_Name %]</p>
+[% END %]
+</td></tr>
+[% PROCESS formtextrow label='Customer Number' size=10 varname='CO_Number' varval=CO_Number %]
+[% PROCESS formtextrow label='Customer Name starts with' size='15' varname='CO_Name' varval=CO_Name %]
+<tr><td colspan="2" class="editFormButtons"><input name="method" type="submit" value="Search"></input></td></tr>
+</table></form><br>
+
+<table cellspacing=1><tr>
+[% FOREACH colhdr IN [ 'Date-Time', 'Customer', 'Agents<br/>Before', 'Agents<br/>After', 'Charge', 'Res Charge', 'Error?' ] %]
+<th class="basiclist-col">[% colhdr %]</th>
+[% END %]
+[% IF Session.L_Level == 6 %]
+<th class="basiclist-col">Reseller</th>
+[% END %]
+</tr>
+[% FOREACH row IN List %]
+<tr>
+<td class="basiclist">[% row.AC_DateTime %]</td>
+<td class="basiclist" title="[% row.CO_Number %]">[% row.CO_Name %]</td>
+<td class="basiclist-right">[% row.AC_AgentsBefore %]</td>
+<td class="basiclist-right">[% row.AC_AgentsAfter %]</td>
+<td class="basiclist-right" style="text-align: right">[% FILTER format('%0.2f') %][% row.AC_CustCharge %][% END %]&nbsp;&nbsp;</td>
+<td class="basiclist-right" style="text-align: right">[% FILTER format('%0.2f') %][% row.AC_ResCharge %][% END %]&nbsp;&nbsp;</td>
+<td class="basiclist">[% row.AC_Error %]</td>
+[% IF Session.L_Level == 6 %]
+<td class="basiclist-right">[% row.CO_ResNumber %]</td>
+[% END %]
+</tr>
+[% END %]
+[% END %]
+</body></html>

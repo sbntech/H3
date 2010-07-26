@@ -1,0 +1,103 @@
+<html>
+<head>
+<title>Customer List</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<script type="text/javascript" src="/glm.js"></script>
+<script>
+	var Host = document.URL.replace(/^http:../, '');
+	Host = Host.replace(/\/.*/, '');
+
+	if (Host != 'localhost') {
+		if (([% RS_Number %] == 77) || ([% RS_Number %] == 123)) {
+			Host = 'secure.bullseyebroadcast.com:4431';
+		} else {
+			Host = 'secure.sbndials.com';
+		}
+	}
+
+	var SessCookie = getCookie('PHPSESSID');
+</script>
+</head><body>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+[% BLOCK formtextrow %]
+	<tr>
+		<td class="editFormLabel">[% label %]</td>
+		<td class="editFormInput"><input class="editForm" type="text" 
+			size="[% size %]" 
+			name="[% varname %]"
+			value="[% varval %]"></input></td>
+	</tr>
+[% END %]
+[% IF Processing_Error %]<p class="error">[% Processing_Error %]</p>[% END %]
+<h2>Customer List</h2>
+<!-- [% X_Sql %] --!>
+<form action="/pg/CustomerList" method="post" enctype="multipart/form-data">
+<table class="editForm" cellspacing="2">
+<tr><td class="editFormLabel">Of Reseller</td>
+	<td class="editFormInput">
+[% IF Session.L_Level == 6 %]
+<select name="RS_Number">
+[% FOREACH row IN X_ResellerList %]
+<option value="[% row.RS_Number %]"
+[% IF row.RS_Number == RS_Number %] selected="1"[% END %]>[% row.RS_Number %] - [% row.RS_Name %]</option>
+[% END %]
+<option value="0" [% IF RS_Number == 0 %] selected="1"[% END %]>All of the above</option></select>
+[% ELSE %]
+<p>[% X_ResellerList.0.RS_Name %]</p>
+[% END %]
+</td></tr>
+[% PROCESS formtextrow label='has Number' size=10 varname='CO_Number' varval=CO_Number %]
+[% PROCESS formtextrow label='Name starts with' size='15' varname='CO_Name' varval=CO_Name %]
+<tr><td colspan="2" class="editFormButtons"><input name="method" type="submit" value="Search"></input></td></tr>
+</table></form>
+<p><input type="button" onclick="window.location='/pg/Customer?X_Method=New&CO_Number=0'" value="Add new customer"></input></p>
+
+<table cellspacing=1><tr>
+[% FOREACH colhdr IN [ 'Action', 'CID', 'Number', 'Name', 'Credit', 'Cred. Hist', 'Address', 'Telephone', 'Email', 'Agt Auth', 'Agt Chg', 'P Pay', 'Rate', 'Bill per', 'Status', 'Time Zone', 'Max Lines' ] %]
+<th class="basiclist-col">[% colhdr %]</th>
+[% END %]
+[% IF Session.L_Level == 6 %]
+<th class="basiclist-col">Go To</th>
+<th class="basiclist-col">Reseller</th>
+[% END %]
+</tr>
+[% FOREACH row IN List %]
+<tr>
+<td class="basiclist"><input type="button" onclick="window.location = '/pg/Customer?X_Method=Edit&CO_Number=[% row.CO_Number %]'" value="Edit"></input></td>
+<td class="basiclist"><input type="button" onclick="window.location = '/pg/CustomerCIDList?CO_Number=[% row.CO_Number %]'" value="Caller Id"></input></td>
+<td class="basiclist">[% row.CO_Number %]</td>
+<td class="basiclist">[% row.CO_Name %]</td>
+<td class="basiclist-right" style="text-align: right">[% FILTER format('%0.2f') %][% row.CO_Credit %][% END %]&nbsp;&nbsp;</td>
+<td class="basiclist"><input title="View credit adjustment history" type="button" onclick="window.location = '/pg/AddCreditList?ac_customer=[% row.CO_Number %]'" value="Credits"></input></td>
+<td class="basiclist">[% row.CO_Address %]</td>
+<td class="basiclist">[% row.CO_Tel %]</td>
+<td class="basiclist">[% row.CO_Email %]</td>
+<td class="basiclist-right">[% row.CO_AuthorizedAgents %]</td>
+<td class="basiclist-right" style="text-align: right">[% FILTER format('%0.2f') %][% row.CO_AgentCharge %][% END %]&nbsp;&nbsp;</td>
+<td class="basiclist"><input type="button" onclick="window.location = 'https://' + Host + '/pg/Payment?CO_Number=[% row.CO_Number %]&X_Method=Periodic&HTTP_Host=' + Host + '&SessionId=' + SessCookie" value="P Pay"></input></td>
+<td class="basiclist-right">[% FILTER format('%0.7f') %][% row.CO_Rate %][% END %]</td>
+<td class="basiclist">
+[% IF row.CO_Billingtype == 'T' %]Min[% END %]
+[% IF row.CO_Billingtype == 'F' %]Connect[% END %]
+[% IF row.CO_Billingtype == 'C' %]Agent conn[% END %]
+[% IF row.CO_Billingtype == 'A' %]Dial[% END %]
+</td>
+<td class="basiclist">
+[% IF row.CO_Status == 'A' %]Active[% ELSIF row.CO_Status == 'B' %]Blocked[% ELSE %]Undefined[% END %]
+</td>
+<td class="basiclist">[% 
+IF row.CO_Timezone == '0' %]Eastern[% 
+ELSIF row.CO_Timezone == '-1' %]Central[% 
+ELSIF row.CO_Timezone == '-2' %]Mountain[% 
+ELSIF row.CO_Timezone == '-3' %]Pacific[%
+ELSE %]Other[% END %]</td>
+<td class="basiclist-right">[% row.CO_Maxlines %]</td>
+[% IF Session.L_Level == 6 %]
+<td class="god"><a href="/pg/ProjectList?CO_Number=[% row.CO_Number %]&ActiveOnly=Yes">Projects</a></td>
+<td class="god-right">[% row.CO_ResNumber %]</td>
+[% END %]
+</tr>
+[% END %]
+[% END %]
+</body></html>

@@ -1,0 +1,20 @@
+# keeps the nvr and the watcher running
+# http://www.tildeslash.com/monit/doc/
+
+set daemon 120 with start delay 40
+
+set mailserver 10.9.2.1
+set alert grant@sbndials.com
+	mail-format {
+		from: root@w0.sbndials.com
+		subject: [monit] $SERVICE $EVENT at $DATE
+		message: $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION.
+	}
+set logfile "/var/log/monit.log"
+set httpd port 2812 and use address localhost
+    allow localhost   # Allow localhost to connect
+
+check process LoadLeads
+    pidfile /var/run/LoadLeads.pid
+    start = "/home/grant/sbn-git/convert/LoadLeads.pl"
+    stop = "/usr/bin/killall LoadLeads.pl"

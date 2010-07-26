@@ -1,0 +1,313 @@
+/* 
+ * colors can be changed s/ddeeff \(.. name-bg\)/ee8877 \1//g
+ *
+*/
+* {
+    font-size: 3.5mm;
+    font-family: Arial, Sans;
+	font-weight: normal;
+}
+
+body.subpage {
+	margin: 0 0 0 0;
+}
+
+pre {
+	margin-left: 10mm;
+	padding: 5 5 5 5;
+	border: solid 1px gray;
+    font-size: 3.2mm;
+    font-family: monospace;
+	font-weight: normal;
+}
+
+h1 {
+	font-size: 160%;
+	margin-bottom: 10mm;
+}
+
+h2 {
+	font-weight: bold;
+	font-size: 120%;
+	margin-bottom: 1mm;
+}
+
+h3 {
+	font-weight: bold;
+	font-size: 110%;
+	margin-bottom: 1mm;
+}
+
+table.filelist {
+	border: solid 1px #040404 /* filelist-tbl */;
+}
+
+span.highlight {
+	font-weight: bold;
+	color: blue; /* message blue */
+}
+
+span.CallScriptData {
+	font-weight: bold;
+	color: blue; /* message blue */
+	padding: 0 3px 0 3px;
+}
+
+p.message {
+	font-weight: bold;
+	color: blue; /* message blue */
+}
+
+p.responded {
+	font-weight: bold;
+	color: green; /* message green*/
+}
+
+p.error {
+	font-weight: bold;
+	color: #ff1144; /* error red */
+}
+
+th.filelist-col {
+	font-weight: bold;
+    border: 1px outset;
+    background-color: #efefef /* filelist-th */;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+th.filelist-row {
+	font-weight: bold;
+	font-size: 90%;
+    border: none;
+    background-color: #efefef /* filelist-th */;
+	padding-left: 3px;
+	padding-right: 3px;
+	text-align: left;
+}
+
+th.filelist-tot {
+	font-weight: bold;
+	font-size: 90%;
+    border: none;
+    background-color: #efefef /* filelist-th */;
+	padding-left: 3px;
+	padding-right: 3px;
+	text-align: right;
+}
+
+td.filelist {
+	font-weight: normal;
+	font-size: 90%;
+	text-align: center;
+    border: none;
+    background-color: #cccccc /* filelist-td */;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+td.filelisttot {
+	font-weight: bold;
+	font-size: 90%;
+	text-align: center;
+	border-top: solid 1px #040404 /* filelist-tbl */;
+    background-color: #cccccc /* filelist-td */;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+th.basiclist-col {
+	font-weight: bolder;
+	padding-top: 1mm;
+	padding-bottom: 1mm;
+	padding-left: 2mm;
+	padding-right: 2mm;
+	text-align: left;
+    color: #000080; /* scheme:default:label */
+	background-color: #66cccc; /* scheme:default:bg */
+    border: 1px outset;
+}
+
+th.basiclist-col-hi {
+	font-weight: bolder;
+	padding-top: 1mm;
+	padding-bottom: 1mm;
+	padding-left: 2mm;
+	padding-right: 2mm;
+	text-align: left;
+    color: #000080; /* scheme:default:label */
+	background-color: #66eeee; /* scheme:default:bg-hi */
+    border: 1px outset;
+	cursor: pointer;
+}
+
+th.basiclist-row {
+	font-weight: bolder;
+	padding-top: 1mm;
+	padding-bottom: 1mm;
+	padding-left: 2mm;
+	padding-right: 2mm;
+	text-align: left;
+    color: #000080; /* scheme:default:label */
+	background-color: #66cccc; /* scheme:default:bg */
+    border: 1px outset;
+	font-size: 90%;
+}
+
+th.basiclist-tot {
+	font-weight: bold;
+	font-size: 90%;
+    border: none;
+    background-color: #efefef /* basiclist-th */;
+	padding-left: 3px;
+	padding-right: 3px;
+	text-align: right;
+}
+
+td.basiclist {
+	text-align: left;
+	background-color: #b0e0e6; /* scheme:default:list */
+	font-size: 90%;
+	padding-left: 2mm;
+	padding-right: 2mm;
+}
+
+td.basiclist-right {
+	text-align: right;
+	background-color: #b0e0e6; /* scheme:default:list */
+	font-size: 90%;
+	padding-left: 2mm;
+	padding-right: 2mm;
+}
+
+td.god {
+	background-color: #ff77bb; /* scheme:default:godlist */
+	font-size: 90%;
+	padding-left: 2mm;
+	padding-right: 2mm;
+}
+
+td.god-right {
+	text-align: right;
+	background-color: #ff77bb; /* scheme:default:godlist */
+	font-size: 90%;
+	padding-left: 2mm;
+	padding-right: 2mm;
+}
+
+td.basiclisttot {
+	font-weight: bold;
+	font-size: 90%;
+	text-align: center;
+	border-top: solid 1px #040404 /* basiclist-tbl */;
+    background-color: #cccccc /* basiclist-td */;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+form {
+	padding: 0;
+	border: 0;
+	margin: 0;
+}
+
+div.hidden {
+	display: none;
+}
+
+div.shown {
+	display: block;
+}
+
+div.buttonbar {
+	background-color: buttonface;
+	border: 2px solid #F0F0F0;
+}
+
+div.mainPage {
+	background-color: white;
+	margin-left: 10px;
+	margin-top: 10px
+}
+
+div.help-tip {
+	background-color: #ffee77;
+	margin: 10 10 10 10;
+	padding: 10 10 10 10;
+	border: 1px solid black;
+}
+
+table.editForm {
+	border: solid 2px #996600; /* edit border */
+}
+
+input.editForm {
+	border: solid 1px #dddddd; /* edit border */
+}
+
+td.editFormLabel {
+	font-weight: bolder;
+	padding-top: 1mm;
+	padding-bottom: 1mm;
+	padding-left: 2mm;
+	padding-right: 2mm;
+	text-align: left;
+    color: #000080; /* scheme:default:label */
+	background-color: #66cccc; /* scheme:default:bg */
+}
+
+td.editFormTextDisplay {
+	padding-left: 2mm;
+	text-align: left;
+	background-color: #66cccc; /* scheme:default */
+}
+
+td.editFormInput {
+	text-align: left;
+	background-color: #66cccc; /* scheme:default */
+}
+
+div.editFormError {
+	display: inline;
+	padding-left: 2mm;
+	font-weight: bold;
+	color: #ff1144; /* error red */
+}
+
+td.editFormButtons {
+	text-align: left;
+	padding-left: 2mm;
+	padding-top: 2mm;
+	padding-bottom: 2mm;
+	background-color: #66cccc; /* scheme:default */
+}
+
+a.help {
+	text-decoration: none;
+	color: white;
+	background-color: white;
+}
+
+a.help:visited {
+	color: white;
+	background-color: white;
+}
+
+a.help:hover {
+	color: white;
+	background-color: white;
+}
+
+dt {
+	font-weight: bolder;
+    color: #000080; /* scheme:default:label */
+}
+
+strong {
+	font-weight: bolder;
+    color: #000080; /* scheme:default:label */
+}
+
+.hiyellow {
+	background-color: yellow;
+}

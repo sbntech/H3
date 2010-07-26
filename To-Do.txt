@@ -1,0 +1,65 @@
+CURRENT:
+
+BACK-BURNER:
+* surveys with P1 option
+* when CO_Rate == 0.00 projects should not be allowed to leave machine messages
+* ColdCaller: (from Carl) if the agent gets a machine, press a key and it leaves a pre-recorded message (happens after bad answer detect)
+* improve call rating accuracy: using latest rate-decks for npanxx-->lata ocn map, update sbn2.phones
+* uppgrade to Lucid 10.04 http://cdimage.ubuntu.com/netboot/lucid/
+* write a JSON and perl based session class to replace PHP stuff (GLM::Session)
+* automatic redialing for Mark msl - once a file is "finished" redialing kicks in
+* cold calling fanciness
+	- all prospect calls have disposition HU?
+	- graphs
+	- Agents must have MustLogin='Y' when on PJ_Type == C
+	- emergency shutdown? 
+	- what if prospect hang-up in the queue before getting to an agent. what is his cdr: HU
+
+* Canadian DNC list on its own table
+* phones table smartness: keep track of every connection
+	- during scrubbing, if it there was a previous connection then it known connectable
+	- during routing can pick a better carrier
+* dialer change: when we get 2 bad originations, return number, and remove this carrier from the bestcarriers, if non left copy alternates to best, if still non left then call it BA
+* dialer install on w015 (eth0 hardware error)
+* Asterisk dialers - prevent interstate agent calls by having the agi server send the CID for the agent
+* remove ln_priority\|ln_line\|ln_dti\|ln_voice
+* rename PJ_Timeleft ---> PJ_RunInfo
+* automatic lead management to block certain files/zones
+* hottish backup in LA for w0 (mysql slave, projects dir rsync'ed etc) or maybe do some HA stuff
+
+NICE TO HAVE:
+* security: convert stored clear-text passwords to hashed (Digest::SHA using sha256)
+* using OpenSIPS to balance load for coldcalling etc
+* Apple Mac Excel produces CSV files with \0D line endings that don't get parsed
+* add more substance to the help pages (www/help)
+* UI for global system CID defaults?!? updates VoxSystems/TELEBIT/TELEBIT.GBL && Astdialer.pl && FastAgiServer
+* 21:40 should rotate logs too
+* customer DNC using area-codes
+* new project features:
+	- timezones for dialing selection
+	- project dial-rates: connects-per-hour, optimum-transfers,
+	- daily maxima: dials, connects, minutes
+
+RECURRING
+* load new dnc list (last load: 2009-04-27)
+* ubuntu software upgrade: aptitude full-upgrade
+	- w012(dns)	Dec 29 (Karmic, *1.6.1.12)
+	- db0		(Intrepid)
+	- db1		May 05 (Jaunty)
+	- w0		2009-03-08
+	- w2		Aug 28 (Jaunty) "message recorder", "inbound terminator", "pbx"
+	- w003		Jun 01 (Lucid, *1.6.2.7) --spare-- "Eddie decommissioned Sep 24"
+	- w004		Jun 02 (Lucid, *1.6.2.8) "Selway C"
+	- w005		Dec 29 (Karmic, *1.6.1.12) squid-cache, "Monkey Biz"
+	- w006		Nov 06 (Karmic) "carrier", "cdr host"
+	- w007		Jun 01 (Lucid, *1.6.2.8+g729) "Platinum D - CANADA"
+	- w008		Jun 01 (Lucid, *1.6.2.7) Selway was "Massive"
+	- w009		May 28 (Lucid, *1.6.2.6) "Massive"
+	- w010		May 28 (Lucid, *1.6.2.7) "Monkey Biz"
+	- w011		May 28 (Lucid, *1.6.2.7) "SmartWorld from 7-Dec-09" - "Imran E decommissioned Nov 2"
+	- w013      May 28 (Lucid, *1.6.2.7) gcns
+	- w014		Mar 16 (Karmic, *1.6.2.6) "cold caller"
+	- w015		? (Jaunty)
+	- hans-lv	Nov 02 (Karmic)	
+* sbn2.phones from w6 to db0 by running s1.sh (May 18)
+

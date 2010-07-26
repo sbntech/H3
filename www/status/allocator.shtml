@@ -1,0 +1,184 @@
+<html><head><title>Allocator</title>
+<link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css" rel="Stylesheet" />	
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+<!--[if IE]><script language="javascript" type="text/javascript" src="../flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="../flot/jquery.flot.js"></script>   
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<script>
+
+var allocdata = [
+<!--#include virtual="../fancy/allocator.graph.json" -->
+];
+
+var cdrdata = [
+<!--#include virtual="../fancy/cdr.graph.json" -->
+];
+
+function trend (datum, tempTrend, tLen) {
+
+	var i = tempTrend.push(datum);
+
+	if (i > tLen) {
+		tempTrend.shift();
+	}
+
+	var sum = 0;
+	var count = 0;
+
+	for (i in tempTrend) {
+		count++;
+		sum += tempTrend[i];
+	}
+
+	if (count > 0) {
+		return sum / count;
+	} else {
+		return 0;
+	}
+}
+
+var average = 0;
+
+var dataDemandLines = [];
+var dataCapacityLines = [];
+var dataUsedLines = [];
+
+for (var i in allocdata) {
+	var rdat = allocdata[i];
+	var t = rdat[0] - (3600000 * 5);
+	var DemandLines		= rdat[1];
+	var CapacityLines	= rdat[2];
+	var UsedLines 		= rdat[3];
+
+	dataDemandLines.push([t, DemandLines]);
+	dataCapacityLines.push([t, CapacityLines]);
+	dataUsedLines.push([t, UsedLines]);
+}
+
+var dataConnRateTrend = [];
+var tempConnRateTrend = [];
+
+var dataTransfersTrend = [];
+var tempTransfersTrend = [];
+
+var dataCarrierBusyTrend = [];
+var tempCarrierBusyTrend = [];
+
+for (var i in cdrdata) {
+	var rdat = cdrdata[i];
+	var t = rdat[0] - (3600000 * 5);
+	var Dials		= rdat[1];
+	var Transfers	= rdat[2];
+	var Connects	= rdat[3];
+	var CarrierBusy	= rdat[4];
+
+	var ConnRate = 0;
+	if (Dials > 0) {
+		ConnRate = (100 * Connects) / Dials;
+	}
+
+	average = trend(ConnRate, tempConnRateTrend, 5);
+	dataConnRateTrend.push([t, average]);
+
+	average = trend(Transfers, tempTransfersTrend, 5);
+	dataTransfersTrend.push([t, average]);
+
+	average = trend(CarrierBusy, tempCarrierBusyTrend, 5);
+	dataCarrierBusyTrend.push([t, average]);
+
+}
+
+</script>
+</head><body onload="var d = new Date(); setTimeout('location.reload()',120000)">
+<!--#include virtual="allocator-warnings.html" -->
+<h3>Connection Rate (5 minute trend)</h3>
+<div id="plotDivConnRate" style="width:1024px;height:200px;"></div>
+<h3>Capacity</h3>
+<div id="plotDivCapacity" style="width:1024px;height:100px;"></div>
+<h3>Lines</h3>
+<div id="plotDivLines" style="width:1024px;height:150px;"></div>
+<h3>Other (5 minute trends)</h3>
+<div id="plotDivOtherTrends" style="width:1024px;height:200px;"></div>
+<!--#include virtual="allocator-tables.html" -->
+<script>
+$(function(){
+
+    $.plot($("#plotDivOtherTrends"), 
+		[ 
+			{
+				data: dataTransfersTrend,
+				label: 'Transfers/Min',
+				lines: { show: true, steps: false }
+			},			 
+			{
+				data: dataCarrierBusyTrend,
+				label: 'CB/Min',
+				lines: { show: true, steps: false }
+			}
+		], 
+		{
+			legend: {
+				position: 'sw'
+			},
+			colors: [ "#994400", "#ee1122" ],
+			xaxis: { mode: "time" }
+		}
+	);
+
+    $.plot($("#plotDivCapacity"), 
+		[ 
+			{
+				data: dataCapacityLines,
+				lines: { show: true, steps: false }
+			}			 
+		], 
+		{
+			legend: {
+				position: 'sw'
+			},
+			colors: [ "#00cc33", "#ee1122", "#9966ff" ],
+			xaxis: { mode: "time" }
+		}
+	);
+
+    $.plot($("#plotDivLines"), 
+		[ 
+			{
+				data: dataDemandLines,
+				label: 'Demand',
+				lines: { show: true, steps: false }
+			},		 
+			{
+				data: dataUsedLines,
+				label: 'Used',
+				lines: { show: true, steps: false }
+			}			 
+		], 
+		{
+			legend: {
+				position: 'sw'
+			},
+			colors: [ "#ee1122", "#9966ff" ],
+			xaxis: { mode: "time" }
+		}
+	);
+
+    $.plot($("#plotDivConnRate"), 
+		[ 
+			{
+				data: dataConnRateTrend,
+				lines: { show: true, steps: false }
+			}
+		], 
+		{
+			legend: {
+				position: 'sw'
+			},
+			colors: [  "#2299ff", "#0011ee" ],
+			xaxis: { mode: "time" }
+		}
+	);
+
+});
+</script>
+</body></html>

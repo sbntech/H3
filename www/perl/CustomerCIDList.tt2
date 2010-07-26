@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>CustomerCID List</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+[% BLOCK formtextrow %]
+	<tr>
+		<td class="editFormLabel">[% label %]</td>
+		<td class="editFormInput"><input class="editForm" type="text" 
+			size="[% size %]" 
+			name="[% varname %]"
+			value="[% varval %]"></input>[% IF estr %]<div class="editFormError">[% estr %]</div>[% END %]</td>
+	</tr>
+[% END %]
+[% IF Processing_Error %]<p class="error">[% Processing_Error %]</p>[% END %]
+<h2 title="Customer Number = [% CO_Number %]">Customer Caller Id for [% CO_Name %]</h2>
+<div class="help-tip" style="width: 500px">
+Disallowing a CID will remove it from all projects using it, there is no undo!
+</div>
+<h3>Allowed Caller Ids</h3>
+<!-- [% X_AllowSql %] --!>
+<table><tr>
+[% FOREACH colhdr IN [ 'Caller ID', 'Created', 'Disallow' ] %]
+<th class="basiclist-col">[% colhdr %]</th>
+[% END %]
+</tr>
+[% FOREACH row IN AllowedList %]
+<tr>
+<td class="basiclist">[% row.CC_CallerId %]</td>
+<td class="basiclist">[% row.CC_CreatedOn %]</td>
+<td class="basiclist">
+	<form action="/pg/CustomerCIDList?CO_Number=[% CO_Number %]" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="CO_Number" value="[% CO_Number %]">
+	<input type="hidden" name="CC_CallerId" value="[% row.CC_CallerId %]">
+	<input type="hidden" name="X_Method" value="Disallow">
+	<input name="method" type="submit" value="Disallow"></input>
+	</form>
+</td>
+</tr>
+[% END %]
+</table>
+<h3>Possible Caller Ids</h3>
+<!-- [% X_NotAllowSql %] --!>
+<table><tr>
+[% FOREACH colhdr IN [ 'Caller ID', 'Allow' ] %]
+<th class="basiclist-col">[% colhdr %]</th>
+[% END %]
+</tr>
+[% FOREACH row IN NotAllowedList %]
+<tr>
+<td class="basiclist">[% row.RC_CallerId %]</td>
+<td class="basiclist">
+	<form action="/pg/CustomerCIDList?CO_Number=[% CO_Number %]" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="CO_Number" value="[% CO_Number %]">
+	<input type="hidden" name="CC_CallerId" value="[% row.RC_CallerId %]">
+	<input type="hidden" name="X_Method" value="Allow">
+	<input name="method" type="submit" value="Allow"></input>
+	</form>
+</td>
+</tr>
+[% END %]
+</table>
+[% END %]
+</body></html>

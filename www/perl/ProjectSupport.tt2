@@ -1,0 +1,49 @@
+<html>
+<head>
+<title>[% ContextProject.PJ_Description %] - support</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<script type="text/javascript" src="/glm.js"></script>
+</head><body class="subpage">
+[% IF ErrStr %]<p class="error">[% ErrStr %]  Cust=[% CO_Number %]</p>
+[% ELSE %]
+<div class="buttonbar">
+<input type="button" onclick="location='/pg/ProjectList?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'" value="Back"></input>
+</div>
+<div class="mainPage">
+<h2>Support: [% ContextProject.PJ_Description %]</h2>
+<p/>
+<iframe id="histframe" src ="/pg/ProjectSupport?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]&X_Method=History" width="600px" height="300px">
+  <p>Your browser does not support iframes.</p>
+</iframe>
+<br/>
+<form action="/pg/ProjectSupport?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]" method="POST">
+<table class="editForm" cellspacing="2" style="width: 600px;">
+<tr><td class="editFormLabel">Your Name</td><td class="editFormInput"><input id="SU_Nickname" name="SU_Nickname"
+onchange="setCookie('SU_Nickname',this.value, 365)" size="32"></input>
+<span class="highlight" style="margin-left:10mm">
+[%- IF ContextProject.PJ_Support == 'C' %]Closed[% ELSIF ContextProject.PJ_Support == 'R' %]Responded[% ELSE %]Open Issue[% END %]</span>
+</td></tr>
+<tr><td class="editFormLabel">Message</td><td class="editFormInput"><textarea name="SU_Message" cols="60" rows="3"></textarea></td></tr>
+<tr><td class="editFormLabel"></td><td class="editFormButtons">
+<input name='X_Method' type="submit" value="Send"></input>
+[% IF ContextProject.PJ_Support == 'C' %]
+<input name='X_Method' type="submit" value="Send and Open"></input>
+[% ELSE %]
+<input name='X_Method' type="submit" value="Send and Close"></input>
+[% END %]
+<input type="button" onclick="location='/pg/ProjectList?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'" value="Back"></input>
+</td></tr>
+</table></form>
+</div>
+<script>
+	var savedNick = getCookie('SU_Nickname');
+
+	if (savedNick == '') {
+		savedNick = 'Anon';
+	}
+
+	var e = document.getElementById('SU_Nickname');
+	e.value = savedNick;
+</script>
+[% END %]
+</body></html>

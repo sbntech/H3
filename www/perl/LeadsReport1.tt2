@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>Report: Call Results</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body class="subpage">
+<div class="buttonBar">
+<button onclick="document.location.href='/pg/Leads?m=show&CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'">Back</button>
+</div><div class="mainPage">
+<h2>Number File Report - Call Results: '[% NFile.NF_FileName %]'</h2>
+<table class="basiclist">
+<tr>
+<th class="basiclist-col">Code</th>
+<th class="basiclist-col">Description</th>
+<th class="basiclist-col">Count</th>
+</tr>
+[% FOREACH trow IN CallResultHistogram %]
+	<tr>
+	<th class="basiclist-row">[% trow.PN_CallResult %]</th>
+	<td class="basiclist">[% trow.Description %]</td>
+	<td class="basiclist-right">[% trow.Count %]</td>
+	</tr>
+[% END %]
+</table>
+</div>
+</body></html>

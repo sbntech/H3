@@ -1,0 +1,9 @@
+-- revenue by month
+select sum(if(CO_ResNumber = 1, RE_Tot_Cost, if(RS_DistribFactor > 0, RE_res_tot_cost / RS_DistribFactor, RE_res_tot_cost))) as Cost, month(RE_Date) as Month from report,customer,project,reseller where PJ_Number = RE_Project and CO_Number = PJ_CustNumber and RS_Number = CO_ResNumber and year(RE_Date) = '2009' group by month(RE_Date);
+
+-- lines per NVR with carrier
+select count(*), ln_ipnumber, ln_trunk from line group by ln_ipnumber,ln_trunk;
+
+-- copy CIDs from reseller 79 to 120
+insert ignore into rescallerid (RC_CallerId,RC_Reseller,RC_DefaultFlag,RC_CreatedOn) select f.RC_CallerId, 120, f.RC_DefaultFlag, now() from rescallerid f where f.RC_Reseller = 79; 
+

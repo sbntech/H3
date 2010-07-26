@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>Reseller List</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<h2>Reseller List</h2>
+<p><input type="button" onclick="window.location='/pg/Reseller'" value="Add new reseller"></input></p>
+
+<table cellspacing=1><tr>
+[% FOREACH colhdr IN [ 'Action', 'CID', 'Number', 'Name', 'Credit', 'Address', 'Telephone', 'Email', 'Agt Chg', 'Agt Chg%', 'Rate/Agent IP Rate', 'Status', 'Time Zone', 'Max Lines', 'Distrib Code', 'Distrib Factor' ] %]
+<th class="basiclist-col">[% colhdr %]</th>
+[% END %]
+</tr>
+[% FOREACH row IN List %]
+<tr>
+<td class="basiclist"><input type="button" onclick="window.location = '/pg/Reseller?RS_Number=[% row.RS_Number %]'" value="Edit"></input></td>
+<td class="basiclist"><input type="button" onclick="window.location = '/pg/ResellerCIDList?RS_Number=[% row.RS_Number %]'" value="Caller Id"></input></td>
+<td class="basiclist">[% row.RS_Number %]</td>
+<td class="basiclist">[% row.RS_Name %]</td>
+<td class="basiclist-right" style="text-align: right">[% FILTER format('%0.2f') %][% row.RS_Credit %][% END %]&nbsp;&nbsp;</td>
+<td class="basiclist">[% row.RS_Address %]</td>
+<td class="basiclist">[% row.RS_Tel %]</td>
+<td class="basiclist">[% row.RS_Email %]</td>
+<td class="basiclist-right">[% FILTER format('%0.2f') %][% row.RS_AgentCharge %][% END %]</td>
+<td class="basiclist-right">[% FILTER format('%0.7f') %][% row.RS_AgentChargePerc %][% END %]</td>
+<td class="basiclist-right">[% FILTER format('%0.7f') %][% row.RS_Rate %][% END %]/[% FILTER format('%0.7f') %][% row.RS_AgentIPRate %][% END %]</td>
+<td class="basiclist">
+[% IF row.RS_Status == 'A' %]Active[% ELSIF row.RS_Status == 'B' %]Blocked[% ELSE %]Undefined[% END %]
+</td>
+<td class="basiclist">[% 
+IF row.RS_Timezone == '0' %]Eastern[% 
+ELSIF row.RS_Timezone == '-1' %]Central[% 
+ELSIF row.RS_Timezone == '-2' %]Mountain[% 
+ELSIF row.RS_Timezone == '-3' %]Pacific[%
+ELSE %]Other[% END %]</td>
+<td class="basiclist-right">[% row.RS_Maxlines %]</td>
+<td class="basiclist">[% row.RS_DistribCode %]</td>
+<td class="basiclist-right">[% FILTER format('%1.7f') %][% row.RS_DistribFactor %][% END %]</td>
+</tr>
+[% END %]
+[% END %]
+</body></html>

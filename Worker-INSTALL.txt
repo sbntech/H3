@@ -1,0 +1,168 @@
+as root:::>
+visudo -f /etc/sudoers
+echo "Port 8946" >> /etc/ssh/ssh_config ; 
+sed -e 's/^Port 22/Port 8946/' /etc/ssh/sshd_config > /tmp/sshd_config ; mv /etc/ssh/sshd_config /etc/ssh/sshd_config.old ; mv /tmp/sshd_config /etc/ssh
+/etc/init.d/ssh restart
+aptitude install vim screen byobu
+
+
+===================================================================================================
+== mysql installation for dialer and sbn2
+===================================================================================================
+aptitude install mysql-server mysql-client git-core
+# use sbntele as the root password
+
+edit my.cnf for correct IP and tuning
+add skip-innodb to my.cnf
+
+# prepare storage by appending the following to fstab
+tmpfs   /var/lib/mysql  tmpfs   size=40G 0 0
+
+# copy the installed files to disk storage
+/etc/init.d/mysql stop
+rm /var/lib/mysql/ib* # innodb files
+mv /var/lib/mysql /root
+install --owner=mysql --group=mysql --mode=755 -d /var/lib/mysql
+mount /var/lib/mysql
+
+# check that tempfs got mounted
+df
+
+# initialize the tempfs /var/lib/mysql
+cp -air /root/mysql/* /var/lib/mysql/
+
+# note: starting mysql with an empty /var/lib/mysql should fail
+/etc/init.d/mysql start
+
+# crontab entries (db0 + db1 substitute in the nightly-db0.pl):
+05,20,35,50 0,1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * * root rsync -aq /var/lib/mysql/ /root/mysql
+01 4 * * * root  /home/grant/sbn-git/convert/nightly-db1.sh
+
+# create databases
+echo "create database dialer; create database sbn2; GRANT ALL PRIVILEGES ON *.* TO root@'%' identified by 'sbntele';" | mysql -uroot -psbntele
+
+# initialize databases
+echo "source /home/grant/sbn-git/convert/database.sql" | mysql -uroot -psbntele dialer
+echo "source /home/grant/sbn-git/convert/sbn2.sql" | mysql -uroot -psbntele sbn2
+
+# foreach host (db0 and db1)
+install --owner mysql --group mysql --mode 775 -d /var/lib/mysql/in-out
+install --owner mysql --group mysql --mode 755 -d  /var/lib/mysql/.ssh
+usermod --shell /bin/bash mysql
+
+# on db0 in sbn2
+load data into tables: dncmilitant custdnc dncnonconn phones
+
+# on db1
+mkdir /backup # needed by nightly-db1.sh
+
+# for dev ONLY
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -psbntele mysql
+echo -e "[mysqld]\ndefault-time-zone='America/New_York'" > /etc/mysql/conf.d/Eastern-TZ.cnf
+
+
+
+===================================================================================================
+== apache2 host for UI  (w0)
+===================================================================================================
+# install software
+aptitude install apache2 libapache2-mod-apreq2 libapache2-mod-perl2 libapache2-mod-php5 libapache2-request-perl 
+libasterisk-agi-perl sox libsox-fmt-all libspreadsheet-parseexcel-perl mysql-client git-core p7zip-full php5-mysql libjson-perl libjson-xs-perl libtext-csv-xs-perl libcrypt-cbc-perl libcrypt-blowfish-perl libdatetime-perl libnet-server-perl gnuplot libtemplate-perl libcrypt-ssleay-perl
+
+
+
+# clone the repo
+git clone ssh://grant@zucker-murray.mine.nu/ZM/people/grant/sbn-git
+
+# setup the directories
+mkdir -p /dialer/projects
+ln -s /home/grant/sbn-git/{www,convert} /dialer/
+ln -s /home/grant/sbn-git/website /dialer/
+ln -s /var/www/{munin,downloads,cdr-summary} /dialer/website
+
+usermod -g www-data -G mysql www-data
+chown -R www-data:www-data /dialer/projects
+install --owner www-data --group www-data -d /dialer/projects/custdnc /dialer/projects/workqueue /dialer/www/popup /dialer/www/fancy /home/www-data /dialer/call-results-queue /var/www/.ssh /var/www/downloads /var/www/cdr-summary
+
+usermod --shell /bin/bash www-data
+
+# enable apache modules not enabled by default
+ln -s /etc/apache2/mods-available/{apreq.load,ssl.conf,ssl.load,expires.load,include.load} /etc/apache2/mods-enabled/
+
+# enable the sbn conf
+ln -s /dialer/www/sbn.apache2.conf /etc/apache2/sites-enabled/
+rm /etc/apache2/sites-enabled/000-default
+
+# edit ssl.conf to use SSLPassPhraseDialog exec:/dialer/convert/ssl.key.sh
+sed -ire 's@SSLPassPhraseDialog.*builtin@SSLPassPhraseDialog exec:/dialer/convert/ssl.key.sh@' /etc/apache2/mods-enabled/ssl.conf
+grep -F SSLPassPhrase /etc/apache2/mods-enabled/ssl.conf
+
+# php ini
+sed -ire 's/log_errors = Off/log_errors = On/' /etc/php5/apache2/php.ini
+sed -ire 's@;session.save_path = "/tmp"@session.save_path = "/var/lib/php5"@' /etc/php5/apache2/php.ini
+
+# flot - jquery plotting
+wget -O ~/flot.zip http://flot.googlecode.com/files/flot-0.6.zip
+cd /dialer/www
+unzip ~/flot.zip
+
+# crontab setup ... [details not recorded here]
+
+# monit setup
+/usr/bin/install -o root -g root -m 0600 /dialer/convert/monitrc /etc/monit
+sed -ire 's/startup=0/startup=1/' /etc/default/monit
+/etc/init.d/monit start
+
+# samba setup
+cd /etc/samba ; ln -s /dialer/convert/smb.conf ; /etc/init.d.samba stop ; rm -rf /var/log/samba/* ; /etc/init.d/samba start
+
+# ssh setup
+# ... ssh-keygen for root@w0 and www-data@w0 and root@db0
+# ... add root@w0 and www-data@w0 pub keys to /var/lib/mysql/.ssh/authorized_keys on (db0 and db1)
+# ... also add root@db0 to /var/lib/mysql/.ssh/authorized_keys on db1 (since LoadLeads.pl loads files)
+# ... also root@coldcaller pub key added to /var/www/.ssh/authorized_keys
+conduct an scp test (port used is important)
+
+# bullseyebroadcast
+install --owner www-data --group www-data -d /dialer/bullseyebroadcast
+ln -s /dialer/www/glm.css /dialer/bullseyebroadcast/
+echo "<html><head><script>window.location = 'http://www.bullseyebroadcast.com/';</script></head></html>" > /dialer/bullseyebroadcast/index.html
+
+# for dev ONLY
+echo "export TZ='America/New_York'" >> /etc/apache2/envvars
+
+
+===================================================================================================
+== LoadLeads and main dnc host (db0)
+===================================================================================================
+mkdir -p /dialer/maindnc
+git clone ssh://grant@zucker-murray.mine.nu/ZM/people/grant/sbn-git
+
+aptitude install freecdb libjson-perl libjson-xs-perl
+load DNC.7z into /dialer/maindnc using dnc-loader.pl and copying over
+
+
+# install perl module CDB_FILE 
+perl -MCDB_File -e 1;
+mkdir CDB_File
+cd CDB_File/
+wget http://search.cpan.org/CPAN/authors/id/M/MS/MSERGEANT/CDB_File-0.96.tar.gz
+tar zxvf CDB_File-0.96.tar.gz 
+cd CDB_File-0.96
+perl Makefile.PL 
+make test
+make install
+perl -MCDB_File -e 1;
+cd ../..
+rm -r CDB_File/
+
+
+
+===================================================================================================
+== hans_lv remote backup
+===================================================================================================
+# incomplete ...
+
+add root@db0 to /root/.ssh/authorized_keys on hans-lv for backup script
+
+

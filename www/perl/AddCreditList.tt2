@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>AddCredit List</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<h2>AddCredit List</h2>
+<table><tr>
+[% FOREACH colhdr IN [ 'Time (Eastern)', 'Amount', 'User', 'Customer Number', 'Customer Name', 'Reseller Number', 'Reseller Name', 'IP Address' ] %]
+<th class="basiclist-col">[% colhdr %]</th>
+[% END %]
+</tr>
+[% FOREACH row IN List %]
+<tr>
+<td class="basiclist">[% row.ac_datetime %]</td>
+<td class="basiclist" style="text-align: right">[% FILTER format('%0.2f') %][% row.ac_amount %][% END %]&nbsp;&nbsp;</td>
+<td class="basiclist">[% row.ac_user %]</td>
+<td class="basiclist">[% row.ac_customer %]</td>
+<td class="basiclist">[% row.CO_Name %]</td>
+<td class="basiclist">[% row.ac_ResNumber %]</td>
+<td class="basiclist">[% row.RS_Name %]</td>
+<td class="basiclist">[% row.ac_ipaddress %]</td>
+</tr>
+[% END %]
+[% END %]
+</body></html>

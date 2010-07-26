@@ -1,0 +1,179 @@
+<html><head>
+<title>[% ContextCustomer.CO_Name %]</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css" rel="Stylesheet" />	
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+<script type="text/javascript">
+
+	var Chosen_PJ_Number = 0;
+
+	if (parseInt("[% PJ_Number %]") > 0) {
+		Chosen_PJ_Number = parseInt("[% PJ_Number %]");
+	}
+
+	var pjList = new Array;
+[% PauseResume = 'Pause' %]
+[% FOREACH pj IN ProjectList %]
+	pjList['[% pj.PJ_Number %]'] = "[% pj.PJ_Description %]";
+	[% IF pj.PJ_timeleft == 'Paused' %][% PauseResume = 'Resume' %][% END %]
+[% END %]
+
+	// PauseResume is "[% PauseResume %]	
+
+	function set_Chosen(pjid) {
+		Chosen_PJ_Number = pjid;
+		$("#Alert1").addClass('hidden');
+	}
+
+	function get_Chosen(pjid) {
+		if (pjid == null) {
+			if (Chosen_PJ_Number == 0) {
+				$("#Alert1").toggleClass('hidden');
+				return 0;
+			}
+		} else {
+			Chosen_PJ_Number = pjid;
+		}
+		
+		return Chosen_PJ_Number;
+	}
+
+	function viewPage(pageStr) {
+
+		var projectId = get_Chosen();
+		if (projectId == 0) {
+			return;
+		}
+	
+   		location = "/pg/" + pageStr + 
+			"CO_Number=[% ContextCustomer.CO_Number %]&PJ_Number=" + projectId;
+	}
+
+	function doSupport() {
+
+		var projectId = get_Chosen();
+		if (projectId == 0) {
+			return;
+		}
+
+		var supportURL = "/pg/ProjectSupport?" + 
+			"CO_Number=[% ContextCustomer.CO_Number %]&PJ_Number=" + projectId;
+	
+   		window.open(supportURL,"supportPage");
+	}
+
+	function viewAgents() {
+
+		var projectId = get_Chosen();
+		if (projectId == 0) {
+			return;
+		}
+	
+		var d1 = pjList[projectId].toUpperCase();
+		var desc = d1.replace(/[^0-9A-Z]/g,"");
+
+		window.open("/fancy/" + projectId + "-" + desc + "-CC.html");
+	}
+
+	function doEdit(projectId) {
+		projectId = get_Chosen(projectId);
+		if (projectId == 0) {
+			return;
+		}
+	
+   		location = "/pg/Project?X_Method=Edit&CO_Number=[% ContextCustomer.CO_Number %]&PJ_Number=" + projectId;
+	}
+
+	function do[% PauseResume %]() {
+   		location = "/pg/Project?X_Method=[% PauseResume %]&CO_Number=[% ContextCustomer.CO_Number %]";
+	}
+
+	function goDelete() {
+
+		var projectId = get_Chosen();
+		if (projectId == 0) {
+			return;
+		}
+	
+		if (window.confirm("Delete project \"" + pjList[projectId] + "\".")) {
+   			location = "/pg/Project?X_Method=Delete&CO_Number=[% ContextCustomer.CO_Number %]&PJ_Number=" + projectId;
+		}
+	}
+
+</script>
+</head><body class="subpage" onload="setTimeout('location.reload()',300000)">
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<div class="buttonbar">
+<input type="button" onclick="location='/scripts/cust/customer.php?CO_Number=[% ContextCustomer.CO_Number %]'" value="Back"></input
+><input type="button" onclick="location='/pg/Project?CO_Number=[% ContextCustomer.CO_Number %]&X_Method=New'" value="New"></input
+><input type="button" onclick="doEdit()" value="Edit"</input
+><input type="button" onclick="goDelete()" value="Remove"></input
+><input type="button" onclick="viewAgents()" value="Agent Activity"</input
+><input type="button" onclick="viewPage('ProjectReport?')" value="Report"</input
+><input type="button" onclick="viewPage('Leads?m=show&')" value="Leads"</input
+><input type="button" onclick="viewPage('VoicePrompts?')" value="Voice"</input
+><input type="button" onclick="viewPage('CDR?')" value="CDR"</input
+><input type="button" onclick="viewPage('Recordings?')" value="Recordings"</input
+><input type="button" onclick="viewPage('ProjectTestCall?')" value="Test Call"</input
+><input type="button" onclick="do[% PauseResume %]()" value="[% PauseResume %]"></input
+><input type="button" onclick="viewPage('ProjectSupport?')" value="Support"></input
+><a style="vertical-align: bottom;" class="help" href="/help/project-list-help.shtml" target="_help"><img style="padding-left:4mm" src="/help/icon-help.png"/></a>
+</div>
+<div class="hidden" id="Alert1"><span class="highlight">&nbsp;&nbsp;Please select one of the records first</span></div>
+<div class="mainPage">
+<h2 title="Customer Number = [% ContextCustomer.CO_Number %]">[% ContextCustomer.CO_Name %]</h2>
+<p>Credit: 
+[% IF ContextCustomer.CO_Credit < 50 %]<b style="color: red">[% FILTER format('%0.2f') %][% ContextCustomer.CO_Credit %][% END %]</b>
+[% ELSE %][% FILTER format('%0.2f') %][% ContextCustomer.CO_Credit %][% END %][% END %]
+<span style="padding-left:30px"></span>
+User: [% Session.L_Name %]
+<span style="padding-left:30px"></span>
+Date: [% CustNowTime %]
+</p>
+<table><tr>
+[% FOREACH colhdr IN [ 'Sel', '?', 'Description', 'Run Info', 'Calls Today', 'Mins Today', 'Leads Left', 'Status', 'End Date', 'Workday', 'Prospects Called', 'Type', 'Lines' ] %]
+<th class="basiclist-col">[% colhdr %]</th>
+[% END %]
+</tr>
+[% FOREACH row IN ProjectList %]
+<tr>
+<td class="basiclist">
+	<input type="radio" id="SelectedProject" name="pjid" value="[% row.PJ_Number %]" onclick="set_Chosen([% row.PJ_Number %])"
+	[% IF PJ_Number == row.PJ_Number %] checked [% END %]
+	></input>
+</td>
+<td class="basiclist" style="cursor:help" onclick="location = '/pg/ProjectSupport?CO_Number=[% ContextCustomer.CO_Number %]&PJ_Number=[% row.PJ_Number %]'"
+[%- IF row.PJ_Support == 'R' %]
+title="Response to support issue">
+<p class="responded" >??</p>
+[%- ELSIF row.PJ_Support == 'O' %]
+title="Open support issue">
+<p class="error" >!!</p>
+[% ELSE %]
+title="Get support">
+[% END -%]
+</td>
+<td class="basiclist"><a href="javascript:doEdit([% row.PJ_Number %])">[% row.PJ_Description %]</a></td>
+<td class="basiclist">[% row.PJ_timeleft %]</td>
+<td class="basiclist-right">[% row.ReportSummary.Calls %]</td>
+<td class="basiclist-right">[% row.ReportSummary.Minutes %]</td>
+<td class="basiclist-right" 
+[% TZName = [ 'EST:', '  CNT:', '  MTN:', '  PST:', '  Oth:' ] %]
+title="
+[%- FOREACH TZone IN [ '0', '1', '2', '3', 'Other' ] -%]
+[%- idx = loop.count - 1 -%]
+[%- TZName.$idx %][% row.LeadsLeft.$TZone -%]
+[%- END -%]
+">[% row.LeadsLeft.Total %]</td>
+<td class="basiclist">[% IF row.PJ_Status == 'A' %]Active[% ELSE %]Blocked[% END %]</td>
+<td class="basiclist">[% row.PJ_DateStop %]</td>
+<td class="basiclist">[% row.PJ_WorkdayStart %]&nbsp;..&nbsp;[% row.PJ_WorkdayStop %]</td>
+<td class="basiclist">[% row.PJ_ProspectStart %]&nbsp;..&nbsp;[% row.PJ_ProspectStop %]</td>
+<td class="basiclist">[% row.PJ_TypeStr %]</td>
+<td class="basiclist">[% row.PJ_Maxline %]</td>
+</tr>
+[% END %]
+</table>
+[% END %]
+</body></html>

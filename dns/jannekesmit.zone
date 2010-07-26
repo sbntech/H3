@@ -1,0 +1,16 @@
+$TTL 10800
+
+@  IN        SOA        ns-hk-1.us.to. tech.sbndials.com. (
+                        2010021001        ; Serial
+                        28800             ; Refresh
+                        3600              ; Retry
+                        604800            ; Expire
+                        86400 )           ; SOA TTL
+                IN      NS        ns-hk-1.us.to.
+     900        IN      MX        100    mail
+                IN      TXT        "Janneke Smit"
+
+mail            IN      A       216.66.234.250
+                IN      MX      100     mail
+
+www             IN      A       216.66.234.250

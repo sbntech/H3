@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>Users</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body class="subpage">
+<div class="buttonbar">
+<button onclick="location ='/scripts/cust/table.php?table=users&CO_Number=[% CO_Number %]&ItemId=[% us_number %]'">Back</button
+></div>
+<div class="mainPage">
+<h2>User</h2>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>[% END %]
+<form action="/pg/Users?CO_Number=[% CO_Number %]" method="post" enctype="multipart/form-data">
+<input type="hidden" name="us_customer" value="[% CO_Number %]"></input>
+[% BLOCK formtextrow %]
+	<tr>
+		<td class="editFormLabel">[% label %]</td>
+		<td class="editFormInput"><input class="editForm" type="text" 
+			size="[% size %]" 
+			id="[% varname %]"
+			name="[% varname %]"
+			value="[% varval %]"></input>[% IF estr %]<div class="editFormError">[% estr %]</div>[% END %]</td>
+	</tr>
+[% END %]
+<table class="editForm" cellspacing="2">
+<tr>
+	<td class="editFormLabel">Number</td>
+	[% IF X_Method == 'Insert' %]
+	<td class="editFormInput"> New</input>
+	[% ELSE %]
+	<td class="editFormInput"> [% us_number %]
+	<input type="hidden" name="us_number" value="[% us_number %]"></input>
+	[% END %]
+	[% IF us_number_ERROR %]<div class="editFormError">[% us_number_ERROR %]</div>[% END %]
+	</td>
+</tr>
+[% PROCESS formtextrow label='Name' size='30' varname='us_name' varval=us_name estr=us_name_ERROR %]
+[% PROCESS formtextrow label='Password' size='30' varname='us_password' varval=us_password estr=us_password_ERROR %]
+<tr>
+	<td class="editFormLabel">Access Level</td>
+	<td class="editFormInput"><select name="us_level">
+	<option value="1" [% IF us_level == '1' %]selected="true"[% END %]>1 - Only own projects</option>
+	<option value="2" [% IF us_level == '2' %]selected="true"[% END %]>2 - View other projects</option>
+	<option value="3" [% IF us_level == '3' %]selected="true"[% END %]>3 - Edit other projects</option>
+	<option value="4" [% IF us_level == '4' %]selected="true"[% END %]>4 - Supervisor</option>
+	</select>[% IF us_level_ERROR %]<div class="editFormError">[% us_level_ERROR %]</div>[% END %]</td>
+</tr>
+<tr>
+	<td class="editFormButtons"></td>
+	[% IF X_Method == 'Insert' %]
+	<td class="editFormButtons"><input name="X_Method" type="submit" value="Insert"></input>
+	[% ELSE %]
+	<td class="editFormButtons"><input name="X_Method" type="submit" value="Update"></input>
+	[% END %]
+	<input type="button" onclick="window.location='/scripts/cust/table.php?table=users&CO_Number=[% CO_Number %]&ItemId=[% us_number %]'" value="Cancel"></input></td>
+</tr>
+</table></form>
+</div>
+</body></html>

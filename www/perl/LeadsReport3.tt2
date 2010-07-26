@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>Report: Dispositions</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body class="subpage">
+<div class="buttonBar">
+<button onclick="document.location.href='/pg/Leads?m=show&CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'">Back</button>
+</div><div class="mainPage">
+<h2>Dispositions by Agent for '[% NFile.NF_FileName %]'</h2>
+<table class="basiclist">
+<tr>
+<th class="basiclist-col">Agent</th>
+<th class="basiclist-col">Total</th>
+[% FOREACH disp IN X_Dispositions %]
+[% IF disp.length > 0 %]
+<th class="basiclist-col">[% loop.count - 1 %]: [% disp %]</th>
+[% END %]
+[% END %]
+</tr>
+[% FOREACH agnum IN Dispogram.keys %]
+	<tr>
+	<th class="basiclist-row" title="[% agnum %]">[% Agents.$agnum %]</th>
+	<td class="basiclist-right">[% Dispogram.$agnum.Total %]</th>
+	[% FOREACH disp IN X_Dispositions %]
+	[% IF disp.length > 0 %]
+		[% didx = loop.count - 1 %]
+		<td class="basiclist-right">[% Dispogram.$agnum.$didx %]</td>
+	[% END %]
+	[% END %]
+	</tr>
+[% END %]
+<tr>
+<th class="basiclist-row">Total</th>
+<td class="basiclist-right">[% DispTotals.Total %]</td>
+	[% FOREACH disp IN X_Dispositions %]
+	[% IF disp.length > 0 %]
+		[% didx = loop.count - 1 %]
+		<td class="basiclist-right">[% DispTotals.$didx %]</td>
+	[% END %]
+	[% END %]
+</tr>
+</table>
+</div>
+</body></html>

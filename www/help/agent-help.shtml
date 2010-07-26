@@ -1,0 +1,41 @@
+<!--#include virtual="/help/_header.html" -->
+<h1>Agents</h1>
+<p>This is the list of agents defined for this customer. Agents are typically customer service representatives working at your Callcenter. Agents are used when projects are processed, to provide telephone assistance to interested leads. Using the navigation bar at the top, Agents can be added, deleted, or modified.  To select an Agent to modify, click the radio button to the left of the Agent name.</p>
+<p>You are not required to setup agents here if your project is one that has a call center phone number defined on the project. If you do define agents here, then each agent must have a unique callback number and the project should be setup with a blank call center number.</p>
+
+<h2>Agent Fields</h2>
+<table class="editForm" cellspacing="2">
+<tr><td class="editFormLabel">Number</td><td class="editFormTextDisplay">The system generated id number for this agent</td></tr>
+<tr><td class="editFormLabel">Name</td><td class="editFormTextDisplay">This is the user name that will be used if the agent logs in. Using the actual name of the agent is a good idea.</td></tr>
+<tr><td class="editFormLabel">Password</td><td class="editFormTextDisplay">It is strongly suggested that the agent password be a three or four digit number, since for cold calling type projects the password gets keyed in through the telephone keypad too.</td></tr>
+<tr><td class="editFormLabel">Email</td><td class="editFormTextDisplay">The system does not do anything with this field. It is here for record keeping only.</td></tr>
+<tr><td class="editFormLabel">Call&nbsp;Back&nbsp;Number</td><td class="editFormTextDisplay">This is the number that the agent will be called on, usually it is a 10 digit North American number.<br/>If the agent has a SIP addressable device then this number can be a SIP address. (For example, sip:8005559991@10.10.10.4:8060)<br/>It can also be "call-in", in which case the agent must call into the switch to log in.</td></tr>
+<tr><td class="editFormLabel">Project</td><td class="editFormTextDisplay">Pick the project that this agent is working on.</td></tr>
+<tr><td class="editFormLabel">Status</td><td class="editFormTextDisplay">Most agents are "Active", blocking an agent prevents the agent from logging in. It can be better to block and agent than to delete one, since after deleting an agent his dialing history cannot be associated with a name any longer. (A "Blocked" agent is essentially a deleted agent, that can be undeleted)</td></tr>
+<tr><td class="editFormLabel">Must Login</td><td class="editFormTextDisplay">When this is "Yes" then agents are required to login to the system on their browser to receive calls and pop-ups. If the project is a cold calling type project then agents must be setup with MustLogin=Y. When this is "No" then agents will receive calls without having to log in.</td></tr>
+</table>
+
+<h2>Agent Call Handling in a Cold Calling project</h2><p>These are the steps to get logged in</p>
+<ol>
+	<li>Go to the <a href="/pg/Agent?m=login">agent login page</a> and enter the agent name and password.</li>
+	<li>After verifying the agent's credentials through the web page, the system will call the agent on their Call Back number.</li>
+	<li>The agent answers the call and enters their password followed by the # sign using the phones keypad</li> 
+	<li>The system should say something like "Agent logged in"</li>
+	<li>The web page will "Waiting for a prospect..."</li>
+	<li>The agent remains on the phone all the time	and should not hangup.</li>
+</ol>
+<p>These are the steps to handle a prospect call (make sure the browser does not block pop ups)</p>
+<ol>
+	<li>The agent's phone will beep immediately before being bridged to a prospect.</li>
+	<li>A web page will popup with the prospects details as loaded into the project. Similar to this:<br/>
+		<img style="margin-left:40px;" src="barak-popup-screenshot.png"/></li>
+	<li>The agent talks to the prospect optionally following the Call Script (or perhaps answering machine), then:</li>
+		<ol  id="agent-buttons" style="list-style-type: lower-alpha">
+			<li><strong>Print:</strong> The agent may wish to print the details of the call and can do so by using the "Print" button.</li>
+			<li><strong>Hangup on the Prospect:</strong> If the talking part of the call is finished the agent can hanup on the prospect by using the "Hang Up" button. The agent will be in the paused state and can fill in some notes, DNC etc. Agents can also hangup on the prospect by pressing the * key on the phone's dialpad.</li>
+			<li><strong>Take another call:</strong> When the agent is ready to take the next call, the agent pushes the "Next Call" button. This will un-pause the agent and hangup on the call with the prospect.</li>
+			<li><strong>Attended transfer to third party:</strong> The agent fills in a transfer number and presses the "Transfer" button. The prospect is put on hold. The system dials the third party and the agent talks to the third party and then connects the third party with the prospect by pressing the * key on the phone's dialpad. (Note that the phone number is a 10-digit number without the leading 1). The agent can reconnect with the prospect by dialing 00 on their phone's dialpad to effectively cancel the transfer.
+			<li><strong>Finish the call:</strong> The agent hangs up on the answering machine (or prospect) by pressing the * key. (Note that fax machines mask the * key, so you may need to wait until there is silence to have success.)</li>
+		</ol>
+</ol>
+<!--#include virtual="/help/_footer.html" -->

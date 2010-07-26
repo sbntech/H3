@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>DNC</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body class="subpage">
+<div class="buttonBar">
+<button onclick="document.location.href='/scripts/cust/customer.php?CO_Number=[% CO_Number %]'">Back</button>
+</div>
+<div class="mainPage">
+<h1 title="Id:[% CO_Number %]">Do Not Call</h1>
+[% IF ErrStr %]
+<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<fieldset style="width: 540px"><legend>Upload numbers</legend>
+<form action="/pg/CustomerNodial?CO_Number=[% CO_Number %]&m=upload" method="post" enctype="multipart/form-data">
+<p>Enter numbers here to be uploaded (You can paste them here too.).<br/>
+<textarea name="numberarea" cols="77" rows="8"></textarea></p>
+<p>The file must be a text file with one number per line. (.zip or .txt)<br/>
+<input type="file" size="28" name="newdialfile" /></p>
+<p><input type="submit" value="Upload"/></p>
+</form></fieldset><p/>
+<fieldset style="width: 540px"><legend>Check number</legend>
+<p>Enter a number to check if it exists on the list.</p>
+<form action="/pg/CustomerNodial?CO_Number=[% CO_Number %]&m=check" method="post" enctype="multipart/form-data">
+<p><input type="text" size="14" name="checknumber"/></p>
+<p><input type="submit" value="Check"/></p>
+</form>
+[% IF CheckResultNotFound %]
+<p><span class="highlight">[% CheckResultNotFound %] is NOT on the list</span></p>
+[% END %]
+[% IF CheckResult %]
+<p><span class="highlight">[% CheckResult.CD_PhoneNumber %] originally added [% CheckResult.CD_AddedDT %]
+<br>last removal request on [% CheckResult.CD_LastContactDT %] (Eastern)</span></p>
+[% END %]
+</fieldset><p/>
+<fieldset style="width: 540px"><legend>Download</legend>
+<a href="/pg/CustomerNodial?CO_Number=[% CO_Number %]&m=download"
+>ZIP archive</a>
+</fieldset>
+[% END %]
+</div>
+</body></html>

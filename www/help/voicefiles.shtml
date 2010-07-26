@@ -1,0 +1,40 @@
+<!--#include virtual="/help/_header.html" -->
+<h1>Voice Files and Other Hints</h1>
+<h2>General Info on Uploading</h2>
+<ul>
+<li>You can upload a .wav, .mp3, .vox file and the system will convert it to its .vox format. (Technical Note: .vox is single channel, 8kHz, u-law)</li>
+<li>Your file can be named anything when you upload it, but the system does require files to have specific names, so you will need to rename the file after uploading. In other words, you can upload then rename, you do not need to rename locally first.</li>
+</ul>
+<h2>Message Delivery / Press 1 Project Types</h2>
+<p>Upload the following voice files, as needed for message delivery (voice broadcasting) and press-1 type projects:</p>
+<table class="editForm" cellspacing="2">
+<tr><td class="editFormLabel">live.vox</td><td class="editFormTextDisplay">The system will play this voice file when the system believes that the prospect is a live person. This is the only voice file you will need for these project types if your project is set as "Live Only".</td></tr>
+<tr><td class="editFormLabel">machine.vox</td><td class="editFormTextDisplay">If your project is set to play messages to answering machines, then you will need to have a <strong>machine.vox</strong> voice file too.</td></tr>
+</table>
+<h2>Cold Calling Project Types</h2>
+<table class="editForm" cellspacing="2">
+<tr><td class="editFormLabel">machine.vox</td><td class="editFormTextDisplay">Cold calling type projects do not need any voice files unless your project is set to play messages to answering machines, then you will need to have a <strong>machine.vox</strong> voice file.</td></tr>
+</table>
+<h2>Surveys Project Types</h2>
+<p>Upload the following voice files, as needed for survey type projects:</p>
+<table class="editForm" cellspacing="2">
+<tr><td class="editFormLabel">live.vox</td><td class="editFormTextDisplay">The first file played, it is not a question but rather an introduction. The survey engine does not wait for an answer here, but proceeds directly to <strong>1.vox</strong>.</td></tr>
+<tr><td class="editFormLabel">1.vox</td><td class="editFormTextDisplay">the first question, the only possible answers to questions are single digit key-presses on the phone's keypad. That is 0,1,2,3,4,5,6,7,8,9. The keys # and * are invalid as answers. So the recorded questions should be phrased in a compatible fashion. Here are some examples:<br/>
+<ul>
+<li>"How would you rate Mr. Taft as president, on a scale from one through five, where one is poor and five is excellent."</li>
+<li>"If your income is greater than 100,000 dollars, press 1; if it is less then press 0"</li>
+</ul>
+</td></tr>
+<tr><td class="editFormLabel">2.vox</td><td class="editFormTextDisplay">(optional) the second question ... etc.  <strong>3.vox</strong>, <strong>4.vox</strong> ...</td></tr>
+<tr><td class="editFormLabel">9.vox</td><td class="editFormTextDisplay">(optional) the ninth and final possible question</td></tr>
+<tr><td class="editFormLabel">thanks.vox</td><td class="editFormTextDisplay">(optional) played after the final question</td></tr>
+<tr><td class="editFormLabel">paidfor.vox</td><td class="editFormTextDisplay">(optional) played after thanks.vox</td></tr>
+<tr><td class="editFormLabel">machine.vox</td><td class="editFormTextDisplay">played if a machine is detected as in a voice broadcast type project</td></tr>
+</table>
+<p>It is important to thoroughly test surveys before running them. You can test surveys by uploading a list of 1 or two phone numbers of phones that you can answer and take the survey yourself.</p>
+<p>Survey results are stored in the CDR file, at the end of the line.</p>
+<pre>
+2008-10-20,15:09:51,9494542000,48,HA,D114-10-15-231,7-1*0-0-3-0.0,<span class="hiyellow">1234567</span>
+2008-10-20,16:02:40,9494542001,54,HA,D101-8-23-191,6-1*0-0-3-0.0,,<span class="hiyellow">1234567</span>
+</pre>
+<!--#include virtual="/help/_footer.html" -->

@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>Numbersfile</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css" rel="Stylesheet" />	
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>
+</head><body class="subpage">
+<div class="buttonbar">
+<button onclick="document.location.href='/pg/Leads?m=show&CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'">Back</button>
+</div>
+<div class="mainPage">
+<h2>Column Headings for [% NFile.NF_FileName %]</h2>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<form action="/pg/Leads?m=Update&CO_Number=[% PJ_CustNumber %]&PJ_Number=[% PJ_Number %]" method="post" enctype="multipart/form-data">
+<input type="hidden" name="CO_Number" value="[% CO_Number %]"></input>
+<input type="hidden" name="PJ_Number" value="[% PJ_Number %]"></input>
+<input type="hidden" name="filenumber" value="[% filenumber %]"></input>
+<input type="hidden" name="X_HeadingCount" value="[% X_ColumnHeadings.size %]"></input>
+<table class="editForm" cellspacing="2">
+<tr>
+	<th class="basiclist-col">Col</th>
+	<th class="basiclist-col">Heading</th>
+</tr>
+[% FOREACH Heading IN X_ColumnHeadings %]
+[% CIndex = "X_Heading${loop.count}" %]
+<tr>
+	<td class="editFormLabel">[% loop.count %]</td>
+	<td class="editFormInput">
+		<input class="editForm" type="text" size="30" name="X_Heading[% loop.count %]" value="[% Heading %]"></input>
+	</td>
+</tr>
+[% END %]
+<tr>
+	<td class="editFormButtons"></td>
+	<td class="editFormButtons"><input name="m" type="submit" value="Update"></input>
+	<input type="button" onclick="window.location='/pg/Leads?m=show&CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'" value="Cancel"></input></td>
+</tr>
+</table></form>
+[% END %]
+</div>
+</body></html>

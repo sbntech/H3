@@ -1,0 +1,19 @@
+<html>
+<head>
+<title>Agent Login</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<link rel="P3Pv1" href="http://216.66.234.250/w3c/p3p.xml" />
+</head>
+<body>
+<h1>Agent Login</h1>
+<p class="error">[% ErrorStr %]&nbsp;</p>
+<form action="/pg/Agent" method="POST">
+<table border=0 cellspacing=1 cellpadding=1>
+    <tr><td colspan="2"><div id="divMessage" style="color:red;"></div></td></tr>
+    <tr><td>Agent Name:</td><td><input name="AG_Name" value="[% AG_Name %]"></td></tr>
+    <tr><td>Password:</td><td><input type="password" name="AG_Password"></td></tr>
+    <tr><td colspan="2" align=right><input type="submit" value="Login"></td></tr>
+</table>
+</form>
+</body>
+</html>

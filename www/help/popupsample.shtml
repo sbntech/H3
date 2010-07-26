@@ -1,0 +1,3 @@
+<!--#include virtual="/help/_header.html" -->
+<h1>This page popped up.</h1>
+<!--#include virtual="/help/_footer.html" -->

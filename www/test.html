@@ -1,0 +1,18 @@
+<html><head>
+<script type="text/javascript" src="/glm.js"></script>
+</head>
+<body>
+<script>
+
+	var xfer = getCookie("PHPSESSID");
+	document.write("doc cookie:<pre>" + document.cookie + "</pre><br>");
+	document.write("xfer=" + xfer + "<br>");
+	if (xfer != "") {
+		document.write("nice");
+	} else {
+		document.write("empty");
+	}
+
+</script>
+</body>
+</html>

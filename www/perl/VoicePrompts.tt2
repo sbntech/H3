@@ -1,0 +1,133 @@
+<html>
+<head>
+<title>Manage voice prompts</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<script language="javascript">
+var PJ_Number = "[% PJ_Number %]";
+var BackTo = '/pg/ProjectList?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]';
+
+function renamefile(fname, inpname) {
+
+	var e = document.getElementById(inpname);
+	var newname = e.value;
+
+	if (newname.length == 0) {
+		newname = "something.vox";
+	} else {
+		var pos = newname.indexOf('.vox');
+		if (pos != (newname.length - 4)) {
+			newname = newname + ".vox";
+		}
+	}			
+
+	if (confirm("Rename \"" + fname + "\" to \"" + newname + "\"?")) {
+		location = "/pg/VoicePrompts?CO_Number=[% CO_Number %]&PJ_Number=" + PJ_Number +
+			"&m=rename&ProjFileName=" + fname + 
+			"&NewFileName="	+ newname;
+	}
+}
+
+function delfile(lname, fname) {
+
+	if (confirm("Permanently delete \"" + fname + "\"?")) {
+		location = "/pg/VoicePrompts?CO_Number=[% CO_Number %]&PJ_Number=" + PJ_Number +
+			"&m=delete&" + lname + "=" + fname;
+	}
+}
+
+function do_record() {
+
+	location = "/pg/VoicePrompts?CO_Number=[% CO_Number %]&PJ_Number=" + PJ_Number +
+		"&m=record";
+}
+
+function do_refresh() {
+
+	location = "/pg/VoicePrompts?CO_Number=[% CO_Number %]&PJ_Number=" + PJ_Number;
+}
+
+</script>
+</head><body style="margin:0">
+[% IF ErrStr %]
+<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<div class='buttonBar'>
+<button onclick="location = BackTo">Back</button>
+<button onclick="do_record()">Record</button>
+</div>
+<div class='mainPage'>
+[% IF X_Recording_PIN %]
+<p>Call <span style="font-weight: bold">(866) 714-8093</span> to record the message.</p>
+<p>Remember the following DIAL-IN CODE, needed to record: <span style="font-weight: bold; font-size: 200%;">[% X_Recording_PIN %]</span></p>
+[% IF CO_ResNumber == 3 %]
+<br/>
+<p>Recordings over 25 seconds will automatically and permanantly switch account to per minute billing.</p>
+[% END %]
+<button onclick="do_refresh()">OK</button>
+[% ELSE %]
+<h2>Project files</h2>
+	<table class="filelist"><tr>
+	<th class="filelist-col">File Name</th>
+	<th class="filelist-col">Modified</th>
+	<th class="filelist-col">Size</th>
+	<th class="filelist-col">Length</th>
+	<th class="filelist-col">New Name</th>
+	<th class="filelist-col">Del</th>
+	<th class="filelist-col">To Cust</th>
+	</tr>
+	[% findex = 0 %]
+	[% FOREACH pjfile IN ProjectFiles %]
+		[% findex = findex + 1 %]
+	<tr>
+		<th class="filelist-row"><a href="/pg/VoicePrompts?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]&m=download&ProjFileName=[% pjfile.FileName %]">[% pjfile.FileName %]</a></th>
+		<td class="filelist">[% pjfile.Modified %]</td>
+		<td class="filelist">[% pjfile.Size %] Kb</td>
+		<td class="filelist">[% IF pjfile.FileName.match('\.vox$') %][% pjfile.VoxLength %] secs[% END %]</td>
+		<td class="filelist"><input type="text" id="findex[% findex %]"></input><button 
+			title="Rename [% pjfile.FileName %]"
+			onclick="renamefile('[% pjfile.FileName %]', 'findex[% findex %]')">Rename</button></td>
+		<td class="filelist"><button 
+			title="Delete [% pjfile.FileName %]"
+			onclick="delfile('ProjFileName', '[% pjfile.FileName %]')">X</button></td>
+		<td class="filelist"><button 
+			title="Copy [% pjfile.FileName %] to the customer folder"
+			onclick="location = '/pg/VoicePrompts?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]&m=copy&ProjFileName=[% pjfile.FileName %]'">&gt;</button></td>
+	</tr>
+	[% END %]
+	</table>
+<table><tr><td>
+<form style="margin-top: 10px" method="post" enctype="multipart/form-data" action="/pg/VoicePrompts?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]">
+<p>Upload a voice file (.vox, .wav, .mp3)<br/>
+<input type=hidden name="m" value="load"></input>
+<input size="35" type="file" name="X_UploadName"></input></p>
+<p><input style="text-align:right" type="submit" value="Upload and Convert"></input><a class="help" title="Help on files needed" href="/help/voicefiles.shtml" target="_help"><img src="/help/icon-help.png" style="float:right"/></a></p>
+</form>
+</td></tr></table>
+<h2>Customer files</h2>
+	<table class="filelist"><tr>
+	<th class="filelist-col">File Name</th>
+	<th class="filelist-col">Modified</th>
+	<th class="filelist-col">Size</th>
+	<th class="filelist-col">Length</th>
+	<th class="filelist-col">Del</th>
+	<th class="filelist-col">To Proj</th>
+	</tr>
+	[% FOREACH custfile IN CustomerFiles %]
+	<tr>
+		<th class="filelist-row"><a href="/pg/VoicePrompts?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]&m=download&CustFileName=[% custfile.FileName %]">[% custfile.FileName %]</a></th>
+		<td class="filelist">[% custfile.Modified %]</td>
+		<td class="filelist">[% custfile.Size %] Kb</td>
+		<td class="filelist">[% custfile.VoxLength %] secs</td>
+		<td class="filelist"><button 
+			title="Delete [% custfile.FileName %]"
+			onclick="delfile('CustFileName', '[% custfile.FileName %]')">X</button></td>
+		<td class="filelist"><button 
+			title="Copy [% custfile.FileName %] to the project folder"
+			onclick="location = '/pg/VoicePrompts?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]&m=copy&CustFileName=[% custfile.FileName %]'">&lt;</button></td>
+	</tr>
+	[% END %]
+	</table>
+[% END %]
+</div>
+[% END %]
+</body></html>

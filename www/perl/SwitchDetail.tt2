@@ -1,0 +1,299 @@
+<html>
+<head>
+<title>[% switch %] detail</title>
+<link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css" rel="Stylesheet" />	
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+<!--[if IE]><script language="javascript" type="text/javascript" src="../flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="../flot/jquery.flot.js"></script>   
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<script>
+
+var plotdata = [
+
+[% TRY %]
+	[% INSERT "asterisk.${switch}.graph.dat" %]
+	[% PlotDataFound = 1 %]
+[% CATCH %]
+	[% PlotDataFound = 0 %]
+[% END %]
+
+];
+
+function trend (datum, tempTrend, tLen) {
+
+	var i = tempTrend.push(datum);
+
+	if (i > tLen) {
+		tempTrend.shift();
+	}
+
+	var sum = 0;
+	var count = 0;
+
+	for (i in tempTrend) {
+		count++;
+		sum += tempTrend[i];
+	}
+
+	if (count > 0) {
+		return sum / count;
+	} else {
+		return 0;
+	}
+}
+
+var average = 0;
+
+var dataMaximumCPS = [];
+var dataActualCPS = [];
+
+var dataCurPorts = [];
+var dataUsedPorts = [];
+var dataSimulPorts = [];
+
+var dataLiveRate = [];
+var dataLiveRateTrend = [];
+var tempLiveRateTrend = [];
+
+var dataConnRate = [];
+var dataConnRateTrend = [];
+var tempConnRateTrend = [];
+
+var cumulativeDuration = 0;
+var dataSecsPerP1 = [];
+var dataSecsPerP1Trend = [];
+var tempSecsPerP1Trend = [];
+
+for (var i in plotdata) {
+	var rdat = plotdata[i];
+	var t = rdat[0] - (3600000 * 5);
+	var ProspectCalls 		= rdat[1];
+	var AgentCalls	 		= rdat[2];
+	var Connects	 		= rdat[3];
+	var Human		 		= rdat[4];
+	var Duration	 		= rdat[5];
+	var MaximumCPS	 		= rdat[6];
+	var CurPorts	 		= rdat[7];
+	var UsedPorts	 		= rdat[8];
+	var SimulPorts	 		= rdat[9];
+	var OrigBusy	 		= rdat[10];
+	var OrigGood	 		= rdat[11];
+	var DialsPerLinePerMin	= rdat[12];
+
+	var ActualCPS = ProspectCalls / 60;
+	var ConnRate = 0;
+	if (ProspectCalls > 0) {
+		ConnRate = (100 * Connects) / ProspectCalls;
+	}
+	var LiveRate = 0;
+	if (ProspectCalls > 0) {
+		LiveRate = (100 * Human) / ProspectCalls;
+	}
+
+	cumulativeDuration += Duration;
+	if (AgentCalls > 0) {
+
+		var SecsPerP1 = cumulativeDuration / AgentCalls;
+		dataSecsPerP1.push([t, SecsPerP1]);
+		average = trend(SecsPerP1, tempSecsPerP1Trend, 15);
+		dataSecsPerP1Trend.push([t, average]);
+
+		cumulativeDuration = 0;
+	}
+
+	dataMaximumCPS.push([t, MaximumCPS]);
+	dataActualCPS.push([t, ActualCPS]);
+
+	dataCurPorts.push([t, CurPorts]);
+	dataUsedPorts.push([t, UsedPorts]);
+	dataSimulPorts.push([t, SimulPorts]);
+
+	dataConnRate.push([t, ConnRate]);
+	average = trend(ConnRate, tempConnRateTrend, 5);
+	dataConnRateTrend.push([t, average]);
+
+	dataLiveRate.push([t, LiveRate]);
+	average = trend(LiveRate, tempLiveRateTrend, 5);
+	dataLiveRateTrend.push([t, average]);
+
+}
+</script>
+</head><body class="subpage">
+<div class="buttonbar">
+<button onclick="location ='/status/result-stats.html'">Back</button
+><button onclick="location ='/pg/Switch?switch=[% switch %]&method=block'">Block</button
+[% IF SwitchType == "NVR" %]><button onclick="location ='/pg/Switch?switch=[% switch %]&method=reset'">Reset</button[% END %]
+>
+</div>
+<div class="mainPage">
+<h2>Switch [% switch %] : ([% SwitchType %])</h2>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+[% IF MessageStr %]<p class="message">[% MessageStr %]</p>[% END %]
+[% IF SwitchType == "ASTERISK" %]
+<form action="/pg/Switch?switch=[% switch %]" method="post" enctype="multipart/form-data">
+[% BLOCK formtextrow %]
+	<tr>
+		<td class="editFormLabel">[% label %]</td>
+		<td class="editFormInput"><input class="editForm" type="text" 
+			size="[% size %]" 
+			id="[% varname %]"
+			name="[% varname %]"
+			value="[% varval %]"></input>[% IF estr %]<div class="editFormError">[% estr %]</div>[% END %]</td>
+	</tr>
+[% END %]
+[% IF Processing_Error %]<p class="error">[% Processing_Error %]</p>[% END %]
+<input type="hidden" name="method" value="asterisk"></input>
+<table class="editForm" cellspacing="2">
+[% PROCESS formtextrow label='Calls Per Second (CPS)' size='5' varname='SW_VoipCPS' varval=row.SW_VoipCPS estr=SW_VoipCPS_ERROR %]
+[% PROCESS formtextrow label='Ports' size='10' varname='SW_VoipPorts' varval=row.SW_VoipPorts estr=SW_VoipPorts_ERROR %]
+<tr>
+	<td class="editFormButtons"></td>
+	<td class="editFormButtons"><input name="X_Method" type="submit" value="Update"></input></td>
+</tr>
+</table></form>
+[% IF PlotDataFound == 1 %]
+<h3>Calls Per Second (CPS) Actual vs Max</h3>
+<div id="plotDivCPS" style="width:1024px;height:200px;"></div>
+<h3>Connection Rate</h3>
+<div id="plotDivConnRate" style="width:1024px;height:200px;"></div>
+<h3>Live Connect Rate</h3>
+<div id="plotDivLiveRate" style="width:1024px;height:200px;"></div>
+<h3>Seconds per P1</h3>
+<div id="plotDivSecsPerP1" style="width:1024px;height:200px;"></div>
+<h3>Ports</h3>
+<div id="plotDivPorts" style="width:1024px;height:200px;"></div>
+<script>
+$(function(){
+
+	if ([% PlotDataFound %] == 0) { return; }
+
+    $.plot($("#plotDivCPS"), 
+		[ 
+			{
+				data: dataMaximumCPS,
+				lines: { show: true, steps: true }
+			},			 
+			{
+				data: dataActualCPS,
+				lines: { show: true, steps: false }
+			}			 
+		], 
+		{
+			colors: [ "#00cc33", "#ee1122" ],
+			xaxis: { mode: "time" }
+		}
+	);
+
+    $.plot($("#plotDivPorts"), 
+		[ 
+			{
+				data: dataCurPorts,
+				label: 'Available',
+				lines: { show: true, steps: true }
+			},			 
+			{
+				data: dataUsedPorts,
+				label: 'Used',
+				lines: { show: true, steps: false }
+			},		 
+			{
+				data: dataSimulPorts,
+				label: 'Simul',
+				lines: { show: true, steps: false }
+			}			 
+		], 
+		{
+			legend: {
+				position: 'sw'
+			},
+			colors: [ "#00cc33", "#ee1122", "#9966ff" ],
+			xaxis: { mode: "time" }
+		}
+	);
+
+    $.plot($("#plotDivConnRate"), 
+		[ 
+			{
+				data: dataConnRate,
+				label: 'Actual',
+				lines: { show: true, steps: false }
+			},			 
+			{
+				data: dataConnRateTrend,
+				label: '5min Trend',
+				lines: { show: true, steps: false }
+			}
+		], 
+		{
+			legend: {
+				position: 'sw'
+			},
+			colors: [ "#0011ee", "#2299ff" ],
+			xaxis: { mode: "time" }
+		}
+	);
+
+    $.plot($("#plotDivLiveRate"), 
+		[ 
+			{
+				data: dataLiveRate,
+				label: 'Actual',
+				lines: { show: true, steps: false }
+			},			 
+			{
+				data: dataLiveRateTrend,
+				label: '5min Trend',
+				lines: { show: true, steps: false }
+			}
+		], 
+		{
+			legend: {
+				position: 'sw'
+			},
+			colors: [ "#ddaa00", "#ffdd66" ],
+			xaxis: { mode: "time" }
+		}
+	);
+
+    $.plot($("#plotDivSecsPerP1"), 
+		[ 
+			{
+				data: dataSecsPerP1,
+				label: 'Actual',
+				lines: { show: true, steps: false }
+			},			 
+			{
+				data: dataSecsPerP1Trend,
+				label: '15min Trend',
+				lines: { show: true, steps: false }
+			}
+		], 
+		{
+			legend: {
+				position: 'sw'
+			},
+			colors: [ "#449900", "#77dd33" ],
+			xaxis: { mode: "time" }
+		}
+	);
+});
+</script>
+[% END %]
+[% ELSE %]
+<table><tr>
+[% FOREACH colhdr IN [ 'Board', 'Error', 'Blocked', 'Used', 'Stop', 'Free', 'Open', 'Data', 'Block' ] %]
+<th class="basiclist-col">[% colhdr %]</th>
+[% END %]
+[% FOREACH board IN boardlist %]
+</tr><tr>
+[% FOREACH colname IN [ 'Board', 'Errors', 'Blocked', 'Used', 'Stop', 'Free', 'Open', 'Data' ] %]
+<td class="basiclist">[% board.$colname %]</td>
+[% END %]
+<td class="basiclist"><button onclick="location ='/pg/Switch?switch=[% switch %]&method=board&board=[% board.Board %]'">Block</button></td>
+[% END %]
+</tr></table>
+[% END %]
+[% END %]
+</div>
+</body></html>

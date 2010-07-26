@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>Customer</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+</head><body>
+<h1>Customer</h1>
+[% IF ErrStr %]<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<form action="/pg/Customer?CO_Number=[% CO_Number %]" method="post" enctype="multipart/form-data">
+[% BLOCK formtextrow %]
+	<tr>
+		<td class="editFormLabel">[% label %]</td>
+		<td class="editFormInput"><input class="editForm" type="text" 
+			size="[% size %]" 
+			name="[% varname %]"
+			value="[% varval %]"></input>[% IF estr %]<div class="editFormError">[% estr %]</div>[% END %]</td>
+	</tr>
+[% END %]
+[% IF Processing_Error %]<p class="error">[% Processing_Error %]</p>[% END %]
+<input type="hidden" name="CO_ResNumber" value="[% CO_ResNumber %]"></input>
+[% IF Session.L_Level < 6 %]
+<input type="hidden" name="CO_Priority" value="[% CO_Priority %]"></input>
+[% END %]
+[% IF ContextReseller.RS_DNC_Flag == 'N' %]
+<input type="hidden" name="CO_Checknodial" value="F"></input>
+<input type="hidden" name="CO_EnableMobile" value="F"></input>
+[% END %]
+<table class="editForm" cellspacing="2">
+<tr><td class="editFormLabel">Number</td><td class="editFormInput">[% CO_Number %]</td></tr>
+[% PROCESS formtextrow label='Name' size='35' varname='CO_Name' varval=CO_Name estr=CO_Name_ERROR %]
+[% PROCESS formtextrow label='Password' size='10' varname='CO_Password' varval=CO_Password estr=CO_Password_ERROR %]
+[% PROCESS formtextrow label='Contact' size='35' varname='CO_Contact' varval=CO_Contact estr=CO_Contact_ERROR %]
+[% PROCESS formtextrow label='Managed By' size='35' varname='CO_ManagedBy' varval=CO_ManagedBy estr=CO_ManagedBy_ERROR %]
+[% PROCESS formtextrow label='Address' size='40' varname='CO_Address' varval=CO_Address estr=CO_Address_ERROR %]
+[% PROCESS formtextrow label='Address2' size='40' varname='CO_Address2' varval=CO_Address2 estr=CO_Address2_ERROR %]
+[% PROCESS formtextrow label='City' size='25' varname='CO_City' varval=CO_City estr=CO_City_ERROR %]
+[% PROCESS formtextrow label='Zipcode' size='12' varname='CO_Zipcode' varval=CO_Zipcode estr=CO_Zipcode_ERROR %]
+[% PROCESS formtextrow label='State' size='15' varname='CO_State' varval=CO_State estr=CO_State_ERROR %]
+[% PROCESS formtextrow label='Tel' size='20' varname='CO_Tel' varval=CO_Tel estr=CO_Tel_ERROR %]
+[% PROCESS formtextrow label='Fax' size='20' varname='CO_Fax' varval=CO_Fax estr=CO_Fax_ERROR %]
+[% PROCESS formtextrow label='Email' size='80' varname='CO_Email' varval=CO_Email estr=CO_Email_ERROR %]
+	<tr><td class="editFormLabel">Credit</td><td class="editFormInput">[% FILTER format('%0.2f') %][% CO_Credit %][% END %]</td></tr>
+[% PROCESS formtextrow label='Add Credit' size='12' varname='X_AddCredit' varval=X_AddCredit estr=X_AddCredit_ERROR %]
+	<tr>
+		<td class="editFormLabel">Billing Type</td>
+		<td class="editFormInput"><select name="CO_Billingtype">
+		<option value="T" [% IF CO_Billingtype == 'T' %]selected="true"[% END %]>Time, per minute charges</option>
+		<option value="F" [% IF CO_Billingtype == 'F' %]selected="true"[% END %]>Fixed per connect</option>
+		<option value="C" [% IF CO_Billingtype == 'C' %]selected="true"[% END %]>Fixed per agent connect</option>
+		<option value="A" [% IF CO_Billingtype == 'A' %]selected="true"[% END %]>Fixed per dial</option>
+		</select>[% IF CO_Billingtype_ERROR %]<div class="editFormError">[% CO_Billingtype_ERROR %]</div>[% END %]</td>
+	</tr>
+[% PROCESS formtextrow label='Authorized Agents' size='5' varname='CO_AuthorizedAgents' varval=CO_AuthorizedAgents estr=CO_AuthorizedAgents_ERROR %]
+[% PROCESS formtextrow label='Agent Monthly Charge' size='12' varname='CO_AgentCharge' varval=CO_AgentCharge estr=CO_AgentCharge_ERROR %]
+[% PROCESS formtextrow label='Rate' size='15' varname='CO_Rate' varval=CO_Rate estr=CO_Rate_ERROR %]
+[% PROCESS formtextrow label='Agent IP Rate' size='15' varname='CO_AgentIPRate' varval=CO_AgentIPRate estr=CO_AgentIPRate_ERROR %]
+	<tr>
+		<td class="editFormLabel">Status</td>
+		<td class="editFormInput">
+			<input type="radio" name="CO_Status" value="A" [% IF CO_Status != 'B' %]checked="true"[% END %]>Active</input>
+			<input type="radio" name="CO_Status" value="B" [% IF CO_Status == 'B' %]checked="true"[% END %]>Blocked</input>
+			[% IF CO_Status_ERROR %]<div class="editFormError">[% CO_Status_ERROR %]</div>[% END %]</td>
+	</tr>
+[% PROCESS formtextrow label='RoundBy' size='5' varname='CO_RoundBy' varval=CO_RoundBy estr=CO_RoundBy_ERROR %]
+[% PROCESS formtextrow label='Min_Duration' size='5' varname='CO_Min_Duration' varval=CO_Min_Duration estr=CO_Min_Duration_ERROR %]
+[% IF Session.L_Level == 6 %]
+[% PROCESS formtextrow label='Priority' size='5' varname='CO_Priority' varval=CO_Priority estr=CO_Priority_ERROR %]
+[% END %]
+[% IF (Session.L_Level == 6) || ((Session.L_Level == 5) && (ContextReseller.RS_OnlyColdCall == 'M')) %]
+	<tr>
+		<td class="editFormLabel">Only Cold Calling Allowed</td>
+		<td class="editFormInput"><select name="CO_OnlyColdCall">
+		<option value="Y" [% IF CO_OnlyColdCall == 'Y' %]selected="true"[% END %]>Yes</option>
+		<option value="N" [% IF CO_OnlyColdCall == 'N' %]selected="true"[% END %]>No</option>
+		</select>[% IF CO_OnlyColdCall_ERROR %]<div class="editFormError">[% CO_OnlyColdCall_ERROR %]</div>[% END %]</td>
+	</tr>
+[% ELSE %]
+<input type="hidden" name="CO_OnlyColdCall" value="[% CO_OnlyColdCall %]"></input>
+[% END %]
+	<tr>
+		<td class="editFormLabel">Time Zone</td>
+		<td class="editFormInput"><select name="CO_Timezone">
+		<option value="0" [% IF CO_Timezone == 0 %]selected="true"[% END %]>Eastern</option>
+		<option value="-1" [% IF CO_Timezone == -1 %]selected="true"[% END %]>Central</option>
+		<option value="-2" [% IF CO_Timezone == -2 %]selected="true"[% END %]>Mountain</option>
+		<option value="-3" [% IF CO_Timezone == -3 %]selected="true"[% END %]>Pacific</option>
+		</select>[% IF CO_Timezone_ERROR %]<div class="editFormError">[% CO_Timezone_ERROR %]</div>[% END %]</td>
+	</tr>
+[% PROCESS formtextrow label='Maxlines' size='5' varname='CO_Maxlines' varval=CO_Maxlines estr=CO_Maxlines_ERROR %]
+[% IF ContextReseller.RS_DNC_Flag == 'Y' %]
+	<tr>
+		<td class="editFormLabel">Check DNC Available</td>
+		<td class="editFormInput">
+			<input type="radio" name="CO_Checknodial" value="T" [% IF CO_Checknodial != 'F' %]checked="true"[% END %]>Enabled</input>
+			<input type="radio" name="CO_Checknodial" value="F" [% IF CO_Checknodial == 'F' %]checked="true"[% END %]>Disabled</input>
+			[% IF CO_Checknodial_ERROR %]<div class="editFormError">[% CO_Checknodial_ERROR %]</div>[% END %]</td>
+	</tr>
+	<tr>
+		<td class="editFormLabel">Enable Mobile</td>
+		<td class="editFormInput">
+			<input type="radio" name="CO_EnableMobile" value="T" [% IF CO_EnableMobile != 'F' %]checked="true"[% END %]>Enabled</input>
+			<input type="radio" name="CO_EnableMobile" value="F" [% IF CO_EnableMobile == 'F' %]checked="true"[% END %]>Disabled</input>
+			[% IF CO_EnableMobile_ERROR %]<div class="editFormError">[% CO_EnableMobile_ERROR %]</div>[% END %]</td>
+	</tr>
+[% END %]
+	<tr>
+		<td class="editFormButtons"></td>
+		[% IF X_Method == 'Insert' %]
+		<td class="editFormButtons"><input name="X_Method" type="submit" value="Insert"></input>
+		[% ELSE %]
+		<td class="editFormButtons"><input name="X_Method" type="submit" value="Update"></input>
+		[% END %]
+		<input type="button" onclick="window.location='/pg/CustomerList'" value="Cancel"></input></td>
+	</tr>
+</table></form>
+[% END %]
+</body></html>

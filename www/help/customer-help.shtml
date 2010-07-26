@@ -1,0 +1,31 @@
+<!--#include virtual="/help/_header.html" -->
+<h1>Customer Page</h1>
+<h2>Menu Button Explanation</h2>
+<dl>
+<dt>All Projects</dt>
+<dd>Opens the project list page, showing all projects, blocked, old and current.<dd>
+<dt>Active Projects</dt>
+<dd>Opens the project list page, showing only current active projects.<dd>
+<dt>DNC</dt>
+<dd>Opens the Do Not Call (DNC) list maintenance page.<dd>
+<dt>Payment</dt>
+<dd>Users who are eligible to make credit card payments will see this button. It opens a page that takes credit card payment details to increase the customer credit balance.<dd>
+<dt>Users</dt>
+<dd>Opens the user maintenance page.<dd>
+<dt>Agents</dt>
+<dd>Opens the agent mainenance page.<dd>
+<dt>Logoff</dt>
+<dd>Logs the user off.<dd>
+</dl>
+<h2>Info</h2>
+<dl>
+<dt>Balance</dt>
+<dd>Displays the available credit.<dd>
+<dt>Authorized Agents</dt>
+<dd>Number of agents that may log on simultaneously.<dd>
+<dt>Time Zone</dt>
+<dd>Displays the customer's time zone.<dd>
+</dl>
+<h2>Generate a report</h2>
+<p>This generates a CSV file (that can be opened as a spreadsheet) showing project statistics for the supplied time period.</p>
+<!--#include virtual="/help/_footer.html" -->

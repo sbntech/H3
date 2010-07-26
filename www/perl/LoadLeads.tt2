@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>Load Leads</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<script language="javascript">
+var PJ_Number = "[% PJ_Number %]";
+
+function MenuOp(fid, fname, elemSel) {
+	if (elemSel.value == 'NoOperation') {
+		return;
+	} else if (elemSel.value == 'Delete') {
+		if (! window.confirm("Delete " + fname + "?")) {
+			return;
+		}
+	}
+	location = '/pg/Leads?m=' + elemSel.value + '&filenumber=' + fid +
+			'&CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]';
+}
+
+function showprogress() {
+
+	var e = document.getElementById("getinput1");
+	e.className = "hidden";
+	e = document.getElementById("upload1");
+	e.className = "shown";
+}
+
+</script>
+</head><body class="subpage">
+<div class="buttonBar">
+<button onclick="document.location.href='/pg/ProjectList?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'">Back</button>
+<button onclick="document.location.href='/pg/Leads?m=show&CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]'">Refresh</button>
+</div><div class="mainPage">
+<h2>Project: '[% ContextProject.PJ_Description %]' dial files</h2>
+<p><span class="highlight">[% MenuMessage %]</span></p>
+<table class="filelist">
+<tr>
+<th class="filelist-col">File Name</th>
+<th class="filelist-col" title="Count of all numbers in the file initially">Total</th>
+<th class="filelist-col" title="Count of numbers left to dial">Left</th>
+<th class="filelist-col" title="Count of all numbers used/scrubbed">Used</th>
+<th class="filelist-col" title="Count of all numbers used today">Today</th>
+<th class="filelist-col" title="Count of duplicate numbers not loaded">Dup</th>
+<th class="filelist-col" >Menu Action</th>
+<th class="filelist-col" title="Time the file was loaded">Uploaded</th>
+<th class="filelist-col" title="Was the main DNC used?">MainDNC</th>
+<th class="filelist-col" title="Was the customer dnc used?">CustDNC</th>
+<th class="filelist-col" title="Were mobile/cellular numbers scrubbed?">Mobiles</th>
+</tr>
+[% count = 0 %]
+[% FOREACH trow IN trows %]
+	[% count = count + 1 %]
+	<tr><th class="filelist-row" title="FileNumber=[% trow.NF_FileNumber %]">[% trow.NF_FileName %]</th>
+	<td class="filelist">[% trow.NF_StartTotal %]</td>
+	<td class="filelist">[% trow.LeadsLeft %]</td>
+	<td class="filelist">[% trow.LeadsUsed %]</td>
+	<td class="filelist">[% trow.LeadsUsedToday %]</td>
+	<td class="filelist">[% trow.NF_ScrubDuplicate %]</td>
+	<td class="filelist"><select onchange="MenuOp([% trow.NF_FileNumber %],'[% trow.NF_FileName %]', this)">
+			<option value="NoOperation" selected="true">Choose...</option>
+			<option value="RedialLives">Redial - lives</option>
+			<option value="RedialMachines">Redial - answering machines</option>
+			<option value="RedialNonConn">Redial - non-connects</option>
+[% dCount = 0 %]
+[% FOREACH dispo IN X_Dispositions %]
+		[% IF dispo.length > 0 %]
+			<option value="RedialDisposition[% dCount %]">Redial Disposition [% dCount %] - [% dispo %]</option>
+		[% END %]
+	[% dCount = dCount + 1 %]
+[% END %]
+			<option value="NoOperation" disabled="true">----------------------------------------</option>
+			<option value="ReportCallResult">Report - by Call/Scrub result</option>
+			<option value="ReportTimezone">Report - Left by Timezone</option>
+			<option value="ReportDisposition">Report - by Disposition and Agent</option>
+			<option value="NoOperation" disabled="true">----------------------------------------</option>
+			<option value="EditHeaders">Edit - column headings</option>
+			<option value="Download">Download</option>
+			<option value="Delete">Delete</option>
+		</select>
+	</td>
+	<td class="filelist">[% trow.NF_Uploaded_Time %]</td>
+	<td class="filelist">[% trow.NF_MainScrub %]</td>
+	<td class="filelist">[% trow.NF_CustScrub %]</td>
+	<td class="filelist">[% trow.NF_MobileScrub %]</td>
+	</tr>
+[% END %]
+<tr><th class="filelist-tot">TOTAL:</th>
+	<td class="filelist">[% ttot.NF_StartTotal %]</td>
+	<td class="filelist">[% ttot.LeadsLeft %]</td>
+	<td class="filelist">[% ttot.LeadsUsed %]</td>
+	<td class="filelist">[% ttot.LeadsUsedToday %]</td>
+	<td class="filelist">[% ttot.NF_ScrubDuplicate %]</td>
+	<td colspan="5"></td>
+</tr>
+</table>
+<div id="upload1" class="hidden">
+<p>Uploading, please be patient...</p>
+</div>
+<div id="getinput1" class="shown">
+[% IF ErrStr %]
+<p class="error">[% ErrStr %]</p>
+[% END %]
+[% IF ContextCustomer.CO_ResNumber == 77 || ContextCustomer.CO_ResNumber == 123 %]
+<br/>
+<button onclick="window.open('http://www.bullseyebroadcast.com/load_query_to_dialer.php?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]')">Order Data Here</button>
+<br/>
+[% END %]
+<br/><fieldset style="width: 350px"><legend>Upload a file of numbers to dial</legend>
+[% IF UploadFileList %]
+<p class="message">[% UploadFileList %]: queued for processing, it could take 30 minutes or more to process.</p>
+[% END %]
+<form action="/pg/Leads?m=load&CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]" method="post" enctype="multipart/form-data" onsubmit="showprogress()">
+<table>
+<tr><td><input type="file" size="28" name="newdialfile" /></td></tr>
+[% IF ContextCustomer.CO_Checknodial != 'F' %]
+<tr><td><input type="checkbox" name="maindncscrub" value="on" checked/> Check the Main DNC list</td></tr>
+<tr><td><input type="checkbox" name="custdncscrub" value="on" checked/> Check the Customer DNC list</td></tr>
+[% ELSE %]
+<tr><td><input type="hidden" name="maindncscrub" value="on"/></td></tr>
+<tr><td><input type="hidden" name="custdncscrub" value="on"/></td></tr>
+[% END %]
+[% IF ContextCustomer.CO_EnableMobile != "F" %]
+<tr><td><input type="checkbox" name="enablemobile" value="on"/> Enable mobile</td></tr>
+[% ELSE %]
+<tr><td><input type="hidden" name="enablemobile" value="on"/></td></tr>
+[% END %]
+<tr><td><input type="submit" value="Upload"/><a class="help" title="File formats" href="/help/leadfile-format.shtml" target="_help"><img src="/help/icon-help.png" style="float:right"/></a></td></tr>
+</table></form>
+</div></body></html>

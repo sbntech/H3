@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>Distributor</title>
+<link rel="stylesheet" TYPE="text/css" href="/glm.css">
+<script>
+	var Host = document.URL.replace(/^http:../, '');
+	Host = Host.replace(/\/.*/, '');
+
+	if (Host != 'localhost') {
+		Host = 'secure.sbndials.com';
+	}
+</script>
+</head><body>
+[% IF ErrStr %]
+<h1>Distributor</h1>
+<p class="error">[% ErrStr %]</p>
+[% ELSE %]
+<h1>Distributor - [% master.RS_Name %] : $[% master.RS_Credit %]</h1>
+[% IF TransferErrStr %]<p class="error">[% TransferErrStr %]</p>[% END %]
+<table class="editForm" cellspacing="2">
+<tr>
+<td class="editFormLabel">Id</td>
+<td class="editFormLabel">Reseller Name</td>
+<td class="editFormLabel">Rate</td>
+<td class="editFormLabel">RoundBy</td>
+<td class="editFormLabel">Balance</td>
+<td class="editFormLabel">Factor</td>
+<td class="editFormLabel">Payment?</td>
+<td class="editFormLabel">Transfer?</td>
+</tr>
+[% FOREACH trow IN resrows %]
+<tr>
+<td style="padding-left: 2mm" class="editFormInput">[% trow.RS_Number %]</td>
+<td style="padding-left: 2mm" class="editFormInput">[% trow.RS_Name %]</td>
+<td style="padding-left: 2mm" class="editFormInput">[% trow.RS_Rate %]</td>
+<td style="padding-left: 2mm" class="editFormInput">[% trow.RS_RoundBy %]</td>
+<td style="padding-left: 2mm" class="editFormInput">[% trow.RS_Credit %]</td>
+<td style="padding-left: 2mm" class="editFormInput">[% trow.fact %]</td>
+<td class="editFormInput"><input type="button" onclick="window.open('https://' + Host + '/pg/Payment?RS_DistribCode=[% trow.RS_DistribCode %]&RS_Number=[% trow.RS_Number %]&HTTP_Host=' + Host)" value="Make Payment"></input></td>
+<td style="padding-left: 2mm" class="editFormInput"><form method="POST"><input type="hidden" name="RS_DistribCode" value="[% trow.RS_DistribCode %]"></input
+><input type="hidden" name="X_Slave_RS_Number" value="[% trow.RS_Number %]"></input
+><input type="text" size="10" name="X_TransferAmount"</input
+><input type="submit" value="Transfer"></input></form></td>
+</tr>
+[% END %]
+</table>
+[% END %]
+</body></html>

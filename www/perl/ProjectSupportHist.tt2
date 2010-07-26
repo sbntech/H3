@@ -1,0 +1,27 @@
+<html><head></head><body onload="setTimeout('location.reload()',10000)">
+[% userColors =  [ 'red', 'green', 'blue', 'orange', '#9900FF', '#663300', 'black', 'cyan'] %]
+[% nextColor = 0 %]
+[% currentDay = 'begin' %]
+[% FOREACH row IN Hist %]
+	[% IF currentDay != row.Day %]
+		[% currentDay = row.Day %]
+		<hr/><h3>[% row.Day %]</h3>
+	[% END %]
+	[% IF row.SU_Nickname == '__SYSTEM' %]
+		<span style="font-size:3.5mm; font-weight:bold; color:#0099CC;">([% row.Time %])</span>
+		<span style="font-size:3.5mm; font-weight:bold; color:white; background-color:blue;">&nbsp;[% row.SU_Message %]&nbsp;</span>
+	[% ELSE %]
+		[% IF ! userColor.${row.SU_Nickname} %]
+			[% userColor.${row.SU_Nickname} = userColors.$nextColor %]
+			[% nextColor = nextColor + 1 %]
+		[% END %]
+		<span style="font-size:3.5mm; font-weight:bold; color:[% userColor.${row.SU_Nickname} %]">([% row.Time %])</span>
+		<span style="font-size:3.5mm; font-weight:bold; color:[% userColor.${row.SU_Nickname} %]">[% row.SU_Nickname %]:</span>
+		<span style="font-size:3.5mm;">[% row.SU_Message %]</span>
+	[% END %]
+	<br/>
+[% END %]
+<script>
+document.body.scrollTop = document.body.scrollHeight;
+</script>
+</body></html>
