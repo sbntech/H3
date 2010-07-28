@@ -61,5 +61,4 @@ RECURRING
 	- w014		Mar 16 (Karmic, *1.6.2.6) "cold caller"
 	- w015		? (Jaunty)
 	- hans-lv	Nov 02 (Karmic)	
-* sbn2.phones from w6 to db0 by running s1.sh (May 18)
 
