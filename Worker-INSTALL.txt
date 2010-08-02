@@ -16,7 +16,7 @@ edit my.cnf for correct IP and tuning
 add skip-innodb to my.cnf
 
 # prepare storage by appending the following to fstab
-tmpfs   /var/lib/mysql  tmpfs   size=40G 0 0
+tmpfs   /var/lib/mysql  tmpfs   size=20G 0 0
 
 # copy the installed files to disk storage
 /etc/init.d/mysql stop
@@ -36,7 +36,7 @@ cp -air /root/mysql/* /var/lib/mysql/
 
 # crontab entries (db0 + db1 substitute in the nightly-db0.pl):
 05,20,35,50 0,1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * * root rsync -aq /var/lib/mysql/ /root/mysql
-01 4 * * * root  /home/grant/sbn-git/convert/nightly-db1.sh
+01 4 * * * root  /home/grant/H3/convert/nightly-db1.sh
 
 # create databases
 echo "create database dialer; create database sbn2; GRANT ALL PRIVILEGES ON *.* TO root@'%' identified by 'sbntele';" | mysql -uroot -psbntele
