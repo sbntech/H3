@@ -58,7 +58,7 @@ $sbn2->do("optimize table dncnonconn");
 $log->debug("disconnecting from the database");
 $sbn2->disconnect;
 
-$log-debug("backing up");
+$log->debug("backing up");
 backup();
 
 $log->fin;
