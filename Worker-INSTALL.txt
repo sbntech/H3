@@ -3,7 +3,7 @@ visudo -f /etc/sudoers
 echo "Port 8946" >> /etc/ssh/ssh_config ; 
 sed -e 's/^Port 22/Port 8946/' /etc/ssh/sshd_config > /tmp/sshd_config ; mv /etc/ssh/sshd_config /etc/ssh/sshd_config.old ; mv /tmp/sshd_config /etc/ssh
 /etc/init.d/ssh restart
-aptitude install vim screen byobu
+aptitude install vim screen byobu p7zip-full
 
 
 ===================================================================================================
@@ -36,7 +36,7 @@ cp -air /root/mysql/* /var/lib/mysql/
 
 # crontab entries (db0 + db1 substitute in the nightly-db0.pl):
 05,20,35,50 0,1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * * root rsync -aq /var/lib/mysql/ /root/mysql
-01 4 * * * root  /home/grant/H3/convert/nightly-db1.sh
+01 4 * * * root /home/grant/H3/convert/nightly-db0.pl
 
 # create databases
 echo "create database dialer; create database sbn2; GRANT ALL PRIVILEGES ON *.* TO root@'%' identified by 'sbntele';" | mysql -uroot -psbntele
@@ -45,16 +45,11 @@ echo "create database dialer; create database sbn2; GRANT ALL PRIVILEGES ON *.* 
 echo "source /home/grant/H3/convert/database.sql" | mysql -uroot -psbntele dialer
 echo "source /home/grant/H3/convert/sbn2.sql" | mysql -uroot -psbntele sbn2
 
-# foreach host (db0 and db1)
 install --owner mysql --group mysql --mode 775 -d /var/lib/mysql/in-out
 install --owner mysql --group mysql --mode 755 -d  /var/lib/mysql/.ssh
 usermod --shell /bin/bash mysql
-
-# on db0 in sbn2
-load data into tables: dncmilitant custdnc dncnonconn phones
-
-# on db1
-mkdir /backup # needed by nightly-db1.sh
+load data into sbn2 tables: dncmilitant custdnc dncnonconn phones
+mkdir /backup # needed by nightly-db0.pl
 
 # for dev ONLY
 mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -psbntele mysql

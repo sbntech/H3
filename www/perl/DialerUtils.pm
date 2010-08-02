@@ -572,10 +572,10 @@ sub move_from_db0 {
 
 	my $me = who_am_I();
 
-	if (($me eq 'swift') || ($me eq 'db0')) {
+	if (($me eq 'swift') || ($me eq 'b1-db')) {
 		system("mv '$source' '$target'");
 	} else {
-		system("scp -q -P 8946 root\@10.9.2.15:$source '$target'");
+		system("scp -q -P 8946 root\@10.80.2.32:$source '$target'");
 		# the in-out dir is purged in the nightly script
 	}
 }
@@ -644,9 +644,9 @@ sub sbn2_connect {
 	my $me = who_am_I();
 
 	my $host;
-	$host = 'localhost' if $me eq 'swift'; 
-	$host = 'localhost' if $me eq 'db0'; 
-	$host = '10.9.2.15' if $me eq 'worker0';
+	$host = 'localhost'  if $me eq 'swift'; 
+	$host = 'localhost'  if $me eq 'b1-db'; 
+	$host = '10.80.2.32' if $me eq 'b1-ap';
 
 	my $sbn2 = DBI->connect("DBI:mysql:sbn2;host=$host", 'root', 'sbntele')
 	 || croak("Cannot Connect to database: $!");

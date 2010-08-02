@@ -1,4 +1,9 @@
 CURRENT:
+db0/db1 --> b1-db
+worker0 --> b1-ap
+10.9.2.? --> 10.80.2.?
+/extra-b/sbndials-backup --> /backup
+
 
 BACK-BURNER:
 * surveys with P1 option
