@@ -3,10 +3,10 @@
 use strict;
 use warnings FATAL => 'all';
 
-use lib '/home/grant/sbn-git/www/perl';
+use lib '/home/grant/H3/www/perl';
 use DialerUtils;
 use DBI;
-use lib '/home/grant/sbn-git/convert/npanxx-data';
+use lib '/home/grant/H3/convert/npanxx-data';
 use Rates;
 $|=1;
 
@@ -137,5 +137,5 @@ if ($pleft == 0) {
 	exit;
 } elsif ($running == 2) {
 	print "Restarting [[[ $pleft projects and $rleft rows left to do ]]]\n";
-	exec("/home/grant/sbn-git/convert/pn-routes.pl");
+	exec("/home/grant/H3/convert/pn-routes.pl");
 }

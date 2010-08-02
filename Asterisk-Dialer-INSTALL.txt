@@ -31,20 +31,20 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAwVbSmXu5Ss0Ot8BezE0btIbjXza1YRoevHqejI
 append grant ssh key to coot :: cat /home/grant/.ssh/id_rsa.pub
 echo 'allow ^10\.9\.2\.1$' >> /etc/munin/munin-node.conf
 reboot (for possible new kernel. +ssh +limits +eth0 +syslog)
-scp -r 216.66.234.253:sbn-git .
+scp -r 216.66.234.253:H3 .
 git pull
 ssh-keygen for root copy the pub key to w0
 ssh 10.9.2.1 exit - to test certificate auth and add known host
 mkdir -p /dialer/projects
-run /home/grant/sbn-git/convert/voiceprompts-rsync.sh
+run /home/grant/H3/convert/voiceprompts-rsync.sh
 crontab appendix (s/X007/W05A/)
-*/3 * * * * root /home/grant/sbn-git/convert/voiceprompts-rsync.sh
+*/3 * * * * root /home/grant/H3/convert/voiceprompts-rsync.sh
 00 7 * * * root /bin/rm /var/log/astdialer.dat
 */2 * * * * root /usr/bin/rsync -tq /var/log/astdialer.dat 10.9.2.1:/dialer/www/fancy/asterisk.X007.graph.dat
-40 00 * * * root /home/grant/sbn-git/asterisk/dialer-nightly.sh
-/home/grant/sbn-git/asterisk/install.sh 1.6.1.1
+40 00 * * * root /home/grant/H3/asterisk/dialer-nightly.sh
+/home/grant/H3/asterisk/install.sh 1.6.1.1
 vim /etc/default/monit
-/usr/bin/install -o root -g root -m 0600 /home/grant/sbn-git/asterisk/astdialer-monitrc /etc/monit/monitrc
+/usr/bin/install -o root -g root -m 0600 /home/grant/H3/asterisk/astdialer-monitrc /etc/monit/monitrc
 /etc/init.d/monit start
 Add dialer name to DialerUtils::init_carrier_lookup
 email IP addresses to voip carriers

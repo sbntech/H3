@@ -24,7 +24,7 @@ use Text::CSV_XS;
 
 our %NpaNxx; # hash: lata, ocn, A, B ...
 
-my $DATADIR = '/home/grant/sbn-git/convert/npanxx-data';
+my $DATADIR = '/home/grant/H3/convert/npanxx-data';
 
 # -----------------------------------------------------------------------------
 sub load_canada_file {

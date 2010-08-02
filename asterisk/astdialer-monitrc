@@ -14,7 +14,7 @@ set httpd port 2812 and use address localhost
 
 check process astdialer
     pidfile /var/run/astdialer.pid
-    start = "/home/grant/sbn-git/convert/AsteriskDialer.pl"
+    start = "/home/grant/H3/convert/AsteriskDialer.pl"
     stop = "/usr/bin/killall AsteriskDialer.pl"
 
 check process asterisk

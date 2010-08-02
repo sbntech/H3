@@ -42,8 +42,8 @@ cp -air /root/mysql/* /var/lib/mysql/
 echo "create database dialer; create database sbn2; GRANT ALL PRIVILEGES ON *.* TO root@'%' identified by 'sbntele';" | mysql -uroot -psbntele
 
 # initialize databases
-echo "source /home/grant/sbn-git/convert/database.sql" | mysql -uroot -psbntele dialer
-echo "source /home/grant/sbn-git/convert/sbn2.sql" | mysql -uroot -psbntele sbn2
+echo "source /home/grant/H3/convert/database.sql" | mysql -uroot -psbntele dialer
+echo "source /home/grant/H3/convert/sbn2.sql" | mysql -uroot -psbntele sbn2
 
 # foreach host (db0 and db1)
 install --owner mysql --group mysql --mode 775 -d /var/lib/mysql/in-out
@@ -72,12 +72,12 @@ libasterisk-agi-perl sox libsox-fmt-all libspreadsheet-parseexcel-perl mysql-cli
 
 
 # clone the repo
-git clone ssh://grant@zucker-murray.mine.nu/ZM/people/grant/sbn-git
+git clone ssh://grant@zucker-murray.mine.nu/ZM/people/grant/H3
 
 # setup the directories
 mkdir -p /dialer/projects
-ln -s /home/grant/sbn-git/{www,convert} /dialer/
-ln -s /home/grant/sbn-git/website /dialer/
+ln -s /home/grant/H3/{www,convert} /dialer/
+ln -s /home/grant/H3/website /dialer/
 ln -s /var/www/{munin,downloads,cdr-summary} /dialer/website
 
 usermod -g www-data -G mysql www-data
@@ -136,7 +136,7 @@ echo "export TZ='America/New_York'" >> /etc/apache2/envvars
 == LoadLeads and main dnc host (db0)
 ===================================================================================================
 mkdir -p /dialer/maindnc
-git clone ssh://grant@zucker-murray.mine.nu/ZM/people/grant/sbn-git
+git clone ssh://grant@zucker-murray.mine.nu/ZM/people/grant/H3
 
 aptitude install freecdb libjson-perl libjson-xs-perl
 load DNC.7z into /dialer/maindnc using dnc-loader.pl and copying over

@@ -16,5 +16,5 @@ set httpd port 2812 and use address localhost
 
 check process LoadLeads
     pidfile /var/run/LoadLeads.pid
-    start = "/home/grant/sbn-git/convert/LoadLeads.pl"
+    start = "/home/grant/H3/convert/LoadLeads.pl"
     stop = "/usr/bin/killall LoadLeads.pl"

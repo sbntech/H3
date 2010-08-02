@@ -40,7 +40,7 @@ sub load_AREACODE_STATE {
 	my $self = shift;
 
 	my $count = 0;
-	open(TZFILE, '<', '/home/grant/sbn-git/convert/npanxx-data/areacode-timezone.txt') 
+	open(TZFILE, '<', '/home/grant/H3/convert/npanxx-data/areacode-timezone.txt') 
 		or die "Cannot open timezone file: $!";
 	while (<TZFILE>) {
 		if (/^(\d{3}) (\d*) (..) (.*)$/) {

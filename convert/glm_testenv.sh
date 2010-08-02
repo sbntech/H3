@@ -164,16 +164,16 @@ case $1 in
 		if [ "$DIALERTYPE" = "astdialer" ]
 		then
 			echo "starting AsteriskDialer.pl"
-			/home/grant/sbn-git/convert/AsteriskDialer.pl
+			/home/grant/H3/convert/AsteriskDialer.pl
 			sleep 1
 			echo "update switch set SW_VoipCPS = 10, SW_VoipPorts = 300 where SW_ID = 'WTST'" | mysql -psbntele dialer
 			echo "update line set ln_status = 'F' where ln_status = 'B' and ln_switch = 'WTST' limit 300" | mysql -psbntele dialer
 		elif [ "$DIALERTYPE" = "coldcaller" ]
 		then
 			echo "starting AsteriskColdCaller.pl"
-			/home/grant/sbn-git/convert/AstRecordings.pl
-			/home/grant/sbn-git/convert/AsteriskColdCaller.pl
-			/home/grant/sbn-git/convert/AstAgentsGen.pl
+			/home/grant/H3/convert/AstRecordings.pl
+			/home/grant/H3/convert/AsteriskColdCaller.pl
+			/home/grant/H3/convert/AstAgentsGen.pl
 		elif [ "$DIALERTYPE" = "nulldialer" ]
 		then
 			CARRIER[201]="A"

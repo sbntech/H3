@@ -3,10 +3,10 @@
 use strict;
 use warnings FATAL => 'all';
 
-use lib '/home/grant/sbn-git/www/perl';
+use lib '/home/grant/H3/www/perl';
 use DialerUtils;
 use DBI;
-use lib '/home/grant/sbn-git/convert/npanxx-data';
+use lib '/home/grant/H3/convert/npanxx-data';
 use Rates;
 $|=1;
 

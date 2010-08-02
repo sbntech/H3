@@ -17,10 +17,10 @@ rm /var/log/AsteriskColdCaller.pl.*
 rm /var/log/AstRecordings.pl.*
 rm /var/log/astrecordings.log
 
-sudo -u grant /bin/bash -c '(cd /home/grant/sbn-git ; git pull > /home/grant/nightly-pull.log)'
+sudo -u grant /bin/bash -c '(cd /home/grant/H3 ; git pull > /home/grant/nightly-pull.log)'
 
 asterisk
 sleep 4
 
-/home/grant/sbn-git/convert/AsteriskColdCaller.pl B
-/home/grant/sbn-git/convert/AstRecordings.pl
+/home/grant/H3/convert/AsteriskColdCaller.pl B
+/home/grant/H3/convert/AstRecordings.pl

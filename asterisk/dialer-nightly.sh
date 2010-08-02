@@ -14,8 +14,8 @@ rm /var/log/astdialer.log
 rm /var/log/monit.log
 
 # update ...
-sudo -u grant /bin/bash -c '(cd /home/grant/sbn-git ; git pull > /home/grant/nightly-pull.log)'
-/usr/bin/install -o root -g root -m 0600 /home/grant/sbn-git/asterisk/astdialer-monitrc /etc/monit/monitrc
+sudo -u grant /bin/bash -c '(cd /home/grant/H3 ; git pull > /home/grant/nightly-pull.log)'
+/usr/bin/install -o root -g root -m 0600 /home/grant/H3/asterisk/astdialer-monitrc /etc/monit/monitrc
 
 # start ...
 /etc/init.d/monit start

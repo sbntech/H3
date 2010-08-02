@@ -12,7 +12,7 @@ set logfile "/var/log/monit.log"
 set httpd port 2812 and use address localhost
     allow localhost   # Allow localhost to connect
 
-# install -o root -g root -m 0600 /home/grant/sbn-git/convert/monitrc /etc/"
+# install -o root -g root -m 0600 /home/grant/H3/convert/monitrc /etc/"
 
 check process nvr-1
     pidfile /var/run/nvr-10.9.2.1.pid

@@ -12,8 +12,8 @@ set httpd port 2812 and use address localhost
     allow localhost   # Allow localhost to connect
 
 check file monitrc-git 
-    with path "/home/grant/sbn-git/asterisk/monitrc"
-    if changed checksum then exec "/usr/bin/install -o root -g root -m 0600 /home/grant/sbn-git/asterisk/monitrc /etc/monit/monitrc"
+    with path "/home/grant/H3/asterisk/monitrc"
+    if changed checksum then exec "/usr/bin/install -o root -g root -m 0600 /home/grant/H3/asterisk/monitrc /etc/monit/monitrc"
 
 check process asterisk
     pidfile /var/run/asterisk.pid

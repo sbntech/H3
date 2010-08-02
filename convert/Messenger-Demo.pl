@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use lib qw(/home/grant/sbn-git/convert /ZM/people/grant/sbn-git/convert);
+use lib qw(/home/grant/H3/convert /ZM/people/grant/H3/convert);
 use Messenger;
 
 $|++; #unbuffered output to stdout

@@ -11,8 +11,8 @@
 
 use strict;
 use warnings;
-use lib '/home/grant/sbn-git/convert';
-use lib '/home/grant/sbn-git/www/perl';
+use lib '/home/grant/H3/convert';
+use lib '/home/grant/H3/www/perl';
 use DialerUtils;
 use Logger;
 use AstManager;

@@ -52,18 +52,18 @@ if [ "$HOST" = "w006" -o "$HOST" = "roadrunner" ]
 then
 	# our "carrier" box
 	echo "Carrier config"
-	ln -s /home/grant/sbn-git/asterisk/carrier-config /etc/asterisk
+	ln -s /home/grant/H3/asterisk/carrier-config /etc/asterisk
 
 	if [ "$HOST" = "w006" ]
 	then
-		/home/grant/sbn-git/asterisk/gen-guests.pl
+		/home/grant/H3/asterisk/gen-guests.pl
 	fi
 elif [ "$HOST" = "worker2" ]
 then
-	ln -s /home/grant/sbn-git/asterisk/w2-config /etc/asterisk
-	#ln -s /home/grant/sbn-git/asterisk/w2-config/dalong.gsm /var/lib/asterisk/voicemail/sbn/103/unavail.gsm
+	ln -s /home/grant/H3/asterisk/w2-config /etc/asterisk
+	#ln -s /home/grant/H3/asterisk/w2-config/dalong.gsm /var/lib/asterisk/voicemail/sbn/103/unavail.gsm
 else
-	ln -s /home/grant/sbn-git/asterisk/dialer-config /etc/asterisk
+	ln -s /home/grant/H3/asterisk/dialer-config /etc/asterisk
 
 	if [ ! -d /dialer/projects ]
 	then
@@ -75,5 +75,5 @@ else
 fi
 
 rm -f /var/lib/asterisk/sounds/sbn
-ln -s /home/grant/sbn-git/asterisk/sounds /var/lib/asterisk/sounds/sbn
+ln -s /home/grant/H3/asterisk/sounds /var/lib/asterisk/sounds/sbn
 

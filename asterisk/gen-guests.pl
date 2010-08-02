@@ -2,13 +2,13 @@
 
 use strict;
 use warnings;
-use lib '/home/grant/sbn-git/www/perl';
+use lib '/home/grant/H3/www/perl';
 use DialerUtils;
 
 my $dbh = DialerUtils::db_connect(); # connect to the database
 my $curCust = 0;
 
-open GSIP, '>', '/home/grant/sbn-git/asterisk/carrier-config/guests-sip.conf'
+open GSIP, '>', '/home/grant/H3/asterisk/carrier-config/guests-sip.conf'
 	or die "failed to open guest file: $!";
 
 my $res = $dbh->selectall_arrayref("select * 

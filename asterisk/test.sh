@@ -14,7 +14,7 @@ set -m # man bash; allows background processes to be in their own process group
 tcpdump -i eth0 -s 0 -w /root/tcp-raw.dump port 5060 & 
 
 echo "Running the dialer now..."
-/home/grant/sbn-git/convert/AsteriskDialer.pl > /var/log/astdialer.out 2>&1
+/home/grant/H3/convert/AsteriskDialer.pl > /var/log/astdialer.out 2>&1
 echo "dialer exits"
 
 killall tcpdump

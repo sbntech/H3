@@ -8,8 +8,8 @@ sleep 1
 killall -KILL asterisk
 rm -rf /var/log/asterisk/*
 
-sudo -u grant /bin/bash -c '(cd /home/grant/sbn-git ; git pull > /home/grant/nightly-pull.log)'
+sudo -u grant /bin/bash -c '(cd /home/grant/H3 ; git pull > /home/grant/nightly-pull.log)'
 
-/home/grant/sbn-git/asterisk/gen-guests.pl > /home/grant/gen-guests.log
+/home/grant/H3/asterisk/gen-guests.pl > /home/grant/gen-guests.log
 
 asterisk

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FROM=/home/grant/sbn-git/dns
+FROM=/home/grant/H3/dns
 
 echo "Installing from $FROM"
 
