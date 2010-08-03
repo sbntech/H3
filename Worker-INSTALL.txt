@@ -64,9 +64,7 @@ echo -e "[mysqld]\ndefault-time-zone='America/New_York'" > /etc/mysql/conf.d/Eas
 == apache2 host for UI  (w0)
 ===================================================================================================
 # install software
-aptitude install apache2 libapache2-mod-apreq2 libapache2-mod-perl2 libapache2-mod-php5 libapache2-request-perl 
-libasterisk-agi-perl sox libsox-fmt-all libspreadsheet-parseexcel-perl mysql-client git-core p7zip-full php5-mysql libjson-perl libjson-xs-perl libtext-csv-xs-perl libcrypt-cbc-perl libcrypt-blowfish-perl libdatetime-perl libnet-server-perl gnuplot libtemplate-perl libcrypt-ssleay-perl
-
+aptitude install apache2 libapache2-mod-apreq2 libapache2-mod-perl2 libapache2-mod-php5 libapache2-request-perl libasterisk-agi-perl sox libsox-fmt-all libspreadsheet-parseexcel-perl mysql-client git-core p7zip-full php5-mysql libjson-perl libjson-xs-perl libtext-csv-xs-perl libcrypt-cbc-perl libcrypt-blowfish-perl libdatetime-perl libnet-server-perl gnuplot libtemplate-perl libcrypt-ssleay-perl 
 
 
 # setup the directories
