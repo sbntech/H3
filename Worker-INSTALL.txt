@@ -5,6 +5,9 @@ sed -e 's/^Port 22/Port 8946/' /etc/ssh/sshd_config > /tmp/sshd_config ; mv /etc
 /etc/init.d/ssh restart
 aptitude install vim screen byobu p7zip-full
 
+as grant:::>
+git clone git://github.com/sbntech/H3.git
+
 
 ===================================================================================================
 == mysql installation for dialer and sbn2
@@ -65,9 +68,6 @@ aptitude install apache2 libapache2-mod-apreq2 libapache2-mod-perl2 libapache2-m
 libasterisk-agi-perl sox libsox-fmt-all libspreadsheet-parseexcel-perl mysql-client git-core p7zip-full php5-mysql libjson-perl libjson-xs-perl libtext-csv-xs-perl libcrypt-cbc-perl libcrypt-blowfish-perl libdatetime-perl libnet-server-perl gnuplot libtemplate-perl libcrypt-ssleay-perl
 
 
-
-# clone the repo
-git clone ssh://grant@zucker-murray.mine.nu/ZM/people/grant/H3
 
 # setup the directories
 mkdir -p /dialer/projects
@@ -131,7 +131,6 @@ echo "export TZ='America/New_York'" >> /etc/apache2/envvars
 == LoadLeads and main dnc host (db0)
 ===================================================================================================
 mkdir -p /dialer/maindnc
-git clone ssh://grant@zucker-murray.mine.nu/ZM/people/grant/H3
 
 aptitude install freecdb libjson-perl libjson-xs-perl
 load DNC.7z into /dialer/maindnc using dnc-loader.pl and copying over
