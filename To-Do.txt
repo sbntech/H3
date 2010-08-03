@@ -4,6 +4,7 @@ worker0 --> b1-ap
 10.9.2.? --> 10.80.2.?
 /extra-b/sbndials-backup --> /backup
 load data into tables: dncmilitant custdnc dncnonconn phones
+SSL setup? certs, apache...
 
 tests
 > loading leads
