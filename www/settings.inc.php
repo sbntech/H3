@@ -4,12 +4,12 @@ session_start();
 $ServerName=`hostname`;
 $ServerName = str_replace("\n","",$ServerName);
 
-if (($ServerName == "swift") || ($ServerName == "vaio")) {
+if ($ServerName == "swift") {
 	if (! mysql_connect("localhost", "root", "sbntele")) {
 		die("Database connection failed");
 	}
-} elseif ($ServerName == "worker0"){
-	if (! mysql_connect("10.9.2.16", "root", "sbntele")) {
+} elseif ($ServerName == "b1-ap"){
+	if (! mysql_connect("10.80.2.32", "root", "sbntele")) {
 		die("Database connection failed");
 	}
 } else {

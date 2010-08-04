@@ -6,6 +6,7 @@ worker0 --> b1-ap
 load data into tables: dncmilitant custdnc dncnonconn phones
 SSL setup? certs, apache...
 bullseye and jannekesmit.com
+gnuplot? not installed but is it needed
 
 tests
 > loading leads
