@@ -1,6 +1,7 @@
 CURRENT:
 db0/db1 --> b1-db
 worker0 --> b1-ap
+db IP 10.9.2.16 --> 10.80.2.32
 10.9.2.? --> 10.80.2.?
 /extra-b/sbndials-backup --> /backup
 load data into tables: dncmilitant custdnc dncnonconn phones

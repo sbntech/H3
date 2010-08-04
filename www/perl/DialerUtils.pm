@@ -596,8 +596,7 @@ sub db_host {
 	my $me = who_am_I();
 
 	return 'localhost' if $me eq 'swift'; 
-	return 'localhost' if $me eq 'vaio'; 
-	return '10.9.2.16'; # default to prod
+	return '10.80.2.32'; # default to prod
 }
 	
 sub file2db {
