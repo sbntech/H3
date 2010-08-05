@@ -1,8 +1,8 @@
 include "/etc/bind/zones.rfc1918";
 
-zone "sbndials.com" IN {
+zone "quickdials.com" IN {
         type master;
-        file "/etc/bind/sbndials.zone";
+        file "/etc/bind/quickdials.zone";
         allow-update { none; };
         notify no;
 };

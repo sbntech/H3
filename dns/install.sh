@@ -4,7 +4,7 @@ FROM=/home/grant/H3/dns
 
 echo "Installing from $FROM"
 
-for FN in sbndials.zone jannekesmit.zone named.conf.local
+for FN in quickdials.zone jannekesmit.zone named.conf.local
 do
 	echo "Installing $FN"
 	install --owner=root --group=bind --mode=0644 $FROM/$FN /etc/bind
