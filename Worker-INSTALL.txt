@@ -97,7 +97,7 @@ sed -ire 's@;session.save_path = "/tmp"@session.save_path = "/var/lib/php5"@' /e
 # flot - jquery plotting
 wget -O ~/flot.zip http://flot.googlecode.com/files/flot-0.6.zip
 cd /dialer/www
-unzip ~/flot.zip
+7z e ~/flot.zip
 
 # crontab setup ... [details not recorded here]
 
@@ -123,6 +123,14 @@ echo "<html><head><script>window.location = 'http://www.bullseyebroadcast.com/';
 
 # for dev ONLY
 echo "export TZ='America/New_York'" >> /etc/apache2/envvars
+
+# mailserver (postfix) for sending mail for monit, crontab etc
+aptitude install postfix # select "Internet Site" as type of mail configuration
+vim /etc/aliases # add root:   sbntech@yahoo.com
+newaliases
+vim /etc/postfix/main.cf
+/etc/init.d/postfix reload
+
 
 
 ===================================================================================================

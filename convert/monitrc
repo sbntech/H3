@@ -1,7 +1,7 @@
 # keeps the nvr and the watcher running
 # http://www.tildeslash.com/monit/doc/
 
-set mailserver 10.9.2.1
+set mailserver 10.80.2.1
 set alert grant@sbndials.com
 	mail-format {
 		from: root@w0.sbndials.com
@@ -15,44 +15,9 @@ set httpd port 2812 and use address localhost
 # install -o root -g root -m 0600 /home/grant/H3/convert/monitrc /etc/"
 
 check process nvr-1
-    pidfile /var/run/nvr-10.9.2.1.pid
-    start = "/dialer/convert/nvr2.pl 10.9.2.1 F"
-    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.1.pid"
-
-check process nvr-2
-    pidfile /var/run/nvr-10.9.2.2.pid
-    start = "/dialer/convert/nvr2.pl 10.9.2.2 F"
-    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.2.pid"
-
-check process nvr-4
-    pidfile /var/run/nvr-10.9.2.4.pid
-    start = "/dialer/convert/nvr2.pl 10.9.2.4 F"
-    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.4.pid"
-
-check process nvr-6
-    pidfile /var/run/nvr-10.9.2.6.pid
-    start = "/dialer/convert/nvr2.pl 10.9.2.6 A"
-    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.6.pid"
-
-check process nvr-8
-    pidfile /var/run/nvr-10.9.2.8.pid
-    start = "/dialer/convert/nvr2.pl 10.9.2.8 F"
-    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.8.pid"
-
-check process nvr-10
-    pidfile /var/run/nvr-10.9.2.10.pid
-    start = "/dialer/convert/nvr2.pl 10.9.2.10 A"
-    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.10.pid"
-
-check process nvr-11
-    pidfile /var/run/nvr-10.9.2.11.pid
-    start = "/dialer/convert/nvr2.pl 10.9.2.11 A"
-    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.11.pid"
-
-check process nvr-9
-    pidfile /var/run/nvr-10.9.2.9.pid
-    start = "/dialer/convert/nvr2.pl 10.9.2.9 A"
-    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.9.2.9.pid"
+    pidfile /var/run/nvr-10.80.2.1.pid
+    start = "/dialer/convert/nvr2.pl 10.80.2.1 F"
+    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.80.2.1.pid"
 
 check process number-helper
     pidfile /var/run/number-helper.pid

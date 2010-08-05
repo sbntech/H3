@@ -3,16 +3,20 @@ db0/db1 --> b1-db
 worker0 --> b1-ap
 db IP 10.9.2.16 --> 10.80.2.32
 10.9.2.? --> 10.80.2.?
+216.66.234.* --> ?
 /extra-b/sbndials-backup --> /backup
 load data into tables: dncmilitant custdnc dncnonconn phones
 SSL setup? certs, apache...
 bullseye and jannekesmit.com
 gnuplot? not installed but is it needed
+nvr setup: monit, 
 
 tests
 > loading leads
 > DNC scrubbing
-
+> graphs
+> mailserver 
+> monit
 
 BACK-BURNER:
 * surveys with P1 option
