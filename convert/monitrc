@@ -1,6 +1,9 @@
 # keeps the nvr and the watcher running
 # http://www.tildeslash.com/monit/doc/
 
+set daemon 120
+	with start delay 40
+
 set mailserver 10.80.2.1
 set alert sbntech@yahoo.com
 	mail-format {
