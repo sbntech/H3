@@ -2,9 +2,9 @@
 # http://www.tildeslash.com/monit/doc/
 
 set mailserver 10.80.2.1
-set alert grant@sbndials.com
+set alert sbntech@yahoo.com
 	mail-format {
-		from: root@w0.sbndials.com
+		from: root@app.quickdials.com
 		subject: [monit] $SERVICE $EVENT at $DATE
 		message: $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION.
 	}
@@ -16,7 +16,7 @@ set httpd port 2812 and use address localhost
 
 check process nvr-1
     pidfile /var/run/nvr-10.80.2.1.pid
-    start = "/dialer/convert/nvr2.pl 10.80.2.1 F"
+    start = "/dialer/convert/nvr2.pl 10.80.2.1 A"
     stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.80.2.1.pid"
 
 check process number-helper
@@ -43,5 +43,5 @@ check process FastAgiServer
 check process SecretServer
     pidfile /var/run/SecretService.pid
 
-check host sbnDNS with address 216.66.234.2
+check host quickDNS with address 67.209.46.99
     if failed port 53 type udp protocol dns timeout 3 seconds then alert

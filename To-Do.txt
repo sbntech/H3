@@ -1,4 +1,8 @@
 CURRENT:
+ap: crontab
+set coldcaller up on b1-ap
+setup loadleads
+
 db0/db1 --> b1-db
 worker0 --> b1-ap
 db IP 10.9.2.16 --> 10.80.2.32
@@ -10,8 +14,6 @@ SSL setup? certs, apache...
 bullseye and jannekesmit.com
 gnuplot? not installed but is it needed
 nvr setup: monit, 
-set coldcaller up on b1-ap
-setup DNS server
 
 
 tests
@@ -20,6 +22,7 @@ tests
 > graphs
 > mailserver 
 > monit
+> DNS server
 
 BACK-BURNER:
 * surveys with P1 option

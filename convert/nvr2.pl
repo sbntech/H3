@@ -24,7 +24,7 @@ my $epocht =timegm(localtime());
 $|++; #unbuffered output to stdout
 my $IpNumber = $ARGV[0];
 my $CARRIER_ID = $ARGV[1];
-my $ApacheHost = 'w0.sbndials.com';
+my $ApacheHost = 'app.quickdials.com';
 $ApacheHost = $ARGV[2] if defined($ARGV[2]);
 
 
