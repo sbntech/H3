@@ -85,9 +85,12 @@ while ($row = mysql_fetch_array ($result)) {
 <br/><a href="/status/allocator.shtml">Allocator Report</a>
 <br/><a href="/status/result-stats.html">Call Result Stats</a>
 <br/><a href="/fancy/Monthly.log">Monthly Billing Log</a>
-<br/>CDR Summary: <a href="http://www.sbndials.com/cdr-summary/cdr-summary.csv">cdr-summary.csv</a>
-<br/><a href="http://www.sbndials.com/munin/index.html">Munin Overview</a>
-<br/><a href="http://216.66.234.9/">Temperature Sensor</a>
+<br/>CDR Summary: <a href="http://www.quickdials.com/cdr-summary/cdr-summary.csv">cdr-summary.csv</a>
+<br/><a href="http://www.quickdials.com/munin/index.html">Munin Overview</a>
+<br/><a href="http://67.209.46.103/">b1-ap (app server, coldcaller) BMC (IPMI)</a>
+<br/><a href="http://67.209.46.104/">b1-db (mysql, loadleads) BMC (IPMI)</a>
+<br/><a href="http://67.209.46.105/">w129 BMC (IPMI)</a>
+<br/><a href="http://67.209.46.106/">w130 BMC (IPMI)</a>
 <br/><br/>
 <Form Name=Form Action="../cust/logout.php" METHOD=POST>
 <input type=submit name=button2 value="Logout"></input>
