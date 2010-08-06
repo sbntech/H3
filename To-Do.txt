@@ -10,6 +10,9 @@ SSL setup? certs, apache...
 bullseye and jannekesmit.com
 gnuplot? not installed but is it needed
 nvr setup: monit, 
+set coldcaller up on b1-ap
+setup DNS server
+
 
 tests
 > loading leads
@@ -79,4 +82,17 @@ RECURRING
 	- w014		Mar 16 (Karmic, *1.6.2.6) "cold caller"
 	- w015		? (Jaunty)
 	- hans-lv	Nov 02 (Karmic)	
+
+
+*** rebooting db ***
+# Stopping
+service mysql stop
+rsync -av --delete /var/lib/mysql/ /root/mysql
+reboot
+# Starting
+tail /var/log/mysql.*
+df -h | grep tmpfs
+cp -air /root/mysql/* /var/lib/mysql/
+ls -al /var/lib/mysql
+service mysql start
 

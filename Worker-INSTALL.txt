@@ -29,7 +29,7 @@ install --owner=mysql --group=mysql --mode=755 -d /var/lib/mysql
 mount /var/lib/mysql
 
 # check that tempfs got mounted
-df
+df -h | grep tmpfs
 
 # initialize the tempfs /var/lib/mysql
 cp -air /root/mysql/* /var/lib/mysql/
@@ -64,7 +64,7 @@ echo -e "[mysqld]\ndefault-time-zone='America/New_York'" > /etc/mysql/conf.d/Eas
 == apache2 host for UI  (w0)
 ===================================================================================================
 # install software
-aptitude install apache2 libapache2-mod-apreq2 libapache2-mod-perl2 libapache2-mod-php5 libapache2-request-perl libasterisk-agi-perl sox libsox-fmt-all libspreadsheet-parseexcel-perl mysql-client git-core p7zip-full php5-mysql libjson-perl libjson-xs-perl libtext-csv-xs-perl libcrypt-cbc-perl libcrypt-blowfish-perl libdatetime-perl libnet-server-perl libtemplate-perl libcrypt-ssleay-perl 
+aptitude install apache2 libapache2-mod-apreq2 libapache2-mod-perl2 libapache2-mod-php5 libapache2-request-perl libasterisk-agi-perl sox libsox-fmt-all libspreadsheet-parseexcel-perl mysql-client git-core p7zip-full php5-mysql libjson-perl libjson-xs-perl libtext-csv-xs-perl libcrypt-cbc-perl libcrypt-blowfish-perl libdatetime-perl libnet-server-perl libtemplate-perl libcrypt-ssleay-perl samba
 
 
 # setup the directories
@@ -97,7 +97,7 @@ sed -ire 's@;session.save_path = "/tmp"@session.save_path = "/var/lib/php5"@' /e
 # flot - jquery plotting
 wget -O ~/flot.zip http://flot.googlecode.com/files/flot-0.6.zip
 cd /dialer/www
-7z e ~/flot.zip
+unzip ~/flot.zip
 
 # crontab setup ... [details not recorded here]
 
@@ -107,7 +107,7 @@ sed -ire 's/startup=0/startup=1/' /etc/default/monit
 /etc/init.d/monit start
 
 # samba setup
-cd /etc/samba ; ln -s /dialer/convert/smb.conf ; /etc/init.d.samba stop ; rm -rf /var/log/samba/* ; /etc/init.d/samba start
+cd /etc/samba ; rm smb.conf ; ln -s /dialer/convert/smb.conf ; /etc/init.d/samba stop ; rm -rf /var/log/samba/* ; /etc/init.d/samba start
 
 # ssh setup
 # ... ssh-keygen for root@w0 and www-data@w0 and root@db0

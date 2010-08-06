@@ -24,7 +24,7 @@ iface eth1 inet static
         dns-nameservers 85.159.112.30
 
 mv /etc/rsyslog.d/50-default.conf /root/rsyslog.original ; sed -e 's/^#cron/cron/' /root/rsyslog.original > /etc/rsyslog.d/50-default.conf
-aptitude -y install vim mysql-client-5.0 git-core screen screen-profiles sox libsox-fmt-all openssh-server openssh-client ntp iproute iputils-tracepath htop iftop iotop libdbi-perl libjson-perl libjson-xs-perl monit build-essential ncurses-dev libdatetime-perl openipmi ipmitool munin-node
+aptitude install vim mysql-client-5.0 git-core screen screen-profiles sox libsox-fmt-all openssh-server openssh-client ntp iproute iputils-tracepath htop iftop iotop libdbi-perl libjson-perl libjson-xs-perl monit build-essential ncurses-dev libdatetime-perl openipmi ipmitool munin-node
 echo -e "ipmi_si\nipmi_devintf" >> /etc/modules ; modprobe ipmi_si ; modprobe ipmi_devintf ; ipmitool -I open -U ADMIN -P ADMIN bmc reset cold
 ssh-keygen for grant
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAwVbSmXu5Ss0Ot8BezE0btIbjXza1YRoevHqejI1LKP5DkPJpoiNnrUTgtYJRgu62L3Iq+TuBHA3yTxPYOplXJMR1SOWTMITj+uwys7pSs9s5FcK+Ag0BOdoyfoX6N9go1LoicbUrNFGBcExLfqNS9xaXuGqQm8TCvFcKqSbGio1uGoOisgwJ26He9hz2pdDPNay1XPa2JLn+gRtLego0mdaNdOzDmCUV2nhfAa4yg+Snwi0dG5CidNeNX6xwBOGRmLwYl1i6BHL6MscgjvqkNEbDkKIpA7lyX7+QbnqQ8kSKKLoOGK476QvO9QvVrUJSTRleGoepMi8qK3UehCHZ5Q== grant@swift" > ~/.ssh/authorized_keys
