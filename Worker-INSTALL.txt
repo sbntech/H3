@@ -143,7 +143,7 @@ vim /etc/postfix/main.cf
 ===================================================================================================
 mkdir -p /dialer/maindnc
 
-aptitude install freecdb libjson-perl libjson-xs-perl
+aptitude install freecdb libjson-perl libjson-xs-perl libtext-csv-xs-perl libspreadsheet-parseexcel-perl
 load DNC.7z into /dialer/maindnc using dnc-loader.pl and copying over
 
 

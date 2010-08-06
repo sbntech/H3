@@ -22,4 +22,4 @@ system("rsync -a --delete 10.80.2.32:/root/mysql/sbn2/ $bu/mysql-data/sbn2"); # 
 system("rsync  --exclude 'projects/workqueue' --exclude 'recordings' --exclude 'projects/log' --delete-before --delete-excluded -a /dialer/projects/ $bu/projects"); # projects
 
 # make offsite copy of the data
-#system("rsync -a --delete-before -e 'ssh -p 22' $bu/ root\@24.234.118.147:/quickdials-backup");
+system("rsync -a --delete-before -e 'ssh -p 22' $bu/ root\@24.234.118.147:/quickdials-backup");
