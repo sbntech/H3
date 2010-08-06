@@ -314,7 +314,7 @@ sub handler {
 					}
 
 					# send an email
-					my $smtp = Net::SMTP->new("10.9.2.1", Timeout => 60, Debug => 0);
+					my $smtp = Net::SMTP->new("10.80.2.1", Timeout => 60, Debug => 0);
 					if ($smtp) {
 						$smtp->mail('root@sbndials.com');
 						if ($TESTING) {
@@ -360,7 +360,7 @@ sub handler {
 					}
 
 					# send an email
-					my $smtp = Net::SMTP->new("10.9.2.1", Timeout => 60, Debug => 0);
+					my $smtp = Net::SMTP->new("10.80.2.1", Timeout => 60, Debug => 0);
 					if ($smtp) {
 						$smtp->mail('root@sbndials.com');
 						if ($TESTING) {

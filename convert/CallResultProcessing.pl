@@ -527,10 +527,9 @@ sub block_lines {
 
 # .............................................................................
 sub print_dialer_table {
-	my $header = shift;
 	my $sql = shift;
 
-	print $HTML "<h2>$header dialers</h2>\n";
+	print $HTML "<h2>Dialers</h2>\n";
 	print $HTML "<table cellspacing=1>\n<tr>";
 	for my $th (@theads) { print $HTML "<th class=\"basiclist-col\">$th</th>"; }
 	print $HTML "</tr>\n";
@@ -743,9 +742,7 @@ sub print_status {
 
 	print $HTML "</td></tr></table>";
 
-	print_dialer_table("Production", "select switch.*, (select if(max(ln_lastused),max(ln_lastused),'Unknown') from line where ln_switch = sw_id) as lastused from switch where SW_databaseSRV != '10.9.2.9' order by sw_id");
-	print_dialer_table("Test", "select switch.*, (select if(max(ln_lastused),max(ln_lastused),'Unknown') from line where ln_switch = sw_id) as lastused from switch where SW_databaseSRV = '10.9.2.9' order by sw_id");
-
+	print_dialer_table("select switch.*, (select if(max(ln_lastused),max(ln_lastused),'Unknown') from line where ln_switch = sw_id) as lastused from switch where SW_databaseSRV != '10.80.2.9' order by sw_id");
 
 	print $HTML "</body></html>\n";
 	close($HTML);

@@ -1,6 +1,6 @@
 #!/usr/bin/perl 
 
-# each nvr generates files /dialer/projects/_999/cdr/cdr-YYYY-MM-DD-10.9.2.*.txt
+# each nvr generates files /dialer/projects/_999/cdr/cdr-YYYY-MM-DD-10.80.2.*.txt
 # this script concatenates cdr files into 1 file for each date (before today)
 # and zips them up
 

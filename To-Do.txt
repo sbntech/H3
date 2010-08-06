@@ -1,17 +1,20 @@
 CURRENT:
-set coldcaller up on b1-ap
+set coldcaller up on b1-ap using 10.80.2.14 as cc_host
 setup loadleads
 carrier setup / rates / routing
-
-db0/db1 --> b1-db
-worker0 --> b1-ap
-db IP 10.9.2.16 --> 10.80.2.32
-10.9.2.? --> 10.80.2.?
-216.66.234.* --> ?
+monit on db
+message recording
+xlite carrier like w6 was
 load data into tables: dncmilitant custdnc dncnonconn phones
 SSL setup? certs, apache...
 bullseye and jannekesmit.com
 monthly-ap.pl (monthly processing for seat charges etc)
+
+db0/db1 --> b1-db
+worker0 --> b1-ap
+10.9.2.? --> 10.80.2.?
+216.66.234.* --> ?
+sbndials.com --> quickdials.com
 
 tests
 > loading leads
@@ -21,11 +24,12 @@ tests
 > monit
 > DNS server
 > backups
+> testcalls
 
 Not Doing in H3
 * carrier cdr parsing
 * daven.pl
-* 
+* no test NVR (was 10.9.2.9)
 
 BACK-BURNER:
 * surveys with P1 option

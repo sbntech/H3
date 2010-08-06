@@ -561,7 +561,7 @@ sub move_leads {
 	if ($me eq 'swift') {
 		system("mv '$source' '$target'");
 	} else {
-		system("scp -q -P 8946 '$source' root\@10.9.2.15:$target");
+		system("scp -q -P 8946 '$source' root\@10.80.2.32:$target");
 		unlink($source);
 	}
 }
@@ -588,7 +588,7 @@ sub cc_host {
 
 	return 'localhost' if $me eq 'swift'; 
 	return 'localhost' if $me eq 'vaio'; 
-	return '10.9.2.14'; # default to w14
+	return '10.80.2.14'; # default to w14
 }
 	
 sub db_host {
@@ -985,7 +985,7 @@ $body
 EOM
 ;
 
-	my $smtp = Net::SMTP->new("10.9.2.1", Timeout => 60, Debug => 0) or die "failed to smtp: $!";
+	my $smtp = Net::SMTP->new("10.80.2.1", Timeout => 60, Debug => 0) or die "failed to smtp: $!";
 	$smtp->mail($from);
 	$smtp->to($to);
 	$smtp->data();

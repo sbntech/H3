@@ -92,7 +92,7 @@ sub handler {
 								$data->{'X_OrigPhoneNr'} . ';' . $data->{'X_TestPhone'} . ';' . 
 								$data->{'PJ_Number'} . ';' . $data->{'X_TestType'} . ';';
 					
-					my $where = "and ln_status = 'F' and sw_databaseSRV != '10.9.2.9'";
+					my $where = "and ln_status = 'F'";
 					if ($data->{'Session'}{'L_Level'} == 6) {
 						my $adm_where = '';
 						if ($data->{'X_Switch'} ne 'any') {

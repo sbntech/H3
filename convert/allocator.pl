@@ -499,7 +499,7 @@ sub adjust_for_overall_capacity {
 	# determine capacity
 	my $q = $dbh->selectrow_hashref('select count(*) as Total from line, switch ' .
 		"where (ln_status = 'F' or ln_status = 'U' or ln_status = 'W' or ln_status = 'S')" . 
-		" and ln_switch = sw_id and SW_databaseSRV != '10.9.2.9'");
+		" and ln_switch = sw_id");
 	$tot_capacity = $q->{'Total'};
 	logmsg("Available lines = $tot_capacity");
 
@@ -551,7 +551,6 @@ sub stop_nonrunnables {
 	# stop the projects that are no longer runnable and calculate 
 	# current lines used
 	
-	# select need not worry about SW_databaseSRV != '10.9.2.9'
 	$tot_actual = 0;
 	my $curs = $dbh->selectall_arrayref("select ln_pj_number, ln_trunk, count(*) as Total 
 		from line where ln_pj_number > 0 and substr(ln_info,1,8) != 'DIALLIVE'
@@ -609,7 +608,6 @@ sub assign_lines {
 						"$cc;$cid' 
 					where ln_status = 'F' and ln_trunk = '$k' 
 						and ln_action = 0 and 
-						ln_ipnumber != '10.9.2.9' and
 						ln_action = 0 
 					order by ln_lastused, ln_channel
 					limit $limit");

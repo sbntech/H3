@@ -3,10 +3,10 @@
 
 set daemon 120 with start delay 40
 
-set mailserver 10.9.2.1
-set alert grant@sbndials.com
+set mailserver 10.80.2.1
+set alert sbntech@yahoo.com
 	mail-format {
-		from: root@w0.sbndials.com
+		from: root@b1-db.quickdials.com
 		subject: [monit] $SERVICE $EVENT at $DATE
 		message: $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION.
 	}
