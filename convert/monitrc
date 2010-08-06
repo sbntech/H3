@@ -16,8 +16,6 @@ set httpd port 2812 and use address localhost
     allow localhost
 	allow 10.80.2.1
 
-# install -o root -g root -m 0600 /home/grant/H3/convert/monitrc /etc/"
-
 check process nvr-1
     pidfile /var/run/nvr-10.80.2.1.pid
     start = "/dialer/convert/nvr2.pl 10.80.2.1 A"

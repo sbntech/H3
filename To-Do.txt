@@ -1,5 +1,10 @@
 CURRENT:
 ap: crontab
+00 04 * * * root /home/grant/H3/backup.pl
+30 03 * * * root /home/grant/H3/compress-cdrs.pl
+45 03 * * * root /home/grant/h3/nightly-ap.pl
+59  * * * * root /home/grant/h3/hourly-dbupdates.pl
+	
 set coldcaller up on b1-ap
 setup loadleads
 
@@ -14,6 +19,7 @@ SSL setup? certs, apache...
 bullseye and jannekesmit.com
 gnuplot? not installed but is it needed
 nvr setup: monit, 
+monthly-ap.pl (monthly processing for seat charges etc)
 
 
 tests
@@ -23,6 +29,11 @@ tests
 > mailserver 
 > monit
 > DNS server
+
+Not Doing in H3
+* carrier cdr parsing
+* daven.pl
+* 
 
 BACK-BURNER:
 * surveys with P1 option

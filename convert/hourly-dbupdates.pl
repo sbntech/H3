@@ -66,18 +66,7 @@ for my $tblrow (@$nfref) {
 }
 
 # takes numbers but never connects - could automatically block
-permanent_board_block('D105', 1); 
-permanent_board_block('D105', 13); 
-permanent_board_block('D105', 14); 
-permanent_board_block('D106', 1); 
-permanent_board_block('D106', 2); 
-permanent_board_block('D114', 14); 
-permanent_board_block('D122', 12); 
-permanent_board_block('D155', 2); 
-permanent_board_block('D155', 3); 
-permanent_board_block('D155', 6); 
-permanent_board_block('D159', 11); 
-
+# permanent_board_block('D105', 1); 
 
 $dbh->disconnect;
 flog("ends");

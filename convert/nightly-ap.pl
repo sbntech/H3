@@ -34,10 +34,10 @@ $dbh->do("update switch set SW_callsday = 0");
 $dbh->do("update project set PJ_timeleft = 'Deleted' where PJ_Visible = 0");
 
 if (`hostname` =~ /worker0/) { # on swift we don't want this
-	# move non-connect files to db0
-	system("scp -q /root/NonConnectedNumber.txt 10.9.2.15:/root/");
+	# move non-connect files to db
+	system("scp -q /root/NonConnectedNumber.txt 10.80.2.32:/root/");
 	unlink("/root/NonConnectedNumber.txt");
-	system("scp -q /root/BadNumber.txt 10.9.2.15:/root/");
+	system("scp -q /root/BadNumber.txt 10.80.2.32:/root/");
 	unlink("/root/BadNumber.txt");
 }
 
@@ -75,28 +75,6 @@ for my $row (@$res) {
 		print("$tbl updated $cnt rows that were stuck in the cache\n");
 	}
 
-	if (
-		($tbl eq 'projectnumbers_44356') || # newdeal-ALL
-		($tbl eq 'projectnumbers_46584') || # newdeal-ALL2
-		($tbl eq 'projectnumbers_44311') # LVVA-companyfunds
-		) {
-		# new deal get special treatment
-		my $days = 10;
-		$days = 3 if $tbl eq 'projectnumbers_46584'; # ALL2
-
-		my $dels = $dbh->do("delete quick from $tbl where (PN_DoNotCall = 'Y' or (PN_Agent > 0 and PN_Agent != 9999))");
-		print "deleted $dels DNC/P1 rows from $tbl\n";
-
-		my $aff = $dbh->do("update $tbl set PN_Status = 'R',
-			PN_Seq = PN_Seq + floor(rand()*100000)
-			where PN_Status = 'X' and PN_DoNotCall != 'Y'
-			and date_sub(now(), interval $days day) > PN_CallDT ");
-
-		$aff = 0 unless $aff;
-		printf("%d live numbers reset for redialing\n", $aff);
-
-	}
-	
 	if ($row->{'Rows'} == 0) {  
 		# drop empty tables like projectnumbers_99999
 		print "dropping $tbl it has no rows\n";
