@@ -14,15 +14,15 @@ use DateTime;
 use lib qw(/dialer/www/perl);
 use DialerUtils;
 
-my $worker0 = '10.9.2.1';
+my $worker = '10.80.2.1';
 my $hostname = `hostname`;
 chomp($hostname);
 if ($hostname eq 'swift') {
-	$worker0 = '10.10.10.6';
+	$worker = '10.10.10.6';
 }
 
 FastAgiServer->run({
-	host => $worker0, 
+	host => $worker, 
 	port => 4573, 
 	background => 1,
 	setsid => 1,
