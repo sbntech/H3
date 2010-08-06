@@ -11,7 +11,7 @@ my @now = localtime(time);
 my $wday = $now[6];
 my $weekday = ('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday')[$wday];
 
-my $bu = "/extra-b/sbndials-backup";
+my $bu = "/backup";
 die "No backup directory $bu found" unless (-d $bu);
 
 # make a local copy of the data

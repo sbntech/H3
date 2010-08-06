@@ -99,7 +99,12 @@ wget -O ~/flot.zip http://flot.googlecode.com/files/flot-0.6.zip
 cd /dialer/www
 unzip ~/flot.zip
 
-# crontab setup ... [details not recorded here]
+# crontab setup ... 
+00 04 * * * root /home/grant/H3/convert/backup.pl
+30 03 * * * root /home/grant/H3/convert/compress-cdrs.pl
+45 03 * * * root /home/grant/H3/convert/nightly-ap.pl > /var/log/nightly-ap.1 2> /var/log/nightly-ap.2
+59  * * * * root /home/grant/H3/convert/hourly-dbupdates.pl > /var/log/hourly-dbupdates.1 
+
 
 # monit setup
 /usr/bin/install -o root -g root -m 0600 /dialer/convert/monitrc /etc/monit
