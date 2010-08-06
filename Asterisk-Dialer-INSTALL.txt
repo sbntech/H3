@@ -5,43 +5,30 @@ sed -e 's/^Port 22/Port 8946/' /etc/ssh/sshd_config > /tmp/sshd_config ; mv /etc
 /etc/init.d/ssh restart
 echo -e "* soft nofile 65535\n* hard nofile 65535\nroot soft nofile 65535\nroot hard nofile 65535" >> /etc/security/limits.conf
 cat /etc/resolv.conf
-vim /etc/network/interfaces
-
-auto eth0
-iface eth0 inet static
-        address 10.80.2.21
-        netmask 255.255.255.0
-        network 10.80.2.0
-        broadcast 10.80.2.255
-
-auto eth1
-iface eth1 inet static
-        address 85.159.114.4
-        netmask 255.255.255.240
-        network 85.159.114.0
-        broadcast 85.159.114.15
-        gateway 85.159.114.1
-        dns-nameservers 85.159.112.30
-
+vim /etc/network/interfaces # if necessary to change config
 mv /etc/rsyslog.d/50-default.conf /root/rsyslog.original ; sed -e 's/^#cron/cron/' /root/rsyslog.original > /etc/rsyslog.d/50-default.conf
 aptitude install vim mysql-client-5.0 git-core screen screen-profiles sox libsox-fmt-all openssh-server openssh-client ntp iproute iputils-tracepath htop iftop iotop libdbi-perl libjson-perl libjson-xs-perl monit build-essential ncurses-dev libdatetime-perl openipmi ipmitool munin-node
 echo -e "ipmi_si\nipmi_devintf" >> /etc/modules ; modprobe ipmi_si ; modprobe ipmi_devintf ; ipmitool -I open -U ADMIN -P ADMIN bmc reset cold
 ssh-keygen for grant
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAwVbSmXu5Ss0Ot8BezE0btIbjXza1YRoevHqejI1LKP5DkPJpoiNnrUTgtYJRgu62L3Iq+TuBHA3yTxPYOplXJMR1SOWTMITj+uwys7pSs9s5FcK+Ag0BOdoyfoX6N9go1LoicbUrNFGBcExLfqNS9xaXuGqQm8TCvFcKqSbGio1uGoOisgwJ26He9hz2pdDPNay1XPa2JLn+gRtLego0mdaNdOzDmCUV2nhfAa4yg+Snwi0dG5CidNeNX6xwBOGRmLwYl1i6BHL6MscgjvqkNEbDkKIpA7lyX7+QbnqQ8kSKKLoOGK476QvO9QvVrUJSTRleGoepMi8qK3UehCHZ5Q== grant@swift" > ~/.ssh/authorized_keys
-append grant ssh key to coot :: cat /home/grant/.ssh/id_rsa.pub
-echo 'allow ^10\.9\.2\.1$' >> /etc/munin/munin-node.conf
+echo 'allow ^10\.80\.2\.1$' >> /etc/munin/munin-node.conf
 reboot (for possible new kernel. +ssh +limits +eth0 +syslog)
-scp -r 216.66.234.253:H3 .
-git pull
-ssh-keygen for root copy the pub key to w0
-ssh 10.9.2.1 exit - to test certificate auth and add known host
+
+as grant:::>
+git clone git://github.com/sbntech/H3.git
+ssh-keygen for root copy the pub key to ap
+ssh 10.80.2.1 exit - to test certificate auth and add known host
+
 mkdir -p /dialer/projects
 run /home/grant/H3/convert/voiceprompts-rsync.sh
-crontab appendix (s/X007/W05A/)
+
+crontab appendix (s/XXXX/hostname/)
+MAILTO=sbntech@yahoo.com
 */3 * * * * root /home/grant/H3/convert/voiceprompts-rsync.sh
 00 7 * * * root /bin/rm /var/log/astdialer.dat
-*/2 * * * * root /usr/bin/rsync -tq /var/log/astdialer.dat 10.9.2.1:/dialer/www/fancy/asterisk.X007.graph.dat
+*/2 * * * * root /usr/bin/rsync -tq /var/log/astdialer.dat 10.80.2.1:/dialer/www/fancy/asterisk.XXXX.graph.dat
 40 00 * * * root /home/grant/H3/asterisk/dialer-nightly.sh
+
 /home/grant/H3/asterisk/install.sh 1.6.1.1
 vim /etc/default/monit
 /usr/bin/install -o root -g root -m 0600 /home/grant/H3/asterisk/astdialer-monitrc /etc/monit/monitrc

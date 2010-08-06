@@ -1,10 +1,12 @@
 # http://www.tildeslash.com/monit/doc/
 
-set daemon 60
-set mailserver 10.9.2.1
-set alert grant@sbndials.com { timeout nonexist }
+set daemon 120
+	with start delay 40
+
+set mailserver 10.80.2.1
+set alert sbntech@yahoo.com { timeout nonexist }
 	mail-format {
-		from: root@w0.sbndials.com
+		from: root@quickdials.com
 		subject: [$HOST monit] $SERVICE $EVENT at $DATE
 		message: $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION.
 	}
