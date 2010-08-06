@@ -10,7 +10,8 @@ set alert sbntech@yahoo.com
 	}
 set logfile "/var/log/monit.log"
 set httpd port 2812 and use address localhost
-    allow localhost   # Allow localhost to connect
+    allow localhost
+	allow 10.80.2.1
 
 # install -o root -g root -m 0600 /home/grant/H3/convert/monitrc /etc/"
 
