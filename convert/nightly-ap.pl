@@ -33,7 +33,7 @@ system("rm /dialer/www/fancy/projplot-*");
 $dbh->do("update switch set SW_callsday = 0");
 $dbh->do("update project set PJ_timeleft = 'Deleted' where PJ_Visible = 0");
 
-if (`hostname` =~ /worker0/) { # on swift we don't want this
+if (`hostname` =~ /b1-ap/) { # on swift we don't want this
 	# move non-connect files to db
 	system("scp -q /root/NonConnectedNumber.txt 10.80.2.32:/root/");
 	unlink("/root/NonConnectedNumber.txt");

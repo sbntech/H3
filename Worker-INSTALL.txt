@@ -115,10 +115,10 @@ sed -ire 's/startup=0/startup=1/' /etc/default/monit
 cd /etc/samba ; rm smb.conf ; ln -s /dialer/convert/smb.conf ; /etc/init.d/samba stop ; rm -rf /var/log/samba/* ; /etc/init.d/samba start
 
 # ssh setup
-# ... ssh-keygen for root@w0 and www-data@w0 and root@db0
-# ... add root@w0 and www-data@w0 pub keys to /var/lib/mysql/.ssh/authorized_keys on (db0 and db1)
-# ... also add root@db0 to /var/lib/mysql/.ssh/authorized_keys on db1 (since LoadLeads.pl loads files)
+# ... ssh-keygen for root@ap and www-data@ap and root@db0
+# ... add root@ap and www-data@ap pub keys to /var/lib/mysql/.ssh/authorized_keys on (db)
 # ... also root@coldcaller pub key added to /var/www/.ssh/authorized_keys
+# ... add root@ap to /root/.ssh/authorized_keys on (db) # for backup script
 conduct an scp test (port used is important)
 
 # bullseyebroadcast
