@@ -1,11 +1,11 @@
 CURRENT:
-set coldcaller up on b1-ap using 10.80.2.14 as cc_host
+set coldcaller up on b1-ap(?!) using 10.80.2.14 as cc_host
 setup loadleads
-carrier setup / rates / routing
 monit on db
-message recording
+carrier setup / rates / routing
+message recording on db!?
 xlite carrier like w6 was
-load data into tables: dncmilitant custdnc dncnonconn phones
+load data into tables: dncmilitant custdnc dncnonconn phones?
 SSL setup? certs, apache...
 bullseye and jannekesmit.com
 monthly-ap.pl (monthly processing for seat charges etc)

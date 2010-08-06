@@ -21,6 +21,11 @@ check process nvr-1
     start = "/dialer/convert/nvr2.pl 10.80.2.1 A"
     stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.80.2.1.pid"
 
+check process rsyncd
+    pidfile /var/run/rsyncd.pid
+    start = "/usr/bin/rsync --daemon --config=/home/grant/H3/convert/rsyncd-ap.conf --ipv4 --address=10.80.2.1"
+    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/rsyncd.pid"
+
 check process number-helper
     pidfile /var/run/number-helper.pid
     start = "/dialer/convert/number-helper.pl"

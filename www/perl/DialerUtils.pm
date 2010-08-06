@@ -588,7 +588,7 @@ sub cc_host {
 
 	return 'localhost' if $me eq 'swift'; 
 	return 'localhost' if $me eq 'vaio'; 
-	return '10.80.2.14'; # default to w14
+	return '10.80.2.29'; # default to w129
 }
 	
 sub db_host {
