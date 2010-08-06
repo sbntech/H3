@@ -1,6 +1,9 @@
 # keeps the nvr and the watcher running
 # http://www.tildeslash.com/monit/doc/
 
+
+# /usr/bin/install -o root -g root -m 0600 --no-target-directory /home/grant/H3/convert/monitrc-db /etc/monit/monitrc
+
 set daemon 120 with start delay 40
 
 set mailserver 10.80.2.1

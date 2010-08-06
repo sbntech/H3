@@ -1,8 +1,8 @@
 CURRENT:
-set coldcaller up on b1-ap(?!) using 10.80.2.14 as cc_host
 setup loadleads
 monit on db
 carrier setup / rates / routing
+coldcaller carrier setup
 message recording on db!?
 xlite carrier like w6 was
 load data into tables: dncmilitant custdnc dncnonconn phones?
