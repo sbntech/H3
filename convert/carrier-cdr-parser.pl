@@ -1156,7 +1156,7 @@ sub summarize {
 	open SUMM, '>', $summf or die "opening $summf failed: $!";
 	print SUMM JSON::to_json(\%summaries, {pretty => 1});
 	close SUMM;
-	system("scp $summf w0.sbndials.com:/home/grant/cdr-summaries/");
+	system("scp $summf app.quickdials.com:/home/grant/cdr-summaries/");
 }
 
 

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# first time: aptitude install libncurses-dev
+CARRIERHOST="w006"
+MSGRECHOST="worker2"
+
 ASTVER=$1
 echo Installing asterisk version: $ASTVER
 
@@ -31,7 +33,7 @@ else
 
 	if [ -d /usr/src/$ASTSRC ]
 	then
-		echo 'Removing ald source dir'
+		echo 'Removing old source dir'
 		rm -r /usr/src/$ASTSRC
 	fi
 
@@ -47,22 +49,20 @@ rm -f menuselect.makeopts
 make -j8 || exit
 make install || exit
 
-rm -rf /etc/asterisk
-if [ "$HOST" = "w006" -o "$HOST" = "roadrunner" ]
-then
-	# our "carrier" box
-	echo "Carrier config"
-	ln -s /home/grant/H3/asterisk/carrier-config /etc/asterisk
+echo "Stock asterisk installed, updating config ..."
 
-	if [ "$HOST" = "w006" ]
-	then
-		/home/grant/H3/asterisk/gen-guests.pl
-	fi
-elif [ "$HOST" = "worker2" ]
+rm -rf /etc/asterisk
+if [ "$HOST" = "$CARRIERHOST" ]
 then
+	echo " ... carrier config"
+	ln -s /home/grant/H3/asterisk/carrier-config /etc/asterisk
+	/home/grant/H3/asterisk/gen-guests.pl
+elif [ "$HOST" = "$MSGRECHOST" ]
+then
+	echo " ... message recording w2-config"
 	ln -s /home/grant/H3/asterisk/w2-config /etc/asterisk
-	#ln -s /home/grant/H3/asterisk/w2-config/dalong.gsm /var/lib/asterisk/voicemail/sbn/103/unavail.gsm
 else
+	echo " ... dialer (or coldcaller) config"
 	ln -s /home/grant/H3/asterisk/dialer-config /etc/asterisk
 
 	if [ ! -d /dialer/projects ]

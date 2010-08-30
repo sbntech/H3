@@ -75,26 +75,15 @@ NICE TO HAVE:
 	- daily maxima: dials, connects, minutes
 
 RECURRING
-* load new dnc list (last load: 2009-04-27)
+* load new dnc list 
 * ubuntu software upgrade: aptitude full-upgrade
-	- w012(dns)	Dec 29 (Karmic, *1.6.1.12)
-	- db0		(Intrepid)
-	- db1		May 05 (Jaunty)
-	- w0		2009-03-08
-	- w2		Aug 28 (Jaunty) "message recorder", "inbound terminator", "pbx"
-	- w003		Jun 01 (Lucid, *1.6.2.7) --spare-- "Eddie decommissioned Sep 24"
-	- w004		Jun 02 (Lucid, *1.6.2.8) "Selway C"
-	- w005		Dec 29 (Karmic, *1.6.1.12) squid-cache, "Monkey Biz"
-	- w006		Nov 06 (Karmic) "carrier", "cdr host"
-	- w007		Jun 01 (Lucid, *1.6.2.8+g729) "Platinum D - CANADA"
-	- w008		Jun 01 (Lucid, *1.6.2.7) Selway was "Massive"
-	- w009		May 28 (Lucid, *1.6.2.6) "Massive"
-	- w010		May 28 (Lucid, *1.6.2.7) "Monkey Biz"
-	- w011		May 28 (Lucid, *1.6.2.7) "SmartWorld from 7-Dec-09" - "Imran E decommissioned Nov 2"
-	- w013      May 28 (Lucid, *1.6.2.7) gcns
-	- w014		Mar 16 (Karmic, *1.6.2.6) "cold caller"
-	- w015		? (Jaunty)
-	- hans-lv	Nov 02 (Karmic)	
+	b1-ap	:
+	b1-db	:
+	w129	: cold caller
+	w130	: voip dialer
+	?		: message recorder (need a incoming number)
+	?		: carrier machine for x-lite clients
+	hans-lv	: backup machine	
 
 
 *** rebooting db ***

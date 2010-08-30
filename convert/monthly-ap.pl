@@ -21,14 +21,14 @@ if (($me eq 'swift') || ($me eq 'vaio')) {
 my $logfile = '/var/log/monthly-w0.log';
 my $log = Logger->new($logfile);
 
-my $FROM    = "\"Dialer\" <root\@sbndials.com>";
-my $SBNTO   = "support\@sbndials.com";
+my $FROM    = "\"Dialer\" <root\@quickdials.com>";
+my $SBNTO   = "support\@quickdials.com";
 my $CARLTO  = "support\@bullseyebroadcast.com";
 my $SUBJECT = "Monthly Processing Report";
 
 if ($TESTING) {
-	$SBNTO = "\"SBN Tech\" <tech\@sbndials.com>";
-	$CARLTO = "\"CARL-TEST\" <grant\@sbndials.com>";
+	$SBNTO = "\"SBN Tech\" <tech\@quickdials.com>";
+	$CARLTO = "\"CARL-TEST\" <grant\@quickdials.com>";
 	$SUBJECT = "[TESTMODE] $SUBJECT";
 }
 

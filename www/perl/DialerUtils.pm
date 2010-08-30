@@ -1002,8 +1002,8 @@ sub email_to_support {
 	use Net::SMTP;
 
 	my $em =<<EOM
-To: support\@sbndials.com
-From: root\@sbndials.com
+To: support\@quickdials.com
+From: root\@quickdials.com
 Subject: $subject
 
 $body
@@ -1011,9 +1011,9 @@ EOM
 ;
 
 	my $smtp = Net::SMTP->new("10.9.2.1", Timeout => 60, Debug => 0) or die "failed to smtp: $!";
-	$smtp->mail('root@sbndials.com');
-	$smtp->to('support@sbndials.com');
-	$smtp->to('tech@sbndials.com');
+	$smtp->mail('root@quickdials.com');
+	$smtp->to('support@quickdials.com');
+	$smtp->to('sbntech@yahoo.com');
 	$smtp->data();
 	$smtp->datasend($em);
 	$smtp->dataend();

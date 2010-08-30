@@ -8,7 +8,7 @@ case $DOMAIN in
 		# key of 2009-05-26 is not actually encrypted
 		echo -n 'Leadpower1'
 	;;
-	"secure.sbndials.com:443")
+	"secure.quickdials.com:443")
 		echo -n 'hongkong'
 	;;
 	*)

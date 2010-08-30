@@ -2,7 +2,7 @@
 $checkPass = "NO";
 require("/dialer/www/settings.inc.php");
 
-header('P3P: policyref="http://www.sbndials.com/w3c/p3p.xml",CP="ALL"');
+header('P3P: policyref="http://www.quickdials.com/w3c/p3p.xml",CP="ALL"');
 
 # 0 = not logged in
 # 1 = {user} only own projects2

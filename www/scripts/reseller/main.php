@@ -1,12 +1,12 @@
 <?
-header('P3P: policyref="http://www.sbndials.com/w3c/p3p.xml",CP="ALL"');
+header('P3P: policyref="http://www.quickdials.com/w3c/p3p.xml",CP="ALL"');
 $resellCheck = "YES";
 require("/dialer/www/settings.inc.php");
 
 if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	$ServerName = "localhost";
 } else {
-	$ServerName = "secure.sbndials.com";
+	$ServerName = "secure.quickdials.com";
 }		
 ?>
 <html>

@@ -262,10 +262,10 @@ sub handler {
 				if (! defined($API_Response->{'Processing_Error'})) {
 					my $email;
 					if ($TESTING) {
-						$email = "To: tech\@sbndials.com\nFrom: root\@sbndials.com\n" .
+						$email = "To: tech\@quickdials.com\nFrom: root\@quickdials.com\n" .
 						"Subject: [TESTMODE] Successful CC Transaction\n\n";
 					} else {
-						$email = "To: support\@sbndials.com\nFrom: root\@sbndials.com\n" .
+						$email = "To: support\@quickdials.com\nFrom: root\@quickdials.com\n" .
 						"Subject: Successful CC Transaction\n\n";
 					}
 
@@ -316,11 +316,11 @@ sub handler {
 					# send an email
 					my $smtp = Net::SMTP->new("10.80.2.1", Timeout => 60, Debug => 0);
 					if ($smtp) {
-						$smtp->mail('root@sbndials.com');
+						$smtp->mail('root@quickdials.com');
 						if ($TESTING) {
-							$smtp->to('tech@sbndials.com');
+							$smtp->to('sbntech@yahoo.com');
 						} else {
-							$smtp->to('support@sbndials.com');
+							$smtp->to('support@quickdials.com');
 							if ($data->{'PayType'} eq 'CARL') {
 								$smtp->cc('support@bullseyebroadcast.com');
 							} else {
@@ -342,10 +342,10 @@ sub handler {
 					$data->{'FailureStr'} = $nowdt->ymd . ' ' . $nowdt->hms;
 					my $email; 
 					if ($TESTING) {
-						$email = "To: tech\@sbndials.com\nFrom: root\@sbndials.com\n"
+						$email = "To: tech\@quickdials.com\nFrom: root\@quickdials.com\n"
 									. "Subject: [TESTMODE] Failed CC Transaction\n\n";
 					} else {
-						$email = "To: support\@sbndials.com\nFrom: root\@sbndials.com\n"
+						$email = "To: support\@quickdials.com\nFrom: root\@quickdials.com\n"
 									. "Subject: Failed CC Transaction\n\n";
 					}
 
@@ -362,11 +362,11 @@ sub handler {
 					# send an email
 					my $smtp = Net::SMTP->new("10.80.2.1", Timeout => 60, Debug => 0);
 					if ($smtp) {
-						$smtp->mail('root@sbndials.com');
+						$smtp->mail('root@quickdials.com');
 						if ($TESTING) {
-							$smtp->to('tech@sbndials.com');
+							$smtp->to('sbntech@yahoo.com');
 						} else {
-							$smtp->to('support@sbndials.com');
+							$smtp->to('support@quickdials.com');
 							if ($data->{'PayType'} eq 'CARL') {
 								$smtp->cc('support@bullseyebroadcast.com');
 							} else {

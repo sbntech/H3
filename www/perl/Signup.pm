@@ -149,8 +149,8 @@ sub handler {
 
 	my %Profiles = (
 		'Testing' => {
-				'SupportEmailAddress' => 'tech@sbndials.com',
-				'FromEmailAddress' => 'root@sbndials.com',
+				'SupportEmailAddress' => 'sbntech@yahoo.com',
+				'FromEmailAddress' => 'root@quickdials.com',
 				'LoginURL' => 'http://localhost/start.html',
 				'TermsURL' => '/terms.html',
 				'Defaults' => {
@@ -204,8 +204,8 @@ Sincerely,
 Bullseye Broadcasting",
 			},
 		'SBN' => {
-				'SupportEmailAddress' => 'support@sbndials.com',
-				'LoginURL' => 'http://w0.sbndials.com/start.html',
+				'SupportEmailAddress' => 'support@quickdials.com',
+				'LoginURL' => 'http://app.quickdials.com/start.html',
 				'TermsURL' => '/terms.html',
 				'Defaults' => {
 					'CO_Credit' => 1.00,

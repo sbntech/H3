@@ -7,7 +7,7 @@
 	Host = Host.replace(/\/.*/, '');
 
 	if (Host != 'localhost') {
-		Host = 'secure.sbndials.com';
+		Host = 'secure.quickdials.com';
 	}
 </script>
 </head><body>
