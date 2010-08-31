@@ -83,12 +83,12 @@ my $agent_chantech = 'sip/apn-outbound/1';
 if ($hostname eq 'swift') {
 	$ChannelTech = 'sip/roadrunner/0555';
 	$agent_chantech = 'sip/roadrunner/0555';
-} elsif ($ARGV[0] eq 'B') {
-	$Carrier = 'B';
-	$ChannelTech = 'sip/gcns/1'; # gcns "City Voice"
+} elsif ($ARGV[0] eq 'A') {
+	$Carrier = 'A';
+	$ChannelTech = 'sip/selway/1'; # gcns "City Voice"
 
-	$AgentCarrier = 'B';
-	$agent_chantech = 'sip/gcns/1';
+	$AgentCarrier = 'A';
+	$agent_chantech = 'sip/selway/1';
 }
 
 sub agent_desc {
