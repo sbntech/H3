@@ -107,7 +107,7 @@ unzip ~/flot.zip
 
 
 # monit setup
-/usr/bin/install -o root -g root -m 0600 /dialer/convert/monitrc /etc/monit
+/usr/bin/install --no-target-directory -o root -g root -m 0600 /dialer/convert/monitrc-ap /etc/monit/monitrc
 sed -ire 's/startup=0/startup=1/' /etc/default/monit
 /etc/init.d/monit start
 

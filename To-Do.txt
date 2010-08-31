@@ -1,8 +1,6 @@
 CURRENT:
 setup loadleads
 monit on db
-carrier setup / rates / routing
-coldcaller carrier setup
 message recording on db!?
 xlite carrier like w6 was
 load data into tables: dncmilitant custdnc dncnonconn phones?
@@ -18,6 +16,7 @@ worker0 --> b1-ap
 10.9.2.? --> 10.80.2.?
 216.66.234.* --> ?
 sbndials.com --> quickdials.com
+nvr?
 
 tests
 > loading leads
@@ -28,6 +27,7 @@ tests
 > DNS server
 > backups
 > testcalls
+> routing
 
 Not Doing in H3
 * carrier cdr parsing
