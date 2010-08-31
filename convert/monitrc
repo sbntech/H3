@@ -16,10 +16,10 @@ set httpd port 2812 and use address localhost
     allow localhost
 	allow 10.80.2.1
 
-check process nvr-1
-    pidfile /var/run/nvr-10.80.2.1.pid
-    start = "/dialer/convert/nvr2.pl 10.80.2.1 A"
-    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.80.2.1.pid"
+#check process nvr-1
+#    pidfile /var/run/nvr-10.80.2.1.pid
+#    start = "/dialer/convert/nvr2.pl 10.80.2.1 A"
+#    stop = "/sbin/start-stop-daemon --stop --pidfile /var/run/nvr-10.80.2.1.pid"
 
 check process rsyncd
     pidfile /var/run/rsyncd.pid
