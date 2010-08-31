@@ -22,7 +22,7 @@ use Time::HiRes qw( gettimeofday tv_interval usleep );
 die "FATAL: projects voice prompts missing" unless (-d '/var/lib/asterisk/sounds/projects/_1');
 die "FATAL: standard prompts missing" unless (-d '/var/lib/asterisk/sounds/sbn/StandardPrompts');
 
-my $worker0 = '10.9.2.1'; 
+my $worker0 = '10.80.2.1'; 
 my $hostname = `hostname`;
 chomp($hostname);
 my $dialerId = uc(substr($hostname,0,4));
@@ -36,7 +36,7 @@ my $o_gap = 0.05; # gap in seconds between originations
 # static parameters
 my $AgentCarrierID = 'B';
 my $CarrierID;
-my $MAXPORTS = 2*(672+336);
+my $MAXPORTS = 600;
 my $outchan;
 my $CarrierName = 'UNKNOWN';
 if ($dialerId eq 'WTST') {
@@ -45,45 +45,10 @@ if ($dialerId eq 'WTST') {
 	$CarrierName = 'Tester F';
 	$worker0 = 'localhost'; 
 	$GRAPHDAT = "/dialer/www/fancy/asterisk.$dialerId.graph.dat";
-} elsif ($dialerId eq 'W004') {
-	$CarrierID = 'C';
+} elsif ($dialerId eq 'W130') {
+	$CarrierID = 'A';
 	$outchan = 'sip/selway/1';
-	$CarrierName = 'Selway C';
-} elsif ($dialerId eq 'W007') {
-	$MAXPORTS = 500; # have 300 sessions from carrier but only 100 g729 licenses
-	$CarrierID = 'E';
-	$outchan = 'sip/platinum/40301';
-	$CarrierName = 'Platinum E';
-} elsif ($dialerId eq 'W008') {
-	$CarrierID = 'C';
-	$outchan = 'sip/selway/1';
-	$CarrierName = 'Selway C';
-} elsif ($dialerId eq 'W009') {
-	$CarrierID = 'H';
-	$outchan = 'sip/massive/500091';
-	$CarrierName = 'Massive H';
-} elsif ($dialerId eq 'W011') {
-	$CarrierID = 'D';
-	$outchan = 'sip/sws/1';
-	$CarrierName = "SWS $CarrierID";
-} elsif ($dialerId eq 'W012') {
-	die "dialing not desirable";
-} elsif ($dialerId eq 'W013') {
-	$CarrierID = 'B';
-	$outchan = 'sip/gcns/1';
-	$CarrierName = 'GCNS B';
-} elsif ($dialerId eq 'W005') {
-	$CarrierID = 'G';
-	$outchan = 'sip/monkey5/1';
-	$CarrierName = 'Monkey G';
-} elsif ($dialerId eq 'W010') {
-	$CarrierID = 'G';
-	$outchan = 'sip/monkey10/1';
-	$CarrierName = 'Monkey G';
-} elsif ($dialerId eq 'W006') {
-	$CarrierID = 'C';
-	$outchan = 'sip/aspg/';
-	$CarrierName = 'ASPRING C';
+	$CarrierName = 'Selway A';
 } else {
 	print "\n\nNot a registered dialer name $dialerId\n";
 	exit;

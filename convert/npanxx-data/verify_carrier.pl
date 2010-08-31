@@ -14,7 +14,6 @@ use lib '/dialer/convert/npanxx-data';
 use Rates;
 use lib '/home/grant/H3/www/perl';
 use DialerUtils;
-my $sbn2 = DialerUtils::sbn2_connect();
 
 my $r = initialize Rates(1);
 my $carrier = 'B';
@@ -34,7 +33,7 @@ while (my $row = $csv->getline($PUfile)) {
 	my ($number,$duration,$charge) = @$row;
 	$lcount ++;
 
-	my $nn = $r->lookup_number($number, 1, 1, $sbn2);
+	my $nn = $r->lookup_number($number, 1, 1);
 	my $state = $nn->{'StateCode'};
 
 	my $cr = 0.0;
@@ -64,6 +63,5 @@ print "$lcount cdrs checked.\n";
 printf "Carrier total charge: %0.2f\n", $ctotal;
 printf "Our total charge: %0.2f\n", $ototal;
 	
-$sbn2->disconnect;
 close $PUfile;
 close RESF;

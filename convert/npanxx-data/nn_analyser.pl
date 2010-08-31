@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-my %CARRLOOKUP = ( A => 'Qwest', B => 'GCNS', 'C' => 'Selway', 'D' => 'SWS', 'F' => 'gblx', 'G' => 'Monkey', 'H' => 'Massive', 'X' => 'Trial');
+my %CARRLOOKUP = ( A =>  'Selway', 'X' => 'Trial');
 
 use strict;
 use warnings FATAL => 'all';
@@ -8,11 +8,10 @@ use lib '/dialer/convert/npanxx-data';
 use Rates;
 use lib '/home/grant/H3/www/perl';
 use DialerUtils;
-my $sbn2 = DialerUtils::sbn2_connect();
 
 my $r = initialize Rates(1);
 my $TrialDefault = 0.04; # leave undef or 0.0 if there is none
-$r->load_rate_file('/ZM/people/grant/sbn documents/rate decks/CDI1-TelecomHouse-12710domterm-reformatted.csv', 'Trial', 'X');
+$r->load_rate_file('/ZM/people/grant/H3-private/rate-decks/trial-x.csv', 'Trial', 'X');
 
 # *** analyse ***
 print "Analysing the rates\n";
@@ -31,13 +30,7 @@ my %plans;
 my $nrcount = 0;
 my $nrdur = 0;
 
-my $sampleCA = 0;
-
-if ($sampleCA == 1) {
-	open SAMPLE, 'unzip -p /ZM-no-backup/SBN/leads/Canada-Connects.zip|' || die "failed to open sample data: $!";
-} else {
-	open SAMPLE, '<', 'sbn-sample.txt' || die "failed to open sample data: $!";
-}
+open SAMPLE, '<', 'sbn-sample.txt' || die "failed to open sample data: $!";
 
 while (my $l = <SAMPLE>) {
 	my $npa = substr($l,0,3);
@@ -46,16 +39,13 @@ while (my $l = <SAMPLE>) {
 	my $nn5 = substr($l,0,5);
 	my $block = substr($l,6,1);
 	my $seconds = 12;
-	if ($sampleCA != 1) {
-		$seconds = 1 * substr($l,8,99);
-	}
 
 	my $number = "$npa$nxx$block" . '000';
-	my $nn = $r->lookup_number($number, 1, 1, $sbn2);
+	my $nn = $r->lookup_number($number, 1, 1);
 
 	$nn->{'Rates'}{'X'} = $r->{'Trial'}{"$npa$nxx"};
 	# Trial (X) ---
-	TRYPREFIX: for my $prefix ( "$npa$nxx", $nn5, $nn4, $npa ) {
+	TRYPREFIX: for my $prefix ( "$npa$nxx$block", "$npa$nxx", $nn5, $nn4, $npa ) {
 		if (defined($r->{'Trial'}{$prefix})) {
 			$nn->{'Rates'}{'X'} = $r->{'Trial'}{$prefix};
 			$nn->{'Routable'} = 1;
@@ -112,7 +102,6 @@ for my $t (sort keys %types) {
 	printf "%-12s :%0.2f%%\n", $t, (100 * $types{$t}) / $sample{'TotalCount'} ;
 }
 
-
 # headings
 printf '%12s  ', 'Price';
 for my $c (sort keys %CARRLOOKUP) {
@@ -146,8 +135,6 @@ sub stat_row {
 	print "\n";
 }
 	
-$sbn2->disconnect;
-
 # print plans
 printf "\n%12s %7s\n", 'Plan', 'Perc';
 

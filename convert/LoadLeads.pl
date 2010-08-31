@@ -64,7 +64,7 @@ sub prep_number {
 	my $scrubCode = shift;
 	# XC=Cust DNC; XM=Main Dnc; XR=No Route; XP=Mobile; XN=Non-connect; XX=Militant; XF=Footprint; XD=Duplicate; XE=Expensive
 
-	my $nn = $r->lookup_number($number, $data->{'ContextProject'}->{'PJ_CustNumber'}, $data->{'ContextCustomer'}->{'CO_ResNumber'}, $sbn2);
+	my $nn = $r->lookup_number($number, $data->{'ContextProject'}->{'PJ_CustNumber'}, $data->{'ContextCustomer'}->{'CO_ResNumber'});
 	my $statecode = $nn->{'StateCode'};
 	my $timezone = $nn->{'TimeZone'};
 

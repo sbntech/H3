@@ -11,7 +11,6 @@ use Rates;
 $|=1;
 
 my $dbh = DialerUtils::db_connect(); # connect to the database
-my $sbn2 = DialerUtils::sbn2_connect(); # connect to the database
 
 my $r = initialize Rates(1);
 my $running = 2;
@@ -75,7 +74,7 @@ while ($running > 1) {
 			$curptr++;
 		}
 		my $number = $pn->{'PN_PhoneNumber'};
-		my $nn = $r->lookup_number($number, $ci->{'PJ_CustNumber'}, $ci->{'CO_ResNumber'}, $sbn2);
+		my $nn = $r->lookup_number($number, $ci->{'PJ_CustNumber'}, $ci->{'CO_ResNumber'});
 
 		my $StatusClause = "PN_Status = 'X', PN_CallResult = 'XR', ";
 
@@ -130,7 +129,6 @@ my $pleft = $stats->{'Projects'};
 my $rleft = $stats->{'Rows'};
 
 $dbh->disconnect;
-$sbn2->disconnect;
 
 if ($pleft == 0) {
 	print "Finished.\n";
