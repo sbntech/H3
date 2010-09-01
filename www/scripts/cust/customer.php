@@ -64,11 +64,8 @@ if ($_SESSION["L_Level"] >= 4) { ?>
 </td><td style="vertical-align: top; -left: 50mm; border: 2px solid #e0e0e0;">
 <h2 style="text-align: center; background-color: #e0e0e0">News</h2>
 <table style="width: 400px">
-<tr><td nowrap="true" style="vertical-align: top; font-weight: bolder">May 27:</td><td>
-<a style="float:right" class="help" href="/help/agent-help.shtml#agent-buttons" target="_help"><img src="/help/icon-help.png"/></a>
-Agents on cold calling projects can now transfer prospects from the pop-up page. They still need to dial * on the dialpad to complete the transfer or 00 to abandon it.
-</td></tr>
-<tr><td nowrap="true" style="vertical-align: top; font-weight: bolder">Apr 22:</td><td>Cold calling projects now have the option of recording the calls. There are state laws governing call recording, make sure those laws are obeyed.
+<tr><td nowrap="true" style="vertical-align: top; font-weight: bolder">Fall 2010:</td><td>
+No news to report.
 </td></tr>
 </table>
 </td></tr></table>
