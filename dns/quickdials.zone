@@ -1,7 +1,7 @@
 $TTL 10800
 
-@  IN        SOA        dial-ns1.us.to. sbntech.yahoo.com. (
-                        2010030501        ; Serial
+@  IN        SOA        dial-ns1.us.to. tech093.hotmail.com. (
+                        2010090301        ; Serial
                         28800             ; Refresh
                         3600              ; Retry
                         604800            ; Expire
@@ -19,6 +19,7 @@ app             IN      CNAME   b1-ap
 www             IN      CNAME   b1-ap
 
 b1-db           IN      A       67.209.46.100
+carrier         IN      CNAME   b1-db
 b1-db-bmc       IN      A       67.209.46.104
 w129            IN      A       67.209.46.101
 w129-bmc        IN      A       67.209.46.105
