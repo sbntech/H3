@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CARRIERHOST="w006"
+CARRIERHOST="b1-db"
 MSGRECHOST="worker2"
 
 ASTVER=$1

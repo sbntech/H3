@@ -7,7 +7,7 @@ echo -e "* soft nofile 65535\n* hard nofile 65535\nroot soft nofile 65535\nroot 
 cat /etc/resolv.conf
 vim /etc/network/interfaces # if necessary to change config
 mv /etc/rsyslog.d/50-default.conf /root/rsyslog.original ; sed -e 's/^#cron/cron/' /root/rsyslog.original > /etc/rsyslog.d/50-default.conf
-aptitude install vim mysql-client-5.0 git-core screen screen-profiles sox libsox-fmt-all openssh-server openssh-client ntp iproute iputils-tracepath htop iftop iotop libdbi-perl libjson-perl libjson-xs-perl monit build-essential ncurses-dev libdatetime-perl openipmi ipmitool munin-node
+aptitude install vim mysql-client-5.0 git-core screen screen-profiles sox libsox-fmt-all openssh-server openssh-client ntp iproute iputils-tracepath htop iftop iotop libdbi-perl libjson-perl libjson-xs-perl monit build-essential ncurses-dev libdatetime-perl openipmi ipmitool munin-node libdbd-mysql-perl
 echo -e "ipmi_si\nipmi_devintf" >> /etc/modules ; modprobe ipmi_si ; modprobe ipmi_devintf ; ipmitool -I open -U ADMIN -P ADMIN bmc reset cold
 ssh-keygen for grant
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAwVbSmXu5Ss0Ot8BezE0btIbjXza1YRoevHqejI1LKP5DkPJpoiNnrUTgtYJRgu62L3Iq+TuBHA3yTxPYOplXJMR1SOWTMITj+uwys7pSs9s5FcK+Ag0BOdoyfoX6N9go1LoicbUrNFGBcExLfqNS9xaXuGqQm8TCvFcKqSbGio1uGoOisgwJ26He9hz2pdDPNay1XPa2JLn+gRtLego0mdaNdOzDmCUV2nhfAa4yg+Snwi0dG5CidNeNX6xwBOGRmLwYl1i6BHL6MscgjvqkNEbDkKIpA7lyX7+QbnqQ8kSKKLoOGK476QvO9QvVrUJSTRleGoepMi8qK3UehCHZ5Q== grant@swift" > ~/.ssh/authorized_keys
@@ -23,13 +23,13 @@ mkdir -p /dialer/projects
 run /home/grant/H3/convert/voiceprompts-rsync.sh
 
 crontab appendix (s/XXXX/hostname/)
-MAILTO=sbntech@yahoo.com
+MAILTO=tech093@hotmail.com
 */3 * * * * root /home/grant/H3/convert/voiceprompts-rsync.sh
 00 7 * * * root /bin/rm /var/log/astdialer.dat
 */2 * * * * root /usr/bin/rsync -tq /var/log/astdialer.dat 10.80.2.1:/dialer/www/fancy/asterisk.XXXX.graph.dat
 40 00 * * * root /home/grant/H3/asterisk/dialer-nightly.sh
 
-/home/grant/H3/asterisk/install.sh 1.6.1.1
+/home/grant/H3/asterisk/install.sh 1.6.2.11
 vim /etc/default/monit
 /usr/bin/install -o root -g root -m 0600 /home/grant/H3/asterisk/astdialer-monitrc /etc/monit/monitrc
 /etc/init.d/monit start
