@@ -35,7 +35,7 @@ for my $row (@$res) {
 	my $pw = $row->{'AG_Password'};
 	my $ext = sprintf('%04d', $row->{'AG_Number'});
 
-	printf("  %-15s: username=%s password=%s sipAddress=sip:8$ext\@216.66.234.212:8060\n",
+	printf("  %-15s: username=%s password=%s sipAddress=sip:8$ext\@67.209.46.100:8060\n",
 		$row->{'AG_Name'}, $id, $pw);
 
 	print GSIP <<EndAgent
