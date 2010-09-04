@@ -599,22 +599,6 @@ sub db_host {
 	return '10.80.2.32'; # default to prod
 }
 	
-sub file2db {
-	my $fpath = shift;
-
-	my $host = db_host();
-	my $destname = "$fpath-" . rand;
-	$destname =~ tr [/][_];
-
-	my $me = who_am_I();
-	if (($me eq 'b1-db') && ($host eq '10.80.2.32')) {
-		system("cp '$fpath' '/var/lib/mysql/in-out/$destname'");
-	} else {
-		system("scp -q -P 8946 '$fpath' 'mysql\@$host:in-out/$destname'");
-	}
-	return $destname;
-}
-
 sub db2file {
 	my $dname = shift;
 	my $target = shift;

@@ -179,7 +179,7 @@ sub download {
 		IF(PN_SurveyResults is null,'',PN_SurveyResults) $pdata
 		from `projectnumbers_" .
 		$data->{'PJ_Number'} . "` where PN_FileNumber = '" .
-		$data->{'filenumber'} . "' into outfile 'in-out/$fn.csvdata'
+		$data->{'filenumber'} . "' into outfile 'dialer/DOWNLOAD-$fn.csvdata'
 		fields escaped by '' terminated by ',' optionally enclosed by '' lines terminated by '\\n'");
 	DialerUtils::db2file("$fn.csvdata", $target);
 	DialerUtils::db_rmfile("$fn.csvdata");

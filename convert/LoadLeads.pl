@@ -266,12 +266,13 @@ sub convert {
 			AltCarriers char(9),
 			ScrubCode char(2),
 			PRIMARY KEY(PhNumber))");
-	my $tname = DialerUtils::file2db($cleanf);
-	unlink($cleanf);
-	$dbh->do("load data infile 'in-out/$tname' ignore into table 
+
+	my $tname = "LoadLeads-CLEAN-" . $data->{'JobId'};
+	system("mv $FullPath.clean /var/lib/mysql/dialer/$tname");
+	$dbh->do("load data infile 'dialer/$tname' ignore into table 
 				numload_temp (PhNumber,Timezone,BestCarriers,AltCarriers, ScrubCode) 
 				set SplitPoint = floor(rand() * $spmax)");
-	DialerUtils::db_rmfile($tname);
+	unlink("/var/lib/mysql/dialer/$tname");
 
 	# in-file dupes
 	$NFrow{'NF_ScrubDuplicate'} = 0;

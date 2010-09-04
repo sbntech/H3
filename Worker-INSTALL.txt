@@ -143,9 +143,12 @@ vim /etc/postfix/main.cf
 ===================================================================================================
 mkdir -p /dialer/maindnc
 
-aptitude install freecdb libjson-perl libjson-xs-perl libtext-csv-xs-perl libspreadsheet-parseexcel-perl
+aptitude install freecdb libjson-perl libjson-xs-perl libtext-csv-xs-perl libspreadsheet-parseexcel-perl smbfs
+
 load DNC.7z into /dialer/maindnc using dnc-loader.pl and copying over
 
+fstab:
+//10.80.2.1/projects /dialer/projects smbfs username=www-data,guest,uid=mysql,gid=mysql 0 0
 
 # install perl module CDB_FILE 
 perl -MCDB_File -e 1;
