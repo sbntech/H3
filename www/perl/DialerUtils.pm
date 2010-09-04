@@ -607,7 +607,11 @@ sub file2db {
 	$destname =~ tr [/][_];
 
 	my $me = who_am_I();
-	system("scp -q -P 8946 '$fpath' 'mysql\@$host:in-out/$destname'");
+	if (($me eq 'b1-db') && ($host eq '10.80.2.32')) {
+		system("cp '$fpath' '/var/lib/mysql/in-out/$destname'");
+	} else {
+		system("scp -q -P 8946 '$fpath' 'mysql\@$host:in-out/$destname'");
+	}
 	return $destname;
 }
 
