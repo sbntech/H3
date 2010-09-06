@@ -5,7 +5,7 @@ set daemon 120
 	with start delay 40
 
 set mailserver 10.80.2.1
-set alert sbntech@yahoo.com
+set alert tech@quickdials.com
 	mail-format {
 		from: root@app.quickdials.com
 		subject: [monit] $SERVICE $EVENT at $DATE

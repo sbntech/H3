@@ -4,7 +4,7 @@ set daemon 120
 	with start delay 40
 
 set mailserver 10.80.2.1
-set alert sbntech@yahoo.com { timeout nonexist }
+set alert tech@quickdials.com { timeout nonexist }
 	mail-format {
 		from: root@quickdials.com
 		subject: [$HOST monit] $SERVICE $EVENT at $DATE

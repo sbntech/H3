@@ -149,7 +149,7 @@ sub handler {
 
 	my %Profiles = (
 		'Testing' => {
-				'SupportEmailAddress' => 'sbntech@yahoo.com',
+				'SupportEmailAddress' => 'tech@quickdials.com',
 				'FromEmailAddress' => 'root@quickdials.com',
 				'LoginURL' => 'http://localhost/start.html',
 				'TermsURL' => '/terms.html',

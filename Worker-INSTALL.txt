@@ -131,7 +131,7 @@ echo "export TZ='America/New_York'" >> /etc/apache2/envvars
 
 # mailserver (postfix) for sending mail for monit, crontab etc
 aptitude install postfix # select "Internet Site" as type of mail configuration
-vim /etc/aliases # add root:   sbntech@yahoo.com
+vim /etc/aliases # add root:   tech093@hotmail.com
 newaliases
 vim /etc/postfix/main.cf
 /etc/init.d/postfix reload

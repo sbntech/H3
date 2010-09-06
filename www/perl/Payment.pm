@@ -318,7 +318,7 @@ sub handler {
 					if ($smtp) {
 						$smtp->mail('root@quickdials.com');
 						if ($TESTING) {
-							$smtp->to('sbntech@yahoo.com');
+							$smtp->to('tech@quickdials.com');
 						} else {
 							$smtp->to('support@quickdials.com');
 							if ($data->{'PayType'} eq 'CARL') {
@@ -364,7 +364,7 @@ sub handler {
 					if ($smtp) {
 						$smtp->mail('root@quickdials.com');
 						if ($TESTING) {
-							$smtp->to('sbntech@yahoo.com');
+							$smtp->to('tech@quickdials.com');
 						} else {
 							$smtp->to('support@quickdials.com');
 							if ($data->{'PayType'} eq 'CARL') {

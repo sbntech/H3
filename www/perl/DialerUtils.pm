@@ -1001,7 +1001,7 @@ EOM
 	my $smtp = Net::SMTP->new("10.9.2.1", Timeout => 60, Debug => 0) or die "failed to smtp: $!";
 	$smtp->mail('root@quickdials.com');
 	$smtp->to('support@quickdials.com');
-	$smtp->to('sbntech@yahoo.com');
+	$smtp->to('tech@quickdials.com');
 	$smtp->data();
 	$smtp->datasend($em);
 	$smtp->dataend();
