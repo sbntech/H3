@@ -58,3 +58,5 @@ EndAgent
     
 $dbh->disconnect;
 close GSIP;
+
+system("asterisk -x 'sip reload'");
