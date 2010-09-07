@@ -1,6 +1,5 @@
 CURRENT:
 monit on db
-message recording on ap!?
 load data into tables: dncmilitant custdnc dncnonconn phones?
 SSL setup? certs, apache...
 bullseye and jannekesmit.com
@@ -21,6 +20,7 @@ tests
 > DNC scrubbing
 > graphs
 > mailserver 
+> message recording
 > monit
 > DNS server
 > backups
