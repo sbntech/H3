@@ -105,7 +105,7 @@ for my $t (sort keys %types) {
 # headings
 printf '%12s  ', 'Price';
 for my $c (sort keys %CARRLOOKUP) {
-	printf "$c:%8s", $CARRLOOKUP{$c};
+	printf "%10s", "$c:" . $CARRLOOKUP{$c};
 }
 print "\n";
 	
