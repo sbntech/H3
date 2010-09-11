@@ -400,11 +400,11 @@ sub handler {
 	$res = $dbh->selectrow_hashref("select RS_OnlyColdCall from reseller
 		where RS_Number = '" . $data->{'ContextCustomer'}{'CO_ResNumber'}
 		. "' limit 1");
-	$data->{'OnlyColdCall'} = 'Y';
-	if (($res->{'RS_OnlyColdCall'} eq 'N') ||
-		($data->{'ContextCustomer'}{'CO_OnlyColdCall'} eq 'N')) {
+	$data->{'OnlyColdCall'} = $res->{'RS_OnlyColdCall'};
+	if (($res->{'RS_OnlyColdCall'} eq 'N') &&
+		($data->{'ContextCustomer'}{'CO_OnlyColdCall'} eq 'Y')) {
 
-		$data->{'OnlyColdCall'} = 'N';
+		$data->{'OnlyColdCall'} = 'Y';
 	}
 
 	if (length($data->{'ErrStr'}) == 0) {
