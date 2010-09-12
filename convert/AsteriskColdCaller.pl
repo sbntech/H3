@@ -75,17 +75,14 @@ my $REALTIME_STATS_HEADER = "<html><head><link rel=\"stylesheet\" TYPE=\"text/cs
 my $REALTIME_STATS_FOOTER = "<script>setTimeout('location.reload()',3000);</script>
 </body></html>\n";
 
-my $AgentCarrier = 'Z'; # G=monkey, Z=Mike, B=gcns
-my $Carrier = 'Z'; # G=monkey, Z=Mike, B=gcns
-my $ChannelTech = 'sip/apn-outbound/1'; # Mike's Atlanta Route 
-my $agent_chantech = 'sip/apn-outbound/1';
+my $AgentCarrier = 'Z';
+my $Carrier = 'Z';
+my $ChannelTech = 'sip/roadrunner/0555';
+my $agent_chantech = 'sip/roadrunner/0555';
 
-if ($hostname eq 'swift') {
-	$ChannelTech = 'sip/roadrunner/0555';
-	$agent_chantech = 'sip/roadrunner/0555';
-} elsif ($ARGV[0] eq 'A') {
+if ($ARGV[0] eq 'A') {
 	$Carrier = 'A';
-	$ChannelTech = 'sip/selway/1'; # gcns "City Voice"
+	$ChannelTech = 'sip/selway/1';
 
 	$AgentCarrier = 'A';
 	$agent_chantech = 'sip/selway/1';
