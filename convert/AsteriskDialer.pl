@@ -36,7 +36,7 @@ my $o_gap = 0.05; # gap in seconds between originations
 # static parameters
 my $AgentCarrierID = 'B';
 my $CarrierID;
-my $MAXPORTS = 600;
+my $MAXPORTS = 500;
 my $outchan;
 my $CarrierName = 'UNKNOWN';
 if ($dialerId eq 'WTST') {
@@ -47,7 +47,7 @@ if ($dialerId eq 'WTST') {
 	$GRAPHDAT = "/dialer/www/fancy/asterisk.$dialerId.graph.dat";
 } elsif ($dialerId eq 'W130') {
 	$CarrierID = 'A';
-	$outchan = 'sip/selway/1';
+	$outchan = 'sip/gcns/1';
 	$CarrierName = 'Selway A';
 } else {
 	print "\n\nNot a registered dialer name $dialerId\n";

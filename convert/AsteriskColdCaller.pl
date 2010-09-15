@@ -82,10 +82,10 @@ my $agent_chantech = 'sip/roadrunner/0555';
 
 if ($ARGV[0] eq 'A') {
 	$Carrier = 'A';
-	$ChannelTech = 'sip/selway/1';
+	$ChannelTech = 'sip/gcns/1';
 
 	$AgentCarrier = 'A';
-	$agent_chantech = 'sip/selway/1';
+	$agent_chantech = 'sip/gcns/1';
 }
 
 sub agent_desc {
