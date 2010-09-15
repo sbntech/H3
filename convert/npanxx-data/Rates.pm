@@ -2,8 +2,8 @@
 
 =pod
 
-A ---> Selway
-B ---> GCNS
+A ---> GCNS
+B ---> Selway (defunct)
 
 =cut
 
@@ -126,56 +126,18 @@ sub lookup_number {
 		$rh->{'Ocn'}  = $self->{'Telcodata'}{$npanxx}[1];
 	}
 
-	if (($rh->{'StateCode'} eq 'HI') || ($rh->{'StateCode'} eq 'AK') || ($rh->{'StateCode'} eq 'XX')) {
-		#        Hawaii                             Alaska                       Exotic     
-	} elsif ($rh->{'StateCode'} eq 'XC') { # Canada
-
-		if (defined($self->{'CanadaNPANXX'}{$npanxx})) {
-			$rh->{'Routable'} = 1;
-			
-			my $CAroutes = '';
-			my $CAalts = '';
-
-			# Selway (A)
-#			SELWAYPREFIX: for my $prefix (@checklist) {
-#				if (defined($self->{'Selway'}{$prefix})) {
-#					$rh->{'Rates'}{'A'} = $self->{'Selway'}{$prefix};
-#					$CAroutes .= 'A';
-#					last SELWAYPREFIX;
-#				}
-#			}
-
-			if (length($CAroutes) > 1) {
-				$rh->{'BestCarriers'} = $CAroutes;
-				$rh->{'AltCarriers'} = $CAalts;
-				$rh->{'ScrubType'} = undef;
-			}
-		}
+	if (($rh->{'StateCode'} eq 'HI') || ($rh->{'StateCode'} eq 'AK') || ($rh->{'StateCode'} eq 'XX') || ($rh->{'StateCode'} eq 'XC')) {
+		#        Hawaii                             Alaska                       Exotic                         Canada
 	} else { # U.S.A. 
 		# determine best and alternate carriers
 		my $BestCarriers = '';
 		my $AltCarriers = '';
 
-		# B. GCNS
+		# A. GCNS
 		if (defined($self->{'GCNS'}{$npanxx})) {
-			$rh->{'Rates'}{'B'} = $self->{'GCNS'}{$npanxx};
+			$rh->{'Rates'}{'A'} = $self->{'GCNS'}{$npanxx};
 			$rh->{'Routable'} = 1;
-			if ($rh->{'Rates'}{'B'} < 0.018) {
-				$BestCarriers = 'B';
-			}
-		}
-
-		# A. Selway
-		$rh->{'Rates'}{'A'} = 0.01490; # default interstate rate
-		SELWAYPREFIX: for my $prefix (@checklist) {
-			if (defined($self->{'Selway'}{$prefix})) {
-				$rh->{'Rates'}{'A'} = $self->{'Selway'}{$prefix};
-				$rh->{'Routable'} = 1;
-				if ($BestCarriers eq '') {
-					$BestCarriers = 'A';
-				}
-				last SELWAYPREFIX;
-			}
+			$BestCarriers = 'A';
 		}
 
 		if ($rh->{'Routable'} == 1) {
@@ -287,8 +249,7 @@ sub initialize {
 	$self->load_canada_file;
 	$self->load_areacodes;
 	$self->load_telcodata;
-	$self->load_rate_file("$DATADIR/Selway.csv", 'Selway', 'A');
-	$self->load_rate_file("$DATADIR/GCNS.csv", 'GCNS', 'B');
+	$self->load_rate_file("$DATADIR/GCNS.csv", 'GCNS', 'A');
 
 	$self->{'Exclusions'}{'928601'} = ' pagers only';
 	$self->{'Exclusions'}{'928801'} = ' pagers only';
