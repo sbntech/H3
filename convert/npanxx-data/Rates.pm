@@ -3,6 +3,7 @@
 =pod
 
 A ---> Selway
+B ---> GCNS
 
 =cut
 
@@ -102,6 +103,7 @@ sub lookup_number {
 		if (($CustomerNumber == 11966) || # cleartalk
 			($ResellerNumber == 128)    # funguy1950 roy 20-Jan-2010
 		   ) {
+		    #### !!!! footprint scrubbing needs to be fixed below
 			$rh->{'Footprint'} = 1; # cheap USA
 		}
 	}
@@ -150,64 +152,36 @@ sub lookup_number {
 			}
 		}
 	} else { # U.S.A. 
+		# determine best and alternate carriers
+		my $BestCarriers = '';
+		my $AltCarriers = '';
+
+		# B. GCNS
+		if (defined($self->{'GCNS'}{$npanxx})) {
+			$rh->{'Rates'}{'B'} = $self->{'GCNS'}{$npanxx};
+			$rh->{'Routable'} = 1;
+			if ($rh->{'Rates'}{'B'} < 0.018) {
+				$BestCarriers = 'B';
+			}
+		}
+
 		# A. Selway
 		$rh->{'Rates'}{'A'} = 0.01490; # default interstate rate
 		SELWAYPREFIX: for my $prefix (@checklist) {
 			if (defined($self->{'Selway'}{$prefix})) {
 				$rh->{'Rates'}{'A'} = $self->{'Selway'}{$prefix};
 				$rh->{'Routable'} = 1;
+				if ($BestCarriers eq '') {
+					$BestCarriers = 'A';
+				}
 				last SELWAYPREFIX;
 			}
 		}
 
-		# determine best and alternate carriers
-		my $BestCarriers = '';
-		my $AltCarriers = '';
-
-		my $cheapest = 10.0;
-		my $cheapestCarr;
-		for my $carr ('A') {
-			my $carrRate = $rh->{'Rates'}{$carr};
-			next unless defined($carrRate);
-			
-			if ($carrRate < $cheapest) {
-				$cheapest = $carrRate;
-				$cheapestCarr = $carr;
-			}
-		}
-
-		if (($rh->{'Routable'} == 1) && (defined($cheapestCarr))) {
-			my %bests;
-			$bests{$cheapestCarr} = 1;
-
-			if ($cheapest > 0.03) {
-				# woa! scrub this expensive thing
-				$rh->{'ScrubType'} = 'XE';
-			} elsif ($rh->{'Footprint'} == 2) {
-				# scrub US numbers in Canada-only customers
-				$rh->{'ScrubType'} = 'XF';
-			} elsif (($rh->{'Footprint'} == 1) && ($cheapest > 0.008)) {
-				# limited footprint scrubbing
-				$rh->{'ScrubType'} = 'XF';
-			} else {
-				# determine AltCarriers
-				my %alternates;
-				for my $carr ('A') {
-					next if defined($bests{$carr});
-
-					my $carrRate = $rh->{'Rates'}{$carr};
-					next unless defined($carrRate);
-
-					$alternates{$carr} = 1;
-				}
-
-				map { $BestCarriers .= $_; } sort keys %bests;
-				map { $AltCarriers .= $_; } sort keys %alternates;
-
-				$rh->{'BestCarriers'} = $BestCarriers;
-				$rh->{'AltCarriers'} = $AltCarriers;
-				$rh->{'ScrubType'} = undef;
-			}
+		if ($rh->{'Routable'} == 1) {
+			$rh->{'BestCarriers'} = $BestCarriers;
+			$rh->{'AltCarriers'} = $AltCarriers;
+			$rh->{'ScrubType'} = undef;
 		}
 	}
 
@@ -314,6 +288,7 @@ sub initialize {
 	$self->load_areacodes;
 	$self->load_telcodata;
 	$self->load_rate_file("$DATADIR/Selway.csv", 'Selway', 'A');
+	$self->load_rate_file("$DATADIR/GCNS.csv", 'GCNS', 'B');
 
 	$self->{'Exclusions'}{'928601'} = ' pagers only';
 	$self->{'Exclusions'}{'928801'} = ' pagers only';
