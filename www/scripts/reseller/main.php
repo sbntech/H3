@@ -131,7 +131,7 @@ while ($row = mysql_fetch_array ($result)) {
 	echo "\t<TD class=basiclist>" .  $row["CO_Name"] . "</TD>\n";
 	echo "\t<TD class=basiclist><a href='/pg/ProjectList?CO_Number=". $row["CO_Number"] ."&PJ_Number=" . $row["PJ_Number"] . "' TARGET='ResellerCustWindow'>"
 		. $row["PJ_Description"] . "</a></TD>\n";
-	echo "\t<TD class=basiclist>" . $row["PJ_TypeDesc"] . "</TD>\n";
+	echo "\t<TD class=basiclist>" . $row["PJ_Timeleft"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_Status"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["RE_Calls"] . "</TD>\n";
 	echo "\t<TD class=basiclist>$asr</TD>\n";
@@ -140,8 +140,8 @@ while ($row = mysql_fetch_array ($result)) {
 	echo "\t<TD class=basiclist>" . $Weekend . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_TimeStart"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_TimeStop"] . "</TD>\n";
+	echo "\t<TD class=basiclist>" . $row["PJ_TypeDesc"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_Maxline"] . "</TD>\n";
-	echo "\t<TD class=basiclist>" . $row["PJ_Timeleft"] . "</TD>\n";
 	echo "</TR>";
 }
 
