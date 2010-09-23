@@ -8,8 +8,8 @@
 <TABLE WIDTH="500" BORDER=0 CELLSPACING=1 CELLPADDING=1>
 	<TR><TD colspan=4 align=middle><FONT face=Arial size=7><B>Reseller login</B></FONT></TD></TR>
 	<?
-	if ($HTTP_GET_VARS['errormsg']) {
-	  	$result =urldecode($HTTP_GET_VARS['errormsg']);
+	if ($_GET['errormsg']) {
+	  	$result =urldecode($_GET['errormsg']);
 	  	print "<tr><td colspan=2></td><td colspan=2><FONT color=red>$result</font></td></tr>";
 	}
 	?>
