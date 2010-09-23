@@ -98,6 +98,7 @@ while ($row = mysql_fetch_array ($result)) {
 <TABLE><tr>
         <th class="basiclist-col" valign=middle>Customer</th>
         <th class="basiclist-col" valign=middle>Description</th>
+        <th class="basiclist-col" valign=middle>Run Info</th>
         <th class="basiclist-col" valign=middle>Status</th>
         <th class="basiclist-col" valign=middle>Calls Today</th>
         <th class="basiclist-col" valign=middle>Conn Rate</th>
@@ -108,7 +109,6 @@ while ($row = mysql_fetch_array ($result)) {
         <th class="basiclist-col" valign=middle>TimeStop</th>
         <th class="basiclist-col" valign=middle>Type</th>
         <th class="basiclist-col" valign=middle>MaxLine</th>
-        <th class="basiclist-col" valign=middle>Run Info</th>
     </tr>
 <?
 while ($row = mysql_fetch_array ($result)) {
@@ -131,6 +131,7 @@ while ($row = mysql_fetch_array ($result)) {
 	echo "\t<TD class=basiclist>" .  $row["CO_Name"] . "</TD>\n";
 	echo "\t<TD class=basiclist><a href='/pg/ProjectList?CO_Number=". $row["CO_Number"] ."&PJ_Number=" . $row["PJ_Number"] . "' TARGET='ResellerCustWindow'>"
 		. $row["PJ_Description"] . "</a></TD>\n";
+	echo "\t<TD class=basiclist>" . $row["PJ_TypeDesc"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_Status"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["RE_Calls"] . "</TD>\n";
 	echo "\t<TD class=basiclist>$asr</TD>\n";
@@ -139,7 +140,6 @@ while ($row = mysql_fetch_array ($result)) {
 	echo "\t<TD class=basiclist>" . $Weekend . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_TimeStart"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_TimeStop"] . "</TD>\n";
-	echo "\t<TD class=basiclist>" . $row["PJ_TypeDesc"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_Maxline"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_Timeleft"] . "</TD>\n";
 	echo "</TR>";

@@ -2,7 +2,6 @@
 $checkPass = "NO";
 require("/dialer/www/settings.inc.php");
 
-session_start();
 $_SESSION["L_Level"] = 0;
 $_SESSION["L_Name"] = '';
 $_SESSION["L_Number"] = 0; 
