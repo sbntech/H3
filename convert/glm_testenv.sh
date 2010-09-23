@@ -121,9 +121,6 @@ function rm_logs {
 if [ `hostname` = 'swift' ]
 then
 	echo We are swift
-elif [ `hostname` = 'vaio' ]
-then
-	echo We are Vaio laptop
 else
 	echo Only run on swift
 	exit;

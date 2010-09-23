@@ -546,7 +546,7 @@ sub timezones_allowed {
 sub who_am_I {
 
 	my $me = `hostname`;
-	$me =~ tr/0-9a-z//cd;
+	$me =~ tr/-0-9a-z//cd;
 	return $me;
 
 }
@@ -587,7 +587,6 @@ sub cc_host {
 	my $me = who_am_I();
 
 	return 'localhost' if $me eq 'swift'; 
-	return 'localhost' if $me eq 'vaio'; 
 	return '10.80.2.29'; # default to w129
 }
 	

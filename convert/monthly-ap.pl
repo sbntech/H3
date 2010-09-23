@@ -14,7 +14,7 @@ use JSON;
 my $me = DialerUtils::who_am_I();
 my $TESTING = 0;
 
-if (($me eq 'swift') || ($me eq 'vaio')) {
+if ($me eq 'swift') {
 	$TESTING = 1;
 }
 
