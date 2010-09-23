@@ -86,7 +86,7 @@ while ($row = mysql_fetch_array ($result)) {
 
  mysql_free_result ($result);
  $SQLStmt = "SELECT PJ_Visible,PJ_Weekend, PJ_Number,PJ_Description,IF(PJ_Status = 'A', 'Active', 'Blocked') as PJ_Status, DATE_FORMAT(PJ_DateStart,'%c-%e') as PJ_DateStart,DATE_FORMAT(PJ_Datestop,'%c-%e') as PJ_Datestop, CONCAT(PJ_TimeStart,':',PJ_TimeStartMin) as PJ_TimeStart,CONCAT(PJ_TimeStop, ':',PJ_TimeStopMin) as PJ_TimeStop, 
-	CASE  PJ_Type when 'A' then 'Message Delivery' when 'C' then 'Cold Calling' when 'P' then 'Press 1' when 'S' then 'Survey'  end,
+	CASE  PJ_Type when 'A' then 'Message Delivery' when 'C' then 'Cold Calling' when 'P' then 'Press 1' when 'S' then 'Survey'  end as PJ_TypeDesc,
  PJ_Maxline, PJ_Timeleft, CO_Name,CO_Number,
  (select RE_Calls from report where RE_Agent = 9999 and RE_Project = PJ_Number and RE_date = current_date()) as RE_Calls,
  (select RE_Answered from report where RE_Agent = 9999 and RE_Project = PJ_Number and RE_date = current_date()) as RE_Answered
@@ -139,7 +139,7 @@ while ($row = mysql_fetch_array ($result)) {
 	echo "\t<TD class=basiclist>" . $Weekend . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_TimeStart"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_TimeStop"] . "</TD>\n";
-	echo "\t<TD class=basiclist>" . $row["PJ_Type"] . "</TD>\n";
+	echo "\t<TD class=basiclist>" . $row["PJ_TypeDesc"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_Maxline"] . "</TD>\n";
 	echo "\t<TD class=basiclist>" . $row["PJ_Timeleft"] . "</TD>\n";
 	echo "</TR>";
