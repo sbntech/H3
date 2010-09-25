@@ -43,7 +43,7 @@ $ast->check_limits();
 my $o_gap = 0.2; # gap in seconds between originations
 my $o_time = [ gettimeofday() ]; # used to restrict the pace of originations
 
-my $worker0 = '10.9.2.1'; 
+my $worker0 = '10.80.2.1'; 
 my $hostname = `hostname`;
 chomp($hostname);
 my $dialerId = 'COLD';

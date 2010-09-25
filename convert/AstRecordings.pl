@@ -14,7 +14,7 @@ my $running = 1;
 my %recs;
 
 die "FATAL: asterisk monitor directory ($monitorDIR) missing" unless (-d $monitorDIR);
-my $worker0 = '10.9.2.1'; 
+my $worker0 = '10.80.2.1'; 
 my $me = DialerUtils::who_am_I();
 $worker0 = 'localhost' if $me eq 'swift'; 
 

@@ -278,7 +278,7 @@ do_agent_charges();
 $dbh->disconnect;
 
 # email the reports
-my $smtp = Net::SMTP->new("10.9.2.1", Timeout => 60, Debug => 0);
+my $smtp = Net::SMTP->new("10.80.2.1", Timeout => 60, Debug => 0);
 if ($smtp) {
 	$smtp->mail($FROM);
 	$smtp->to($SBNTO);
