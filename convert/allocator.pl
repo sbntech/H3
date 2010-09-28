@@ -1174,9 +1174,5 @@ while (1) {
 
     $dbh->disconnect;
 
-	my $x = time() % 60; # current seconds
-	my $sleeptime = 120 - $x;
-	$sleeptime = 10 if $me eq 'swift';
-	logmsg("sleeping $sleeptime");
-	sleep $sleeptime;
+	sleep 15;
 }
