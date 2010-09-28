@@ -11,14 +11,19 @@ use Logger;
 
 my $log = Logger->new('/var/log/nightly.log');
 
-$log->debug("connecting to the database");
+my $me = DialerUtils::who_am_I();
+$log->debug("connecting to the database ($me)");
 my $sbn2 = DialerUtils::sbn2_connect(); # connect to the database
 
 sub backup {
 	
-	system('mysqldump -uroot -psbntele --force dialer | 7z a -si /backup/$(date +%A).database.backup.7z > /dev/null');
-	system('rsync -av /backup/*.7z 10.80.2.1:/backup/mysql-data');
-	
+	if ($me ne 'swift') {
+		$log->debug("backing up");
+		system('mysqldump -uroot -psbntele --force dialer | 7z a -si /backup/$(date +%A).database.backup.7z > /dev/null');
+		system('rsync -av /backup/*.7z 10.80.2.1:/backup/mysql-data');
+	} else {
+		$log->debug("not backing up on $me");
+	}	
 }
 
 sub load_nonconnects {
@@ -58,7 +63,6 @@ $sbn2->do("optimize table dncnonconn");
 $log->debug("disconnecting from the database");
 $sbn2->disconnect;
 
-$log->debug("backing up");
 backup();
 
 $log->fin;

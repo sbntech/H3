@@ -152,7 +152,7 @@ case $1 in
 		echo "hourly-dbupdates..."
 		./hourly-dbupdates.pl "interval 1 second"
 		echo "nightly jobs..."
-		./nightly-w0.pl
+		./nightly-ap.pl
 		./nightly-db0.pl
 
 		# start the LoadLeads.pl

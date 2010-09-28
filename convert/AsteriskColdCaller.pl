@@ -592,16 +592,16 @@ sub originate {
 		$log->debug("CALLER_ID: Project $pjnum has no caller id, chose system: $callerid");
 	} else {
 		# ensure the project callerid is interstate
-		if ($ast->areacode2state(substr($callerid,0,3)) eq
-				$ast->areacode2state(substr($num,0,3))) {
-			$log->debug("CALLER_ID: Project $pjnum has caller id $callerid in the same"
-				. " state (" . $ast->areacode2state(substr($callerid,0,3)) .
-				") as the prospect number $num");
-			$callerid = $ast->select_system_callerid($num);
-		} else {
+### removed 28Sep10 ###		if ($ast->areacode2state(substr($callerid,0,3)) eq
+### removed 28Sep10 ###				$ast->areacode2state(substr($num,0,3))) {
+### removed 28Sep10 ###			$log->debug("CALLER_ID: Project $pjnum has caller id $callerid in the same"
+### removed 28Sep10 ###				. " state (" . $ast->areacode2state(substr($callerid,0,3)) .
+### removed 28Sep10 ###				") as the prospect number $num");
+### removed 28Sep10 ###			$callerid = $ast->select_system_callerid($num);
+### removed 28Sep10 ###		} else {
 			$log->debug("CALLER_ID: using Project $pjnum caller id $callerid " .
 				"for prospect number $num");
-		}
+### removed 28Sep10 ###		}
 	}
 
 	$q->{'ListOriginations'}{$num} = 1;

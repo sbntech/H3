@@ -301,16 +301,16 @@ sub originate_one_call {
 		$callerid = $ast->select_system_callerid($number);
 	} else {
 		# ensure the project callerid is interstate
-		if ($ast->areacode2state(substr($callerid,0,3)) eq
-				$ast->areacode2state(substr($number,0,3))) {
-			$log->debug("CALLER_ID: Project $pjnum has caller id $callerid in the same"
-				. " state (" . $ast->areacode2state(substr($callerid,0,3)) .
-				") as the prospect number $number");
-			$callerid = $ast->select_system_callerid($number);
-		} else {
+### removed 28Sep10 ###		if ($ast->areacode2state(substr($callerid,0,3)) eq
+### removed 28Sep10 ###				$ast->areacode2state(substr($number,0,3))) {
+### removed 28Sep10 ###			$log->debug("CALLER_ID: Project $pjnum has caller id $callerid in the same"
+### removed 28Sep10 ###				. " state (" . $ast->areacode2state(substr($callerid,0,3)) .
+### removed 28Sep10 ###				") as the prospect number $number");
+### removed 28Sep10 ###			$callerid = $ast->select_system_callerid($number);
+### removed 28Sep10 ###		} else {
 			$log->debug("CALLER_ID: using Project $pjnum caller id $callerid " .
 				"for prospect number $number");
-		}
+### removed 28Sep10 ###		}
 	}
 
 	my $pj = $projects{$pjnum};
