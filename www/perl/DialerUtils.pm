@@ -576,7 +576,7 @@ sub move_from_db {
 		system("mv '$source' '$target'");
 	} else {
 		#system("scp -q -P 8946 root\@10.80.2.32:$source '$target'");
-		system("echo -e 'get $source $target\nrm $source' | sftp -oPort=8946 'root\@$host' > /dev/null 2> /dev/null");
+		system("echo -e 'get $source $target\nrm $source' | sftp -oPort=8946 'root\@10.80.2.32' > /dev/null 2> /dev/null");
 	}
 }
 
