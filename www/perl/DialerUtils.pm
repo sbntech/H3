@@ -566,7 +566,7 @@ sub move_leads {
 	}
 }
 
-sub move_from_db0 {
+sub move_from_db {
 
 	my ($source, $target) = @_;
 
@@ -575,8 +575,8 @@ sub move_from_db0 {
 	if (($me eq 'swift') || ($me eq 'b1-db')) {
 		system("mv '$source' '$target'");
 	} else {
-		system("scp -q -P 8946 root\@10.80.2.32:$source '$target'");
-		# the in-out dir is purged in the nightly script
+		#system("scp -q -P 8946 root\@10.80.2.32:$source '$target'");
+		system("echo -e 'get $source $target\nrm $source' | sftp -oPort=8946 'root\@$host' > /dev/null 2> /dev/null");
 	}
 }
 
@@ -598,23 +598,6 @@ sub db_host {
 	return '10.80.2.32'; # default to prod
 }
 	
-sub db2file {
-	my $dname = shift;
-	my $target = shift;
-
-	my $host = db_host();
-	my $me = who_am_I();
-	system("scp -q -P 8946 'mysql\@$host:in-out/$dname' '$target'");
-}
-
-sub db_rmfile {
-	my $dname = shift;
-
-	my $host = db_host();
-	my $me = who_am_I();
-	system("echo 'rm /var/lib/mysql/in-out/$dname' | sftp -oPort=8946 'mysql\@$host' > /dev/null 2> /dev/null");
-}
-
 sub db_connect {
 	my $host = shift;
 

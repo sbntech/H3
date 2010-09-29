@@ -48,7 +48,6 @@ echo "create database dialer; create database sbn2; GRANT ALL PRIVILEGES ON *.* 
 echo "source /home/grant/H3/convert/database.sql" | mysql -uroot -psbntele dialer
 echo "source /home/grant/H3/convert/sbn2.sql" | mysql -uroot -psbntele sbn2
 
-install --owner mysql --group mysql --mode 775 -d /var/lib/mysql/in-out
 install --owner mysql --group mysql --mode 755 -d  /var/lib/mysql/.ssh
 usermod --shell /bin/bash mysql
 load data into sbn2 tables: dncmilitant custdnc dncnonconn phones

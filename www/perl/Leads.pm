@@ -169,6 +169,7 @@ sub download {
 
 	# write PN_PhoneNumber, PN_Popdata
 	my $target = "/tmp/$fn.csvdata";
+	my $dumpf = "/var/lib/mysql/dialer/DOWNLOAD-$fn.csvdata";
 	$dbh->do("select PN_PhoneNumber,
 		IF(PN_Notes is null,'',PN_Notes),
 		IF(PN_Disposition is null,'',PN_Disposition),
@@ -179,10 +180,9 @@ sub download {
 		IF(PN_SurveyResults is null,'',PN_SurveyResults) $pdata
 		from `projectnumbers_" .
 		$data->{'PJ_Number'} . "` where PN_FileNumber = '" .
-		$data->{'filenumber'} . "' into outfile 'dialer/DOWNLOAD-$fn.csvdata'
+		$data->{'filenumber'} . "' into outfile '$dumpf'
 		fields escaped by '' terminated by ',' optionally enclosed by '' lines terminated by '\\n'");
-	DialerUtils::db2file("$fn.csvdata", $target);
-	DialerUtils::db_rmfile("$fn.csvdata");
+	DialerUtils::move_from_db($dumpf, $target);
 
 	system("cat $tmp $target > /tmp/$fn.csv");
 	my $zip = "/tmp/$fn.zip";

@@ -52,8 +52,6 @@ sub load_nonconnects {
 load_nonconnects('BadNumber.txt', 21);
 load_nonconnects('NonConnectedNumber.txt', 7);
 
-system('rm -f /var/lib/mysql/in-out/*');
-
 $log->info("deleting expired dncnonconn rows");
 $sbn2->do("delete quick from dncnonconn where DN_Expires < now() or exists (select 'x' from phones where PH_Number = DN_PhoneNumber)");
 

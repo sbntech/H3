@@ -109,7 +109,7 @@ sub handler {
 		} elsif ($data->{'m'} eq 'download') {
 			# download a list
 			my $cust = $data->{'CO_Number'};
-			my $outfile = "/var/lib/mysql/in-out/$cust-DNC.txt";
+			my $outfile = "/var/lib/mysql/dialer/$cust-DNC.txt";
 			my $target = "/tmp/$cust-DNC";
 			my $sbn2 = DialerUtils::sbn2_connect();
 			my $cdnc = $sbn2->selectrow_hashref("select CD_PhoneNumber from custdnc 
@@ -117,7 +117,7 @@ sub handler {
 				and (CD_LastContactCust = $cust or CD_AddedCust = $cust)
 				into outfile '$outfile'");
 			$sbn2->disconnect();
-			DialerUtils::move_from_db0($outfile, "$target.txt");
+			DialerUtils::move_from_db($outfile, "$target.txt");
 			system("zip -q -j $target.zip $target.txt");
 			unlink("$target.txt");
 
