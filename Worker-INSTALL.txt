@@ -65,7 +65,8 @@ aptitude install apache2 libapache2-mod-apreq2 libapache2-mod-perl2 libapache2-m
 
 
 # setup the directories
-mkdir -p /dialer/projects
+mkdir -p /dialer/projects/voicecust
+chown www-data:www-data /dialer/projects/voicecust
 ln -s /home/grant/H3/{www,convert} /dialer/
 ln -s /home/grant/H3/website /dialer/
 ln -s /var/www/{munin,downloads,cdr-summary} /dialer/website

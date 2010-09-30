@@ -46,15 +46,18 @@ sub handler {
 		# figure out which file is being referred to
 		my $dir = '/tmp';
 		my $fn = 'unknown.wav';
+		my $lev = 'Proj';
 		my $mvdir;
 		if (defined($req->param->{'ProjFileName'})) {
 			$fn = $req->param->{'ProjFileName'};
 			$dir = $vdir;
 			$mvdir = $custvdir;
+			$lev = 'Proj';
 		} elsif (defined($req->param->{'CustFileName'})) {
 			$fn = $req->param->{'CustFileName'};
 			$dir = $custvdir;
 			$mvdir = $vdir;
+			$lev = 'Cust';
 		}
 		$fn =~ /(.*)\.(wav|vox|mp3)$/;
 		my ($base, $ext) = ($1, $2);
@@ -100,7 +103,7 @@ sub handler {
 
 		} elsif ($data->{'Method'} eq 'delete') {
 			if ($dir ne '/tmp') {
-				if ($fn =~ /^(live|machine)\.vox$/) {
+				if (($fn =~ /^(live|machine)\.vox$/) && ($lev eq 'Proj')) {
 					my $a = $1;
 					system("mv '$dir/$fn' '$dir/$a-$d-$t.vox'");
 				} else {
