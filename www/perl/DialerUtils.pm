@@ -579,7 +579,7 @@ sub move_from_db {
 	} else {
 		#system("scp -q -P 8946 root\@10.80.2.32:$source '$target'");
 		#system("echo -e 'get $source $target\nrm $source' | sftp -oPort=8946 'root\@10.80.2.32' > /dev/null 2> /dev/null");
-		my $output = `echo -e 'get $source $target\\nrm $source' | sftp -oPort=8946 'root\@10.80.2.32' 2> /dev/null`;
+		my $output = `/bin/echo -e 'get $source $target\\nrm $source' | sftp -oPort=8946 'root\@10.80.2.32' 2> /dev/null`;
 
 		print STDERR "output=$output\n";
 	}
