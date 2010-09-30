@@ -112,7 +112,7 @@ sub handler {
 			my $outfile = "/var/lib/mysql/dialer/$cust-DNC.txt";
 			my $target = "/tmp/$cust-DNC";
 			my $sbn2 = DialerUtils::sbn2_connect();
-			my $cdnc = $sbn2->selectrow_hashref("select CD_PhoneNumber from custdnc 
+			my $cdnc = $sbn2->do("select CD_PhoneNumber from custdnc 
 				where CD_LastContactDT > date_sub(current_date(), interval 90 day)
 				and (CD_LastContactCust = $cust or CD_AddedCust = $cust)
 				into outfile '$outfile'");
