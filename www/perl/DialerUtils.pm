@@ -572,14 +572,14 @@ sub move_from_db {
 
 	my $me = who_am_I();
 
-	print STDERR "me=$me source=$souce target=$target\n";
+	print STDERR "me=$me source=$source target=$target\n";
 
 	if (($me eq 'swift') || ($me eq 'b1-db')) {
 		system("mv '$source' '$target'");
 	} else {
 		#system("scp -q -P 8946 root\@10.80.2.32:$source '$target'");
 		#system("echo -e 'get $source $target\nrm $source' | sftp -oPort=8946 'root\@10.80.2.32' > /dev/null 2> /dev/null");
-		my $output = `echo -e 'get $source $target\nrm $source' | sftp -oPort=8946 'root\@10.80.2.32' 2> /dev/null`;
+		my $output = `echo -e 'get $source $target\\nrm $source' | sftp -oPort=8946 'root\@10.80.2.32' 2> /dev/null`;
 
 		print STDERR "output=$output\n";
 	}
