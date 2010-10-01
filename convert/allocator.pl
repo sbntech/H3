@@ -486,7 +486,7 @@ sub check_reseller_maxlines {
 # .............................................................................
 sub adjust_for_overall_capacity {
 
-	my $capacity_factor = 1; # never exceed 100% of capacity
+	my $capacity_factor = 0.99; # never exceed 99% of capacity
 
 	# determine initial demand
 	$tot_demand = 0;
