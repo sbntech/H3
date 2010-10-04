@@ -2,6 +2,10 @@
 	/* used to bill customers */
 	
 	require("/dialer/www/settings.inc.php");
+	$DateReportfrom = $_POST['DateReportfrom'];
+	$DateReporttill = $_POST['DateReporttill'];
+	$ReportCust 	= $_POST['ReportCust'];
+	$ReportReseller = $_POST['ReportReseller'];
 
 	$clause = "";
 	if ($ReportCust > 0) {

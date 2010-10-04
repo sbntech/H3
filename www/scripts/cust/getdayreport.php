@@ -4,6 +4,9 @@
 	*/
 	
 	require("/dialer/www/settings.inc.php");
+	$DateReportfrom = $_POST['DateReportfrom'];
+	$DateReporttill = $_POST['DateReporttill'];
+
 
 	$heading = "Date,Project,Project Name,Agent,Minutes,Standby Minutes,Dials,ConnectedAgent,Answered,Machine,Fax,No Answer,Bad Number,Cost\n";
 	$SQLStmt = "select re_date,RE_Project as Project,PJ_Description as 'Project name',RE_Agent as Agent, RE_Tot_Sec/60 as Minutes,RE_AS_Seconds / 60,RE_Calls as dials, RE_Connectedagent, RE_Answered answering ,RE_Ansrmachine as mach,RE_Faxmachine as fax,RE_Noanswer as 'NO answ',RE_Badnumber as 'bad num', RE_Tot_cost as cost 
