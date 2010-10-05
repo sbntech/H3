@@ -57,10 +57,7 @@ for my $tblrow (@$nfref) {
 	# numbers lost that were sent for redial are marked for deletion 
 	# numbers lost (NOT for redialing) are re-readied
 
-	my $cnt = $dbh->do("update $tbl
-		set PN_Sent_Time = null, PN_Status = 'R'
-		where PN_Sent_Time < date_sub(now(), $interval) 
-			and PN_Status = 'C'");
+	my $cnt = $dbh->do("update $tbl set PN_Sent_Time = null, PN_Status = 'R' where PN_Sent_Time < date_sub(now(), $interval) and PN_Status != 'X'");
 
 	flog("$tbl updated $cnt rows");
 }

@@ -132,7 +132,7 @@ sub loadcache {
 
 
 				my $updated = $dbh->do("update $pnTableName, workcache
-					set PN_Sent_Time = now(), PN_Status = 'C'
+					set PN_Sent_Time = now(), PN_Status = 'S'
 					where PN_PhoneNumber = Num");
 				if ($updated == 0) {
 					logmsg("failed to update $pnTableName: " . $dbh->errstr);

@@ -63,7 +63,7 @@ CREATE TABLE dialer.projectnumbers (
 	PN_PhoneNumber char(10)  NOT NULL,
 	PN_FileNumber integer UNSIGNED NOT NULL,
 	PN_Sent_Time DATETIME,
-	PN_Status char(1)  NOT NULL DEFAULT 'R' COMMENT 'R - ready, C - Cached',
+	PN_Status char(1)  NOT NULL DEFAULT 'R',
 	PN_Seq INTEGER unsigned  NOT NULL DEFAULT 0,
 	PN_Timezone INTEGER unsigned NOT NULL DEFAULT 0,
 	PN_BestCarriers char(9) NOT NULL,
