@@ -1173,6 +1173,8 @@ while (1) {
 	build_stats_page();
 
     $dbh->disconnect;
-
-	sleep 15;
+	my $x = time() % 60; # current seconds
+	my $sleeptime = 120 - $x;
+	logmsg("sleeping $sleeptime");
+	sleep $sleeptime;
 }
