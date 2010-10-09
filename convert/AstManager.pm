@@ -114,11 +114,9 @@ sub prep_prospect_cdr {
 		$disposition = $chan->{'DispositionCode'} if defined($chan->{'DispositionCode'});
 		$duration = $chan->{'BillableDuration'} if defined($chan->{'BillableDuration'});
 		$CDRtime = $chan->{'ResultTimestamp'} if defined($chan->{'ResultTimestamp'});
+		$survey = $chan->{'SurveyResult'} if defined($chan->{'SurveyResult'});
 
 		if (defined($chan->{'Variables'})) {
-			if (defined($chan->{'Variables'}{'SurveyResult'})) {
-				$survey = $chan->{'Variables'}{'SurveyResult'}{'Value'};
-			}
 
 			if (defined($chan->{'Variables'}{'CustomerDNCRequest'})) {
 				$DNCflag = 'Y';
