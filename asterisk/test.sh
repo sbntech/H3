@@ -21,4 +21,4 @@ killall tcpdump
 DATESTR=`date +%Y%m%d-%Hh%Mm%Ss`
 DATESTR="latest"
 rm /home/grant/run-$DATESTR.zip
-zip -j /home/grant/run-$DATESTR.zip /var/log/asterisk/verbose /var/log/asterisk/debug /root/tcp-raw.dump /var/log/astdialer.* /var/spool/asterisk/monitor/*-in.ulaw 
+zip -j /home/grant/run-$DATESTR.zip /var/log/asterisk/verbose /var/log/asterisk/debug /root/tcp-raw.dump /var/log/astdialer.* /var/spool/asterisk/monitor/DETECT-*-in.ulaw 
