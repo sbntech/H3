@@ -100,7 +100,7 @@ function showprogress() {
 [% IF ErrStr %]
 <p class="error">[% ErrStr %]</p>
 [% END %]
-[% IF ContextCustomer.CO_ResNumber == 77 || ContextCustomer.CO_ResNumber == 123 %]
+[% IF ContextCustomer.CO_ResNumber == 79 %]
 <br/>
 <button onclick="window.open('http://www.bullseyebroadcast.com/load_query_to_dialer.php?CO_Number=[% CO_Number %]&PJ_Number=[% PJ_Number %]')">Order Data Here</button>
 <br/>

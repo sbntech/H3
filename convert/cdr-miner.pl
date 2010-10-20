@@ -20,7 +20,7 @@ my $res = $dbh->selectall_arrayref("select
 	PJ_Number, CO_Number, CO_ResNumber, PJ_Description, CO_Name 
 	from project,customer 
 	where PJ_CustNumber = CO_Number and PJ_Type = 'C'
-		and (CO_ResNumber = 77 or CO_ResNumber = 123)",
+		and (CO_ResNumber = 79)",
 	{ Slice => {}});
 
 PROJECT: for my $row (@$res) {

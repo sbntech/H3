@@ -8,7 +8,7 @@
 	Host = Host.replace(/\/.*/, '');
 
 	if (Host != 'localhost') {
-		if (([% RS_Number %] == 77) || ([% RS_Number %] == 123)) {
+		if ([% RS_Number %] == 79) {
 			Host = 'secure.bullseyebroadcast.com:4431';
 		} else {
 			Host = 'secure.quickdials.com';

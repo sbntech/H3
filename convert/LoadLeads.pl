@@ -92,7 +92,7 @@ sub prep_number {
 	}
 
 	# non-connect scrubbing
-	if ((!defined($scrubCode)) && ($NFrow->{'NF_MainScrub'} ne "'N'") && ($data->{'ContextCustomer'}->{'CO_ResNumber'} != 77)) {
+	if ((!defined($scrubCode)) && ($NFrow->{'NF_MainScrub'} ne "'N'")) {
 		$res = $sbn2->selectrow_hashref("select DN_PhoneNumber from dncnonconn where DN_PhoneNumber = '$number'");
 		if (defined($res->{'DN_PhoneNumber'})) {
 			$scrubCode = 'XN';

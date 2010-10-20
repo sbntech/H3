@@ -49,7 +49,7 @@ echo "source /home/grant/H3/convert/database.sql" | mysql -uroot -psbntele diale
 echo "source /home/grant/H3/convert/sbn2.sql" | mysql -uroot -psbntele sbn2
 
 load data into sbn2 tables: dncmilitant custdnc dncnonconn phones
-mkdir /backup # needed by nightly-db0.pl
+mkdir /backup # needed by nightly-db0.pl (but not on swift)
 
 # for dev ONLY
 mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -psbntele mysql
@@ -61,7 +61,7 @@ echo -e "[mysqld]\ndefault-time-zone='America/New_York'" > /etc/mysql/conf.d/Eas
 == apache2 host for UI  (w0)
 ===================================================================================================
 # install software
-aptitude install apache2 libapache2-mod-apreq2 libapache2-mod-perl2 libapache2-mod-php5 libapache2-request-perl libasterisk-agi-perl sox libsox-fmt-all libspreadsheet-parseexcel-perl mysql-client git-core p7zip-full php5-mysql libjson-perl libjson-xs-perl libtext-csv-xs-perl libcrypt-cbc-perl libcrypt-blowfish-perl libdatetime-perl libnet-server-perl libtemplate-perl libcrypt-ssleay-perl samba
+aptitude install apache2 apache2-mpm-prefork libapache2-mod-apreq2 libapache2-mod-perl2 libapache2-mod-php5 libapache2-request-perl libasterisk-agi-perl sox libsox-fmt-all libspreadsheet-parseexcel-perl mysql-client git-core p7zip-full php5-mysql libjson-perl libjson-xs-perl libtext-csv-xs-perl libcrypt-cbc-perl libcrypt-blowfish-perl libdatetime-perl libnet-server-perl libtemplate-perl libcrypt-ssleay-perl samba
 
 
 # setup the directories
@@ -91,11 +91,11 @@ grep -F SSLPassPhrase /etc/apache2/mods-enabled/ssl.conf
 # php ini
 sed -ire 's/log_errors = Off/log_errors = On/' /etc/php5/apache2/php.ini
 sed -ire 's@;session.save_path = "/tmp"@session.save_path = "/var/lib/php5"@' /etc/php5/apache2/php.ini
+grep '^\(log_errors\|session.save_path\) ' /etc/php5/apache2/php.ini
 
 # flot - jquery plotting
-wget -O ~/flot.zip http://flot.googlecode.com/files/flot-0.6.zip
-cd /dialer/www
-unzip ~/flot.zip
+wget -O /tmp/flot.zip http://flot.googlecode.com/files/flot-0.6.zip
+unzip /tmp/flot.zip -d /dialer/www
 
 # crontab setup ... 
 00 04 * * * root /home/grant/H3/convert/backup.pl
@@ -110,7 +110,7 @@ sed -ire 's/startup=0/startup=1/' /etc/default/monit
 /etc/init.d/monit start
 
 # samba setup
-cd /etc/samba ; rm smb.conf ; ln -s /dialer/convert/smb.conf ; /etc/init.d/samba stop ; rm -rf /var/log/samba/* ; /etc/init.d/samba start
+cd /etc/samba ; rm smb.conf ; ln -s /dialer/convert/smb.conf ; service smbd stop ; rm -rf /var/log/samba/* ; service smbd start
 
 # ssh setup
 # ... ssh-keygen for root@ap and www-data@ap and root@db0

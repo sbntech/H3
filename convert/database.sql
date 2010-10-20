@@ -324,6 +324,6 @@ CREATE TABLE users (
 
 INSERT INTO `reseller` VALUES (1,'restart','SBN','123 Hq','Hq','HongKong','90000','US','7027020000','7027020000','hq@main.gov',10000,0.01,0.01,'A',6,6,1,'0',100000,'me',NULL,NULL,'Y','N',0.0,0.0);
 INSERT INTO `reseller` VALUES (2,'ohohoh','CanadaTEST','123 Hq','Hq','HongKong','90000','US','7027020000','7027020000','hq@main.gov',10000,0.01,0.005,'A',6,6,1,'0',100000,'me',NULL,NULL,'Y','N',0.0,0.0);
-INSERT INTO `reseller` VALUES (77,'bullseye','Ibroadcast','.','.','.','.','.','5166448872','5168972772','carldagostino@optonline.net',2000.00,0.016,0.0,'A',6,6,1,'0',6000,'carldagostino@optonline.net','',0,'Y','M',0,50);
+INSERT INTO `reseller` VALUES (79,'Winter1','Bullseye','200 Garden City Plaza','x','Garden City ','11530','NY','866-916-7695','516-706-3533','www.BullseyeBroadcast.com',1105.3264,0.016,0,'A',6,6,5,'0',1000,'Carl DAgostino','',0,'Y','M',0,50);
 INSERT INTO `customer` VALUES (1,'123','test','123 Main','yes','NewYork','87871','NY','8160009999','8908900000','yes@maybe.no',100,0.008,0.008,'A',6,6,1,'0',25,'Y','N','me','some foo','Y','T',100.0,4,1,'7027027000\r\n');
-INSERT INTO `customer` VALUES (7,'123','carlcust','123 Main','yes','NewYork','87871','NY','8160009999','8908900000','yes@maybe.no',100,0.008,0.0,'A',6,6,1,'0',25,'Y','N','me','some foo','Y','T',100.0,4,77,'7027027000\r\n');
+INSERT INTO `customer` VALUES (7,'123','carlcust','123 Main','yes','NewYork','87871','NY','8160009999','8908900000','yes@maybe.no',100,0.008,0.0,'A',6,6,1,'0',25,'Y','N','me','some foo','Y','T',100.0,4,79,'7027027000\r\n');

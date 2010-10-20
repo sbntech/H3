@@ -29,10 +29,8 @@ echo("// CO_ResNumber=" . $row['CO_ResNumber']);
 <input type="button" onclick="window.open('https://localhost/pg/Payment?CO_Number=<? echo $CO_Number;?>&HTTP_Host=localhost&SessionId=' + SessCookie)" value="Payment [TEST]"></input><?
 	} elseif ($row['CO_ResNumber'] == 1) { ?>
 <input type="button" onclick="window.open('https://secure.quickdials.com/pg/Payment?CO_Number=<? echo $CO_Number;?>&HTTP_Host=secure.quickdials.com&SessionId=' + SessCookie)" value="Payment"></input><?
-	} elseif (($row['CO_ResNumber'] == 77) || ($row['CO_ResNumber'] == 123)) { ?>
-<input type="button" onclick="window.open('https://secure.bullseyebroadcast.com:4431/pg/Payment?CO_Number=<? echo $CO_Number;?>&HTTP_Host=secure.bullseyebroadcast.com:4431&SessionId=' + SessCookie)" value="Payment"></input
-><input type="button" onclick="window.open('http://www.bullseyebroadcast.com/Video%20Training/PDS%20Training2.html')" value="Predictive Dialing Training"></input
-><input type="button" onclick="window.open('http://www.bullseyebroadcast.com/Voice%20Broadcasting%20Training/VB%20Training.html')" value="Voice Broadcasting Training"></input><?
+	} elseif ($row['CO_ResNumber'] == 79) { ?>
+<input type="button" onclick="window.open('https://secure.bullseyebroadcast.com:4431/pg/Payment?CO_Number=<? echo $CO_Number;?>&HTTP_Host=secure.bullseyebroadcast.com:4431&SessionId=' + SessCookie)" value="Payment"></input ><?
 	}
 if ($_SESSION["L_Level"] >= 4) { ?>
 <input type="button" onclick="window.location = '/scripts/cust/table.php?CO_Number=<? echo $CO_Number;?>&table=users'" value="Users"></input

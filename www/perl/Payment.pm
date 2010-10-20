@@ -104,7 +104,7 @@ sub handler {
 			if ($data->{'Z_CO_Permitted'} ne 'Yes') {
 				$data->{'ErrStr'} .= " Not authorized.";
 			} else {
-				if (($data->{'ContextCustomer'}{'CO_ResNumber'} == 77) || ($data->{'ContextCustomer'}{'CO_ResNumber'} == 123)) {
+				if ($data->{'ContextCustomer'}{'CO_ResNumber'} == 79) {
 					$data->{'PayType'} = "CARL";
 				} else {
 					$data->{'PayType'} = "CUST";

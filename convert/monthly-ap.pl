@@ -47,7 +47,7 @@ sub report {
 	$log->info($msg);
 	$emailSBN .= "$msg\n";
 
-	if ($reseller == 77) {
+	if ($reseller == 79) {
 		$emailCARL .= "$msg\n";
 	}
 }
@@ -75,7 +75,7 @@ sub log_change {
 
 sub do_agent_charges {
 
-	report(77, "\n\nAgent Charges:");
+	report(79, "\n\nAgent Charges:");
 
 	# find customers
 	# note: the "CO_Credit > 0" is redundant because of the above fix
@@ -182,7 +182,7 @@ sub do_agent_charges {
 
 sub do_periodic_payments {
 
-	report(77, "\nPeriodic Payments:");
+	report(79, "\nPeriodic Payments:");
 
 	my $s = DialerUtils::tellSecret();
 	die "Blowfish not swimming" unless $s;
@@ -215,7 +215,7 @@ sub do_periodic_payments {
 		}
 
 		my $merchant = 'SBN';
-		$merchant = 'CARL' if ($row->{'CO_ResNumber'} == 77);
+		$merchant = 'CARL' if ($row->{'CO_ResNumber'} == 79);
 
 		my $API_Response = $cc->sale($row->{'PP_ChargeAmount'}, $merchant);
 

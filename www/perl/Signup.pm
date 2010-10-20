@@ -185,7 +185,7 @@ sub handler {
 					'CO_Billingtype' => 'T',
 					'CO_AuthorizedAgents' => 1,
 					'CO_AgentCharge' => 199.99,
-					'CO_ResNumber' => 77},
+					'CO_ResNumber' => 79},
 				'Credit' => 5,
 				'Response' => 'API',
 				'EmailSubject' => 'Bullseye Broadcasting FREE TRIAL',
