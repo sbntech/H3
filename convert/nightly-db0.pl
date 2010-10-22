@@ -19,6 +19,7 @@ sub backup {
 	
 	if ($me ne 'swift') {
 		$log->debug("backing up");
+		system('rm /backup/$(date +%A).database.backup.7z > /dev/null');
 		system('mysqldump -uroot -psbntele --force dialer | 7z a -si /backup/$(date +%A).database.backup.7z > /dev/null');
 		system('rsync -av /backup/*.7z 10.80.2.1:/backup/mysql-data');
 	} else {
