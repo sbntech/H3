@@ -91,6 +91,9 @@ while ($row = mysql_fetch_array ($result)) {
 <br/><a href="http://67.209.46.104/">b1-db (mysql, loadleads) BMC (IPMI)</a>
 <br/><a href="http://67.209.46.105/">w129 BMC (IPMI)</a>
 <br/><a href="http://67.209.46.106/">w130 BMC (IPMI)</a>
+<br/><a href="http://67.209.46.110/">w801 BMC (IPMI)</a>
+<br/><a href="http://67.209.46.111/">w802 BMC (IPMI)</a>
+<br/><a href="http://67.209.46.112/">w804 BMC (IPMI)</a>
 <br/><br/>
 <Form Name=Form Action="../cust/logout.php" METHOD=POST>
 <input type=submit name=button2 value="Logout"></input>

@@ -1,7 +1,7 @@
 $TTL 10800
 
 @  IN        SOA        dial-ns1.us.to. tech093.hotmail.com. (
-                        2010090301        ; Serial
+                        2010010211        ; Serial
                         28800             ; Refresh
                         3600              ; Retry
                         604800            ; Expire
@@ -25,4 +25,10 @@ w129            IN      A       67.209.46.101
 w129-bmc        IN      A       67.209.46.105
 w130            IN      A       67.209.46.102
 w130-bmc        IN      A       67.209.46.106
+w801	        IN      A       67.209.46.107
+w802	        IN      A       67.209.46.108
+w804	        IN      A       67.209.46.109
+w801-bmc        IN      A       67.209.46.110
+w802-bmc        IN      A       67.209.46.111
+w804-bmc        IN      A       67.209.46.112
 

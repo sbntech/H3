@@ -3,7 +3,7 @@
 =pod
 
 A ---> GCNS
-B ---> Selway (defunct)
+B ---> Selway
 
 =cut
 
@@ -110,7 +110,6 @@ sub lookup_number {
 
 	if (
 			($self->{'Exclusions'}{$npanxx}) ||
-			($nxx eq '555') ||
 			($nxx eq '911') ||
 			($nxx eq '411') 
 		) {
@@ -130,15 +129,55 @@ sub lookup_number {
 		#        Hawaii                             Alaska                       Exotic                         Canada
 	} else { # U.S.A. 
 		# determine best and alternate carriers
-		my $BestCarriers = '';
-		my $AltCarriers = '';
+		my %Bests;
+		my %Alts;
+		my $cheapest = 1000.0;
+		my $cheapestCarr;
 
 		# A. GCNS
 		if (defined($self->{'GCNS'}{$npanxx})) {
 			$rh->{'Rates'}{'A'} = $self->{'GCNS'}{$npanxx};
 			$rh->{'Routable'} = 1;
-			$BestCarriers = 'A';
+
+			if ($rh->{'Rates'}{'A'} < $cheapest) {
+				$cheapest = $rh->{'Rates'}{'A'};
+				$cheapestCarr = 'A';
+			}
+
+			if ($rh->{'Rates'}{'A'} < 0.012) {
+				$Bests{'A'} = 1;
+			} else {
+				$Alts{'A'} = 1;
+			}
 		}
+
+		# B. SWAY
+		if (defined($self->{'SWAY'}{$npanxx})) {
+			$rh->{'Rates'}{'B'} = $self->{'SWAY'}{$npanxx};
+			$rh->{'Routable'} = 1;
+
+			if ($rh->{'Rates'}{'B'} < $cheapest) {
+				$cheapest = $rh->{'Rates'}{'B'};
+				$cheapestCarr = 'B';
+			}
+
+			if ($rh->{'Rates'}{'B'} < 0.010) {
+				$Bests{'B'} = 1;
+			} else {
+				$Alts{'B'} = 1;
+			}
+		}
+
+		if (defined($cheapestCarr)) {
+			delete $Alts{$cheapestCarr} if defined $Alts{$cheapestCarr};
+			$Bests{$cheapestCarr} = 1;
+		}
+
+
+		my $BestCarriers = '';
+		my $AltCarriers = '';
+		map { $BestCarriers .= $_; } sort keys %Bests;
+		map { $AltCarriers .= $_; } sort keys %Alts;
 
 		if ($rh->{'Routable'} == 1) {
 			$rh->{'BestCarriers'} = $BestCarriers;
@@ -250,6 +289,7 @@ sub initialize {
 	$self->load_areacodes;
 	$self->load_telcodata;
 	$self->load_rate_file("$DATADIR/GCNS.csv", 'GCNS', 'A');
+	$self->load_rate_file("$DATADIR/Selway.csv", 'SWAY', 'B');
 
 	$self->{'Exclusions'}{'928601'} = ' pagers only';
 	$self->{'Exclusions'}{'928801'} = ' pagers only';
