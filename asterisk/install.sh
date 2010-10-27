@@ -54,9 +54,13 @@ echo "Stock asterisk installed, updating config ..."
 rm -rf /etc/asterisk
 if [ "$HOST" = "$CARRIERHOST" ]
 then
-	echo " ... carrier and message recording config"
+	echo " ... carrier config"
 	ln -s /home/grant/H3/asterisk/carrier-config /etc/asterisk
 	/home/grant/H3/asterisk/gen-guests.pl
+elif [ "$HOST" = "w802" ]
+then
+	echo " ... message recording and removal gateway config"
+	ln -s /home/grant/H3/asterisk/w802-config /etc/asterisk
 else
 	echo " ... dialer (or coldcaller) config"
 	ln -s /home/grant/H3/asterisk/dialer-config /etc/asterisk
