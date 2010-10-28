@@ -29,7 +29,7 @@ $_SESSION["L_LoginPage"] = "/start.html?message=";
 $username = strtolower($_REQUEST["username"]);
 $password = $_REQUEST["password"];
 
-if (($username == "finan") and ($password == "qqq-admin-10")) {
+if (($username == "finan") and (md5($password) == "0f63a40d385afbe0935fc4bdeb814cee")) {
 	# financial admin logged in
 	$_SESSION["L_Level"] = 6;
 	$_SESSION["L_Name"] = 'Admin';
