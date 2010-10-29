@@ -1,12 +1,9 @@
-bullseyebroadcast:
-
-
 CURRENT:
+monthly-ap.pl (monthly processing for seat charges etc)
 monit on db
 load data into tables: dncmilitant custdnc dncnonconn phones?
 SSL setup? certs, apache...
 jannekesmit.com
-monthly-ap.pl (monthly processing for seat charges etc)
 payment gateway
 	* https://ipp.developer.intuit.com
 	* idn_dev_support@intuit.com

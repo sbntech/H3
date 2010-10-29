@@ -27,7 +27,7 @@ my $CARLTO  = "support\@bullseyebroadcast.com";
 my $SUBJECT = "Monthly Processing Report";
 
 if ($TESTING) {
-	$SBNTO = "\"SBN Tech\" <tech\@quickdials.com>";
+	$SBNTO = "\"Tech\" <tech\@quickdials.com>";
 	$CARLTO = "\"CARL-TEST\" <grant\@quickdials.com>";
 	$SUBJECT = "[TESTMODE] $SUBJECT";
 }
