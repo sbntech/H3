@@ -57,7 +57,7 @@ function do_refresh() {
 </div>
 <div class='mainPage'>
 [% IF X_Recording_PIN %]
-<p>Call <span style="font-weight: bold">(866) 714-8093</span> to record the message.</p>
+<p>Call <span style="font-weight: bold">(310) 362-7322</span> to record the message.</p>
 <p>Remember the following DIAL-IN CODE, needed to record: <span style="font-weight: bold; font-size: 200%;">[% X_Recording_PIN %]</span></p>
 [% IF CO_ResNumber == 3 %]
 <br/>
