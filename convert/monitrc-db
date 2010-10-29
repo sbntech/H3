@@ -21,3 +21,9 @@ check process LoadLeads
     pidfile /var/run/LoadLeads.pid
     start = "/home/grant/H3/convert/LoadLeads.pl"
     stop = "/usr/bin/killall LoadLeads.pl"
+
+check process asterisk
+    pidfile /var/run/asterisk.pid
+    start = "/usr/sbin/asterisk"
+    stop = "/usr/bin/killall asterisk"
+

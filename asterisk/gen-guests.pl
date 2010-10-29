@@ -59,5 +59,5 @@ EndAgent
 $dbh->disconnect;
 close GSIP;
 
-print "\nexecuting sip reload:\n";
-print `asterisk -x 'sip reload'`;
+#print "\nexecuting sip reload:\n";
+#print `asterisk -x 'sip reload'`;
