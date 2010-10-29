@@ -87,7 +87,7 @@ sub handler {
 			$data->{'X_Recording_PIN'} = int(rand() * 9000) + 1000;
 
 			use AstManager;
-			my $ast = new AstManager('sbnmgr', 'iuytfghd', '67.209.46.100');
+			my $ast = new AstManager('sbnmgr', 'iuytfghd', '67.209.46.108');
 
 			$ast->send_action("DBPut", {
 				'Family'	=> 'MsgRec',
