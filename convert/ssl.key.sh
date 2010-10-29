@@ -9,7 +9,7 @@ case $DOMAIN in
 		echo -n 'Leadpower1'
 	;;
 	"secure.quickdials.com:443")
-		echo -n 'hongkong'
+		echo -n 'ssl-sam'
 	;;
 	*)
 		echo -n 'no such luck'
