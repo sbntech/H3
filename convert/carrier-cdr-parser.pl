@@ -12,7 +12,8 @@ $| = 1; # unbuffered output
 my %stats;
 my %statsUTC;
 
-my $weeks = 5;
+my $days = $ARGV[0] || 5;
+print "Reporting for last $days days\n";
 my $bigcsv;
 my $csvhdr;
 
@@ -167,7 +168,7 @@ print "reading sbn\n";
 my $now = DateTime->now(time_zone => 'America/New_York'); 
 my $nowstr = $now->ymd . ' ' . $now->hms;
 my $dt  = DateTime->now(time_zone => 'America/New_York'); 
-$dt->subtract_duration(DateTime::Duration->new(weeks => $weeks));
+$dt->subtract_duration(DateTime::Duration->new(days => $days));
  
 while (DateTime->compare($dt, $now) < 0) {
 	cdr_read($dt->ymd(''));
@@ -186,7 +187,7 @@ for my $tz ('Eastern', 'UTC') {
 }
 		
 $dt  = DateTime->now(time_zone => 'America/New_York'); 
-$dt->subtract_duration(DateTime::Duration->new(weeks => $weeks));
+$dt->subtract_duration(DateTime::Duration->new(days => $days));
  
 while (DateTime->compare($dt, $now) < 0) {
 	print_csv_row($dt->strftime("%F"));
