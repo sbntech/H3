@@ -304,55 +304,10 @@ sub sbncdr_parser {
 		$cdr{'LoopTime'} = $1;
 	}
 	$cdr{'CarrierCode'} = 'X';
-	
-	# W011-W013 was Imran E (until 2009-11-02)
-
-	# Z: Mikes VOIP @66.187.177.100
-	# D: was BBCOM
-	# B: is GCNS voip (from tested on 2009-10-29, then in prod from 2009-11-10)
-	
-	my %CARRIERS = (
-		'A' => [ # qwest
-			'D201',  # null dialers
-			'D105', 'D106', 'D107', 'D108', 'D119', 'D120', 'D157', # connected to nvr-6
-			'D103', 'D104', 'D145', # connected to nvr-10
-			'D117', 'D118', 'D146', 'D158', # connected to nvr-11
-
-			],
-		'F' => [ # global crossing
-			'D202',	 # null dialers
-			'D114', 'D115', 'D116', 'D125', 'D143', # connected to nvr-1
-			'D101', 'D102', 'D111', 'D112', 'D113', 'D123', 'D124', 'D144',  # connected to nvr-2 [D112 crashed hard-drive Nov09]
-			'D110', 'D121', 'D122', 'D141', 'D142', 'D159', # connected to nvr-4
-			'D109', 'D147', 'D148', 'D155', 'D156', 'D160', # connected to nvr-8
-			],
-		'G' => [ 'W005', 'W010' ], # monkey biz
-		'H' => [ 'W008', 'W009' ], # massive
-		'T' => [ # test
-			'D127', 'D128', 'D130', 'D132', 'D133', 'D134', # connected to nvr-9
-			'WTST', # when run on swift
-			],
-		'U' => [ 
-			'D126', 'D129', 'D131', 'D154', 
-			'W003', 'W004', 'W006', 'W007', 'W011', 'W012', 'W013', 'W014',
-			'X001', 'X002', 'X003', 'X007', 'X012',
-			'W05A', 'W05B'], # unknown
-	);
-
 	if ($cdr{'LineId'} =~ /[\w\d]+-C-([A-Z])/) {
 		$cdr{'CarrierCode'} = $1;
 	} else {
-		# search based on dialer in %CARRIERS
-		for my $carr (keys %CARRIERS) {
-			if (grep($_ eq $dialer, @{$CARRIERS{$carr}})) {
-				$cdr{'CarrierCode'} = $carr;
-				last;
-			}
-		}
-	}
-
-	if ($cdr{'CarrierCode'} eq 'X') {
-		die "failed to determine carrier for dialer $dialer";
+		die "failed to determine carrier for dialer $dialer, in cdr [$line]";
 	}
 
 	return \%cdr;
