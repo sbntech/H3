@@ -193,6 +193,6 @@ while (DateTime->compare($dt, $now) < 0) {
 }
 
 open OUT, '>', "/dialer/website/cdr-summary/cdr-summary.csv" or die "opening failed: $!";
-print OUT "$csvhdr\n"";
+print OUT "$csvhdr\n";
 print OUT $bigcsv;
 close OUT;
