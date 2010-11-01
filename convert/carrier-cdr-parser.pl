@@ -163,8 +163,6 @@ sub print_cells {
 ######################################################################
 
 # === parse cdrs and populate %stats  and  %statsUTC
-print "reading sbn\n";
-
 my $now = DateTime->now(time_zone => 'America/New_York'); 
 my $nowstr = $now->ymd . ' ' . $now->hms;
 my $dt  = DateTime->now(time_zone => 'America/New_York'); 
@@ -195,6 +193,6 @@ while (DateTime->compare($dt, $now) < 0) {
 }
 
 open OUT, '>', "/dialer/website/cdr-summary/cdr-summary.csv" or die "opening failed: $!";
-print OUT $csvhdr;
+print OUT "$csvhdr\n"";
 print OUT $bigcsv;
 close OUT;
