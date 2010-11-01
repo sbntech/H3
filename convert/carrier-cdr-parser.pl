@@ -88,17 +88,17 @@ sub cdr_read {
 				$stats{$cdr->{'Date'}}{'TOTAL'}{'Connects'} += $conn;
 				$stats{$cdr->{'Date'}}{'TOTAL'}{'Duration'} += $rdur;
 				
-				$stats{$cdr->{'DateUTC'}}{$cdr->{'CarrierCode'}}{'Connects'} += $conn;
-				$stats{$cdr->{'DateUTC'}}{$cdr->{'CarrierCode'}}{'Duration'} += $rdur;
-				$stats{$cdr->{'DateUTC'}}{'TOTAL'}{'Connects'} += $conn;
-				$stats{$cdr->{'DateUTC'}}{'TOTAL'}{'Duration'} += $rdur;
+				$statsUTC{$cdr->{'DateUTC'}}{$cdr->{'CarrierCode'}}{'Connects'} += $conn;
+				$statsUTC{$cdr->{'DateUTC'}}{$cdr->{'CarrierCode'}}{'Duration'} += $rdur;
+				$statsUTC{$cdr->{'DateUTC'}}{'TOTAL'}{'Connects'} += $conn;
+				$statsUTC{$cdr->{'DateUTC'}}{'TOTAL'}{'Duration'} += $rdur;
 			} else {
 				# non-connect stats
 				$stats{$cdr->{'Date'}}{$cdr->{'CarrierCode'}}{'NonConnects'} += $conn;
 				$stats{$cdr->{'Date'}}{'TOTAL'}{'NonConnects'} += $conn;
 				
-				$stats{$cdr->{'DateUTC'}}{$cdr->{'CarrierCode'}}{'NonConnects'} += $conn;
-				$stats{$cdr->{'DateUTC'}}{'TOTAL'}{'NonConnects'} += $conn;
+				$statsUTC{$cdr->{'DateUTC'}}{$cdr->{'CarrierCode'}}{'NonConnects'} += $conn;
+				$statsUTC{$cdr->{'DateUTC'}}{'TOTAL'}{'NonConnects'} += $conn;
 			}
 
 		}
