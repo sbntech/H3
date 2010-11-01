@@ -12,12 +12,13 @@ use JSON;
 $| = 1; # unbuffered output
 my $LOCALDIR='/home/grant/carrier-cdr';
 my $RESULTSDIR = "$LOCALDIR/results";
-my $SBNRESULTSDIR = '/home/grant/cdr-summaries';
+my $OURRESULTSDIR = '/home/grant/cdr-summaries';
 my @SUMMARYattrs = ('Count', 'Duration', 'IntrastateCount', 'CarrierCost',
 'Duration-Under7', 'Duration-Over180', 'Duration-Over2000', 'Duration-Over3600');
 
 my $callType = $ARGV[0];
 die "need a callType" unless defined $callType;
+die "$OURRESULTSDIR does not exitst" unless -d $OURRESULTSDIR;
 
 my %projRates; # $projRates{$pjid}
 
@@ -195,8 +196,8 @@ sub sbn_Read {
 	my $DAY = shift;
 	my $fday = substr($DAY,0,4) . '-' . substr($DAY,4,2) . '-' . substr($DAY,6,2);
 
-	# each file gets summarized into $SBNRESULTSDIR/$DAY/...
-	my $rdir = "$SBNRESULTSDIR/$DAY";
+	# each file gets summarized into $OURRESULTSDIR/$DAY/...
+	my $rdir = "$OURRESULTSDIR/$DAY";
 	if (-f "$rdir/Completed") {
 		print "skipping $DAY, already done\n";
 		return;
@@ -349,7 +350,7 @@ sub sbn_summarize {
 
 	my %ss; # spreadsheet  ss{'2009-01-01'}{Mins|Conns|Cost|
 	# read the CarrierSummary.json file
-	my $jtxt = `cat $SBNRESULTSDIR/CarrierSummary.json`;
+	my $jtxt = `cat $OURRESULTSDIR/CarrierSummary.json`;
 	my $carrSumm = JSON::from_json($jtxt);
 
 	my $now = DateTime->now(time_zone => 'America/New_York'); 
@@ -367,7 +368,7 @@ sub sbn_summarize {
 
 	while (DateTime->compare($dt, $now) < 0) {
 		my $ymd = $dt->ymd('');
-		my $sbndir = "$SBNRESULTSDIR/$ymd";
+		my $sbndir = "$OURRESULTSDIR/$ymd";
 		if ( -d $sbndir ) {
 			print "doing $sbndir\n";
 

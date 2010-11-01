@@ -811,7 +811,7 @@ sub timeout_callback {
 				'Duration' => 0,
 				'Disposition_Code' => 'EC',
 				'Dialer_Id' => $dialerId,
-				'Circuit' => 'None',
+				'Circuit' => "C-$CarrierID",
 				'Extra_Info' => 'ERR480',
 				'Related_Number' => '', # no related number
 				'Survey_Response' => '',
