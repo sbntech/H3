@@ -602,8 +602,8 @@ sub summarize {
 
 $r = initialize Rates(1);
 
-if (( -d '/dialer/projects/_1/cdr' ) && ($callType eq 'worker0')) {
-	# running on w0 so we are doing SBN cdrs
+if (( -d '/dialer/projects/_1/cdr' ) && ($callType eq 'quickdials')) {
+	# running on b1-ap so we are doing our cdrs
 	$dbh = DialerUtils::db_connect();
 	sbn_ReadRaw();
 	sbn_summarize();
