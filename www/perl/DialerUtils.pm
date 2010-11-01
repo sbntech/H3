@@ -294,6 +294,12 @@ sub sbncdr_parser {
 	$cdr{'Time-Minute'} = $2;
 	$cdr{'Time-Second'} = $3;
 	
+	my $dtEST = DateTime->new(year => $cdr{'Date-Year'}, month => $cdr{'Date-Month'}, day => $cdr{'Date-Day'},
+    						   hour => $cdr{'Time-Hour'}, minute => $cdr{'Time-Minute'}, second => $cdr{'Time-Second'},
+    							time_zone => 'America/New_York');
+    my $dtUTC = $dtEST->clone()->set_time_zone('UTC');
+    $cdr{'DateUTC'} = $dtUTC->strftime("%F");
+	
 	$cdr{'CarrierBusy'} = 0;
 	if ($cdr{'CallSetup'} =~ /-(546|556|554)-/) {
 		$cdr{'CarrierBusy'} = 1;
@@ -307,7 +313,7 @@ sub sbncdr_parser {
 	if ($cdr{'LineId'} =~ /[\w\d]+-C-([A-Z])/) {
 		$cdr{'CarrierCode'} = $1;
 	} else {
-		die "failed to determine carrier for dialer $dialer, in cdr [$line]";
+		die "failed to determine carrier for dialer $dialer, in cdr [$line]	";
 	}
 
 	return \%cdr;
