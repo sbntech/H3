@@ -143,7 +143,7 @@ sub print_cells {
 			}
 			
 			if (defined($dat->{$carr}{'Duration'})) {
-				$bigcsv .= sprintf(",%d", $dat->{$carr}{'Duration'});
+				$bigcsv .= sprintf(",%d", $dat->{$carr}{'Duration'} / 60);
 			} else {
 				$bigcsv .= ",";
 			}
@@ -175,7 +175,7 @@ while (DateTime->compare($dt, $now) < 0) {
 
 
 # === summarize
-$csvhdr = "Produced: $nowstr\n,Date";
+$csvhdr = "Produced: $nowstr\nDate";
 for my $tz ('Eastern', 'UTC') {
  	for my $carr ('A - GCNS', 'B - Selway') {
 		for my $k ('Connects', 'Minutes', 'NonConnects') {
