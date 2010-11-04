@@ -122,7 +122,7 @@ sub print_csv_row {
 	my $rowdt = shift;
 
 	# Column: date
-	$bigcsv .= "$rowdt,";
+	$bigcsv .= "$rowdt";
 	
 	print_cells("EST", $stats{$rowdt});
 	print_cells("UTC", $statsUTC{$rowdt});
