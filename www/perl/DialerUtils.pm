@@ -556,6 +556,7 @@ sub db_host {
 
 	my $me = who_am_I();
 
+	return '10.10.10.6' if $me eq 'emma'; 
 	return 'localhost' if $me eq 'swift'; 
 	return '10.80.2.32'; # default to prod
 }
