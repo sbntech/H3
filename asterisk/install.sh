@@ -52,7 +52,7 @@ make install || exit
 echo "Stock asterisk installed, updating config ..."
 
 rm -rf /etc/asterisk
-if [ "$HOST" = "$CARRIERHOST" -or "$HOST" = "emma" ]
+if [ "$HOST" = "$CARRIERHOST" -o "$HOST" = "emma" ]
 then
 	echo " ... carrier config"
 	ln -s /home/grant/H3/asterisk/carrier-config /etc/asterisk
