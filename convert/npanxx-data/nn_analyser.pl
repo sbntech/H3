@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-my %CARRLOOKUP = ( A => 'GCNS', B => 'SWAY', 'X' => 'Trial');
+my %CARRLOOKUP = ( A => 'GCNS', B => 'SWAY', C => 'NETD', 'X' => 'Trial');
 
 use strict;
 use warnings FATAL => 'all';

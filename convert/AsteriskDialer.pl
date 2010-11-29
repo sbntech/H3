@@ -53,7 +53,11 @@ if ($dialerId eq 'WTST') {
 	$CarrierID = 'B';
 	$outchan = 'sip/selway/1';
 	$CarrierName = 'SWAY B';
-	$MAXPORTS = 1480;
+	$MAXPORTS = 1480;} 
+elsif ($dialerId eq 'W804') {
+	$CarrierID = 'C';
+	$outchan = 'sip/netd/1';
+	$CarrierName = 'NETD C';
 } else {
 	print "\n\nNot a registered dialer name $dialerId\n";
 	exit;

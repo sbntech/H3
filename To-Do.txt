@@ -1,4 +1,7 @@
 CURRENT:
+* make CID a required value on a project
+* setup a server for AMD testing
+* ChanSpy changes
 monthly-ap.pl (monthly processing for seat charges etc)
 jannekesmit.com
 payment gateway
@@ -10,7 +13,6 @@ worker0 --> b1-ap
 nvr?
 
 Not Doing in H3
-* carrier cdr parsing
 * daven.pl
 * no test NVR instance
 

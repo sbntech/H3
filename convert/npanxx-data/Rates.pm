@@ -4,6 +4,7 @@
 
 A ---> GCNS
 B ---> Selway
+C ---> NetD
 
 =cut
 
@@ -168,6 +169,23 @@ sub lookup_number {
 			}
 		}
 
+		# C. NETD
+		if (defined($self->{'NETD'}{$npanxx})) {
+			$rh->{'Rates'}{'C'} = $self->{'NETD'}{$npanxx};
+			$rh->{'Routable'} = 1;
+
+			if ($rh->{'Rates'}{'C'} < $cheapest) {
+				$cheapest = $rh->{'Rates'}{'C'};
+				$cheapestCarr = 'C';
+			}
+
+			if ($rh->{'Rates'}{'C'} < 0.010) {
+				$Bests{'C'} = 1;
+			} else {
+				$Alts{'C'} = 1;
+			}
+		}
+
 		if (defined($cheapestCarr)) {
 			delete $Alts{$cheapestCarr} if defined $Alts{$cheapestCarr};
 			$Bests{$cheapestCarr} = 1;
@@ -290,6 +308,7 @@ sub initialize {
 	$self->load_telcodata;
 	$self->load_rate_file("$DATADIR/GCNS.csv", 'GCNS', 'A');
 	$self->load_rate_file("$DATADIR/Selway.csv", 'SWAY', 'B');
+	$self->load_rate_file("$DATADIR/netd.csv", 'NETD', 'C');
 
 	$self->{'Exclusions'}{'928601'} = ' pagers only';
 	$self->{'Exclusions'}{'928801'} = ' pagers only';
