@@ -2,7 +2,7 @@
 
 =pod
 
-A ---> GCNS
+A ---> GCNS (removed permanently 30-Nov-2010)
 B ---> Selway
 C ---> NetD
 
@@ -135,23 +135,6 @@ sub lookup_number {
 		my $cheapest = 1000.0;
 		my $cheapestCarr;
 
-		# A. GCNS
-		if (defined($self->{'GCNS'}{$npanxx})) {
-			$rh->{'Rates'}{'A'} = $self->{'GCNS'}{$npanxx};
-			$rh->{'Routable'} = 1;
-
-			if ($rh->{'Rates'}{'A'} < $cheapest) {
-				$cheapest = $rh->{'Rates'}{'A'};
-				$cheapestCarr = 'A';
-			}
-
-			if ($rh->{'Rates'}{'A'} < 0.012) {
-				$Bests{'A'} = 1;
-			} else {
-				$Alts{'A'} = 1;
-			}
-		}
-
 		# B. SWAY
 		if (defined($self->{'SWAY'}{$npanxx})) {
 			$rh->{'Rates'}{'B'} = $self->{'SWAY'}{$npanxx};
@@ -162,7 +145,7 @@ sub lookup_number {
 				$cheapestCarr = 'B';
 			}
 
-			if ($rh->{'Rates'}{'B'} < 0.010) {
+			if ($rh->{'Rates'}{'B'} < 0.014) {
 				$Bests{'B'} = 1;
 			} else {
 				$Alts{'B'} = 1;
