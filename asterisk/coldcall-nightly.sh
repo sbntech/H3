@@ -22,5 +22,5 @@ sudo -u grant /bin/bash -c '(cd /home/grant/H3 ; git pull > /home/grant/nightly-
 asterisk
 sleep 4
 
-/home/grant/H3/convert/AsteriskColdCaller.pl A
+/home/grant/H3/convert/AsteriskColdCaller.pl B
 /home/grant/H3/convert/AstRecordings.pl
