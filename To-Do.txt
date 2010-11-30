@@ -1,4 +1,5 @@
 CURRENT:
+* remove CityVoice as a carrier
 * make CID a required value on a project
 * setup a server for AMD testing
 * ChanSpy changes
