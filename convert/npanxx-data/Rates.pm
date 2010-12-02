@@ -4,7 +4,7 @@
 
 A ---> GCNS (removed permanently 30-Nov-2010)
 B ---> Selway
-C ---> NetD
+C ---> NetD (never in prod)
 
 =cut
 
@@ -145,28 +145,8 @@ sub lookup_number {
 				$cheapestCarr = 'B';
 			}
 
-			if ($rh->{'Rates'}{'B'} < 0.014) {
-				$Bests{'B'} = 1;
-			} else {
-				$Alts{'B'} = 1;
-			}
-		}
-
-		# C. NETD
-		if (defined($self->{'NETD'}{$npanxx})) {
-			$rh->{'Rates'}{'C'} = $self->{'NETD'}{$npanxx};
-			$rh->{'Routable'} = 1;
-
-			if ($rh->{'Rates'}{'C'} < $cheapest) {
-				$cheapest = $rh->{'Rates'}{'C'};
-				$cheapestCarr = 'C';
-			}
-
-			if ($rh->{'Rates'}{'C'} < 0.010) {
-				$Bests{'C'} = 1;
-			} else {
-				$Alts{'C'} = 1;
-			}
+			# for now selway is awlays in
+			$Bests{'B'} = 1;
 		}
 
 		if (defined($cheapestCarr)) {
