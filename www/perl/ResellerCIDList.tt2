@@ -17,43 +17,28 @@
 	<td class="editFormInput"><textarea lines="5" cols="14" name="RC_CallerId"></textarea>
 [% IF RC_CallerId_ERROR %]<div class="editFormError">[% RC_CallerId_ERROR %]</div>[% END %]</td>
 </tr>
-<tr>
-	<td class="editFormLabel">Default?</td>
-	<td class="editFormInput"><input class="editForm" type="checkbox" 
-		[% IF RC_DefaultFlag == 'Y' %]checked="true"[% END %]
-		name="RC_DefaultFlag"></input></td>
-</tr>
 <tr><td colspan="2" class="editFormButtons"><input name="method" type="submit" value="Add New"></input></td></tr>
 </table></form><br/>
-<div class="help-tip" style="width: 500px">
-Deleting a CID will remove it from any customers and projects, there is no undo!
-</div>
 <table><tr>
-[% FOREACH colhdr IN [ 'Caller ID', 'Default', 'Created', 'Delete' ] %]
+[% FOREACH colhdr IN [ 'Caller ID', 'Created', 'Action' ] %]
 <th class="basiclist-col">[% colhdr %]</th>
 [% END %]
 </tr>
 [% FOREACH row IN List %]
 <tr>
 <td class="basiclist">[% row.RC_CallerId %]</td>
-<td class="basiclist">
-	<form action="/pg/ResellerCIDList" method="post" enctype="multipart/form-data">
-	<input type="hidden" name="RS_Number" value="[% RS_Number %]">
-	<input type="hidden" name="X_Method" value="FlipDefault">
-	<input type="hidden" name="RC_CallerId" value="[% row.RC_CallerId %]">
-	<input name="method" type="submit" title="Press to flip it"
-[% IF row.RC_DefaultFlag == 'Y' %]value="Yes"[% ELSE %]value="No"[% END %]
-	></input>
-	</form>
-</td>
 <td class="basiclist">[% row.RC_CreatedOn %]</td>
 <td class="basiclist">
+[% IF row.UsedCount > 0 %]
+Allowed on [% row.UsedCount %] customer(s)
+[% ELSE %]
 	<form action="/pg/ResellerCIDList" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="RS_Number" value="[% RS_Number %]">
 	<input type="hidden" name="RC_CallerId" value="[% row.RC_CallerId %]">
 	<input type="hidden" name="X_Method" value="Delete">
 	<input name="method" type="submit" value="Delete"></input>
 	</form>
+[% END %]
 </td>
 </tr>
 [% END %]

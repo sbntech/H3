@@ -159,11 +159,9 @@
 	[% IF CID_Option == PJ_OrigPhoneNr %][% CID_selected = 1 %] selected="true" [% END %]
 >[% CID_Option %]</option>
 [% END %]
-		</select> <span class="highlight">
-	[% IF CID_count == 0 %] Using system default
-	[% ELSIF CID_selected == 0 %] Choose one to replace system default
-	[% END %]
-</span>
+		</select><div class="editFormError">[% PJ_OrigPhoneNr_ERROR %]
+	[% IF CID_count == 0 %] (No caller id to choose, add one first) [% END %]
+</div>
 	</td>
 </tr>
 [% IF OnlyColdCall != 'Y' %]

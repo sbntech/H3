@@ -280,6 +280,8 @@ sub build_runnable_projects {
 			$runmsg = 'Inactive customer';
 		} elsif ($pj->{'CO_Maxlines'} < 1) {
 			$runmsg = 'No customer lines';
+		} elsif ((! defined($pj->{'PJ_OrigPhoneNr'})) || ($pj->{'PJ_OrigPhoneNr'} !~ /\d{10}/)) {
+			$runmsg = 'Bad CallerID';			
 		} elsif ($pj->{'PJ_Maxline'} < 1) {
 			$runmsg = 'No project lines';
 		} elsif ($pj->{'CO_Credit'} < 0.01) {
@@ -331,20 +333,6 @@ sub build_runnable_projects {
 				# not Asterisk Cold Calling
 				$pj->{'X_CurrentLines'} = 0;
 				$pj->{'X_CarrierAllocatedTotal'} = 0; 
-
-				if ((! defined($pj->{'PJ_OrigPhoneNr'})) ||
-					($pj->{'PJ_OrigPhoneNr'} eq '')) {
-					# fetch a reseller default CID
-					my $rcid = $dbh->selectrow_hashref("select RC_CallerId from
-						rescallerid where RC_Reseller = " . $pj->{'RS_Number'} . 
-						" and RC_DefaultFlag = 'Y' order by rand() limit 1");
-
-					if (defined($rcid->{'RC_CallerId'})) {
-						$pj->{'PJ_OrigPhoneNr'} = $rcid->{'RC_CallerId'};
-						logmsg('Reseller ' . $pj->{'RS_Number'} . ' default CID ' . $rcid->{'RC_CallerId'} . 
-							" used for $pjdesc");
-					}
-				}
 
 				push(@runnables, $pj);
 			}

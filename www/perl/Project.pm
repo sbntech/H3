@@ -12,12 +12,12 @@ sub required {
 	my $data = shift;
 	my $fld = shift;
 
-	if (DialerUtils::is_blank_str($data->{$fld})) {
+	if ((! defined($data->{$fld})) || (DialerUtils::is_blank_str($data->{$fld}))) {
 		$data->{$fld . '_ERROR'} = 'Required';
 		return 0;
-	} else {
-		return 1;
 	}
+		
+	return 1;
 }
 
 sub make_sql {
@@ -267,8 +267,8 @@ sub make_sql {
 	$data->{'PJ_User'} = '' if (! defined($data->{'PJ_User'}));
 
 	# PJ_OrigPhoneNr - left to the UI for now
-	$data->{'PJ_OrigPhoneNr'} = '' if (! defined($data->{'PJ_OrigPhoneNr'}));
-
+	$valid = 0 if required($data,'PJ_OrigPhoneNr') == 0;
+	
 	# PJ_DisposDescrip (non-normalized)
 	if ($data->{'PJ_Type'} eq 'C') {
 		my $s = '';

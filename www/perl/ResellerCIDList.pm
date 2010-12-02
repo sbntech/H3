@@ -11,10 +11,6 @@ sub add_new {
 	my $dbh = shift;
 	my $data = shift;
 
-	# normalize the flag
-	my $def = ((defined($data->{'RC_DefaultFlag'})) && ($data->{'RC_DefaultFlag'} eq 'on')) ? 'Y' : 'N';
-	$data->{'RC_DefaultFlag'} = $def;
-
 	# validate the number 
 	my $inlist = $data->{'RC_CallerId'};
 	my $values = '';
@@ -37,63 +33,42 @@ sub add_new {
 		my $n = DialerUtils::north_american_phnumber($num);
 		if (($n =~ /^\d{10}$/) && ($n !~ /^8(00|66|77|88|55|44|33|22)/)) {
 			$values .= ',' if length($values) > 0;
-			$values .= "('" . $data->{'RS_Number'} . "','$n','$def', now())";
+			$values .= "('" . $data->{'RS_Number'} . "','$n', now())";
 		}
 	}
 		
-	my $sql = "insert ignore into rescallerid (RC_Reseller, RC_CallerId, RC_DefaultFlag, RC_CreatedOn)
+	my $sql = "insert ignore into rescallerid (RC_Reseller, RC_CallerId, RC_CreatedOn)
 		values $values";
 
 	$dbh->do($sql) if length($values) > 0;
+	
 	delete $data->{'RC_CallerId'};
-	delete $data->{'RC_DefaultFlag'};
-
 }
 
 sub del_cid {
 	my $dbh = shift;
 	my $data = shift;
 
-	my $sql = "delete from rescallerid 
-		where RC_CallerId = '" . $data->{'RC_CallerId'} . 
+
+	my $c = $dbh->selectrow_hashref("select count(*) as UsedCount 
+		from custcallerid, customer where CC_CallerId = '" . $data->{'RC_CallerId'} . 
+		"' and CO_Number = CC_Customer and CO_ResNumber = '" . $data->{'RS_Number'} . "'");
+	my $UsedCount = (defined($c->{'UsedCount'})) ? $c->{'UsedCount'} : 0;
+	
+	if ($UsedCount > 0) {
+		$data->{'Processing_Error'} = "Attempt to delete " . $data->{'RC_CallerId'} . 
+			" failed because it is allowed on $UsedCount customers";
+		return;
+	} else {
+		my $sql = "delete from rescallerid 
+			where RC_CallerId = '" . $data->{'RC_CallerId'} . 
 			"' and RC_Reseller = '" . $data->{'RS_Number'} . "' limit 1";
-	$dbh->do($sql);
-
-	$sql = "select * from custcallerid, customer where CC_CallerId = '" . $data->{'RC_CallerId'} . 
-		"' and CO_Number = CC_Customer and CO_ResNumber = '" . $data->{'RS_Number'} . "'";
-	my $c = $dbh->selectall_arrayref($sql, { Slice => {} });
-	my $logstr = "Deleted reseller" . $data->{'RS_Number'} . " caller id [" . $data->{'RC_CallerId'} . "], cascaded to customers:\n";
-
-	for my $i (@$c) {
-		$dbh->do("delete from custcallerid where CC_Customer = " . $i->{'CC_Customer'} . 
-			" and CC_CallerId = '" . $data->{'RC_CallerId'} . "'");
-
-		my $pcnt = $dbh->do("update project set PJ_OrigPhoneNr = null where
-			PJ_OrigPhoneNr = '" . $data->{'RC_CallerId'} . 
-			"' and PJ_CustNumber = " . $i->{'CC_Customer'});
-
-		$logstr .= "    " . $i->{'CC_Customer'} . " - " . $i->{'CO_Name'} . 
-			": $pcnt projects affected\n";
+		$dbh->do($sql);
+		
+		print STDERR "Deleted reseller" . $data->{'RS_Number'} . " caller id: " . $data->{'RC_CallerId'} . "\n";
 	}
 
-	print STDERR $logstr;
-
 	delete $data->{'RC_CallerId'};
-	delete $data->{'RC_DefaultFlag'};
-}
-
-sub flip_default {
-	my $dbh = shift;
-	my $data = shift;
-
-	my $sql = "update rescallerid 
-		set RC_DefaultFlag = IF(RC_DefaultFlag = 'Y','N','Y')
-		where RC_CallerId = '" . $data->{'RC_CallerId'} . 
-			"' and RC_Reseller = '" . $data->{'RS_Number'} . "' limit 1";
-
-	$dbh->do($sql);
-	delete $data->{'RC_CallerId'};
-	delete $data->{'RC_DefaultFlag'};
 }
 
 sub handler {
@@ -124,15 +99,16 @@ sub handler {
 					if ($data->{'X_Method'} eq 'AddNew') {
 						# adding a new one.
 						add_new($dbh, $data);
-					} elsif ($data->{'X_Method'} eq 'FlipDefault') {
-						flip_default($dbh, $data);
 					} elsif ($data->{'X_Method'} eq 'Delete') {
 						# delete one
 						del_cid($dbh, $data);
 					}
 				}
 
-				$data->{'X_Sql'} = "select RC_Reseller, RC_CallerId, RC_DefaultFlag, RC_CreatedOn
+				$data->{'X_Sql'} = "select RC_Reseller, RC_CallerId, RC_CreatedOn,
+					(select count(*) from custcallerid, customer 
+						where CO_Number = CC_Customer and CO_ResNumber = RC_Reseller 
+						and CC_CallerId = RC_CallerId) as UsedCount
 					from rescallerid where RC_Reseller = " . $data->{'RS_Number'};
 				$res = $dbh->selectall_arrayref($data->{'X_Sql'}, { Slice => {} });
 				$data->{'List'} = $res;

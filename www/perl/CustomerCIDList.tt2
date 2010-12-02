@@ -15,14 +15,11 @@
 	</tr>
 [% END %]
 [% IF Processing_Error %]<p class="error">[% Processing_Error %]</p>[% END %]
-<h2 title="Customer Number = [% CO_Number %]">Customer Caller Id for [% CO_Name %]</h2>
-<div class="help-tip" style="width: 500px">
-Disallowing a CID will remove it from all projects using it, there is no undo!
-</div>
+<h2 title="Customer Number = [% CO_Number %]">Customer Caller Id for: [% ContextCustomer.CO_Name %]</h2>
 <h3>Allowed Caller Ids</h3>
 <!-- [% X_AllowSql %] --!>
 <table><tr>
-[% FOREACH colhdr IN [ 'Caller ID', 'Created', 'Disallow' ] %]
+[% FOREACH colhdr IN [ 'Caller ID', 'Created', 'Action' ] %]
 <th class="basiclist-col">[% colhdr %]</th>
 [% END %]
 </tr>
@@ -31,12 +28,16 @@ Disallowing a CID will remove it from all projects using it, there is no undo!
 <td class="basiclist">[% row.CC_CallerId %]</td>
 <td class="basiclist">[% row.CC_CreatedOn %]</td>
 <td class="basiclist">
+[% IF row.UsedCount == 0 %]
 	<form action="/pg/CustomerCIDList?CO_Number=[% CO_Number %]" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="CO_Number" value="[% CO_Number %]">
 	<input type="hidden" name="CC_CallerId" value="[% row.CC_CallerId %]">
 	<input type="hidden" name="X_Method" value="Disallow">
 	<input name="method" type="submit" value="Disallow"></input>
 	</form>
+[% ELSE -%]
+	Used on [% row.UsedCount %] project(s)	
+[%- END %]
 </td>
 </tr>
 [% END %]

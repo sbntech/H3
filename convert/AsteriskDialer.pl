@@ -277,19 +277,12 @@ sub update_project {
 		# a new project
 		$LineRate = 1 if (! defined($LineRate)); # testcall sample
 		$log->debug("New project " . $pjrow->{'PJ_Number'} . ": line rate set at $LineRate");
-		
-		my $CID = DialerUtils::determine_CID_for_project($dbh, $pjrow->{'PJ_OrigPhoneNr'},
-			$pjrow->{'PJ_CustNumber'});
-		if ((defined($pjrow->{'PJ_OrigPhoneNr'})) && ($pjrow->{'PJ_OrigPhoneNr'} ne $CID)) {
-			$log->debug("Reseller default CID $CID used for project " .
-				$pjrow->{'PJ_Number'});
-		}
 
 		$projects{$pjrow->{'PJ_Number'}} = {
 			PJ_Number => $pjrow->{'PJ_Number'},
 			PJ_Type => $pjrow->{'PJ_Type'},
 			PJ_Type2 => $pjrow->{'PJ_Type2'},
-			PJ_OrigPhoneNr => $CID,				
+			PJ_OrigPhoneNr => $pjrow->{'PJ_OrigPhoneNr'},		
 			LineRate => $LineRate, # number of simultaneous calls (lines) we should use
 			NumbersBuffer => [ ], # array containing undialed numbers
 			NumbersActive => {}, # hash (key=number) of hashes for numbers being used
@@ -304,23 +297,6 @@ sub originate_one_call {
 	my $number = shift;
 	my $callerid = shift;
 	my $testcall = shift;
-
-	if ((! defined($callerid)) || ($callerid !~ /\d{10}/)) {
-		$log->debug("CALLER_ID: Project $pjnum has no caller id");
-		$callerid = $ast->select_system_callerid($number);
-	} else {
-		# ensure the project callerid is interstate
-### removed 28Sep10 ###		if ($ast->areacode2state(substr($callerid,0,3)) eq
-### removed 28Sep10 ###				$ast->areacode2state(substr($number,0,3))) {
-### removed 28Sep10 ###			$log->debug("CALLER_ID: Project $pjnum has caller id $callerid in the same"
-### removed 28Sep10 ###				. " state (" . $ast->areacode2state(substr($callerid,0,3)) .
-### removed 28Sep10 ###				") as the prospect number $number");
-### removed 28Sep10 ###			$callerid = $ast->select_system_callerid($number);
-### removed 28Sep10 ###		} else {
-			$log->debug("CALLER_ID: using Project $pjnum caller id $callerid " .
-				"for prospect number $number");
-### removed 28Sep10 ###		}
-	}
 
 	my $pj = $projects{$pjnum};
 	if (defined($pj->{'NumbersActive'}->{$number})) {
@@ -454,6 +430,7 @@ sub look_for_work {
 		PJ_Type, PJ_Type2, PJ_OrigPhoneNr, PJ_Number, PJ_CustNumber
 		from line, project 
 		where ln_PJ_Number = PJ_Number and ln_switch = '$dialerId'
+			and length(PJ_OrigPhoneNr) = 10
 			and ln_status = 'U' and ln_PJ_Number > 0
 		group by ln_PJ_number", { Slice => {}});
 

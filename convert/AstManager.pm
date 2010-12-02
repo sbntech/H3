@@ -70,28 +70,6 @@ sub areacode2state {
 	}
 }
 
-sub select_system_callerid {
-	my $self = shift;
-	my $number = shift;
-
-	my @sysCallerIds = ('5712610012', '2406998981');
-
-	# use one of the sysCallerIds (iterstate)
-	for my $sysCID (@sysCallerIds) {
-		if ($self->areacode2state(substr($sysCID,0,3)) ne
-				$self->areacode2state(substr($number,0,3))) {
-			$self->{'logger'}->debug("CALLER_ID: chose $sysCID (state=" . $self->areacode2state(substr($sysCID,0,3)) .
-				") for number $number (state=" . $self->areacode2state(substr($number,0,3)) .
-				")");
-			return $sysCID;
-		}
-	}
-
-	# last resort
-	$self->{'logger'}->error("callerid of last resort used for $number");
-	return $sysCallerIds[0];
-}
-
 sub prep_prospect_cdr {
 	my $chan = shift;
 	my $orig = shift;

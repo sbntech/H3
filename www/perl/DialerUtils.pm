@@ -319,26 +319,6 @@ sub sbncdr_parser {
 	return \%cdr;
 }
 
-sub determine_CID_for_project {
-
-	my ($dbh, $PJ_OrigPhoneNr, $PJ_CustNumber) = @_;
-
-	my $CID = $PJ_OrigPhoneNr;
-	if ((! defined($CID)) || ($CID eq '')) {
-		# fetch a reseller default CID
-		my $rcid = $dbh->selectrow_hashref("select RC_CallerId, RC_Reseller from
-			rescallerid, customer where CO_Number =  $PJ_CustNumber
-			and RC_Reseller = CO_ResNumber and RC_DefaultFlag = 'Y' 
-			order by rand() limit 1");
-
-		if (defined($rcid->{'RC_CallerId'})) {
-			$CID = $rcid->{'RC_CallerId'};
-		}
-	}
-
-	return $CID;
-}
-
 sub pjnumbers_get {
 	# not carrier specific
 

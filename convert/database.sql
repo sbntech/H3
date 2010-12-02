@@ -33,7 +33,6 @@ create table dialer.agentcharge (
 create table dialer.rescallerid (
 	RC_CallerId char(10) not NULL,
 	RC_Reseller int(11) not NULL,
-	RC_DefaultFlag char(1) not NULL default 'N',
 	RC_CreatedOn datetime not null,
 	primary key (RC_Reseller, RC_CallerId)
 ) ENGINE = MyISAM;

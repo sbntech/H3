@@ -22,7 +22,6 @@ use LWP;
 use HTTP::Request::Common qw( GET POST );
 use Time::HiRes qw( gettimeofday tv_interval usleep );
 
-my @sysCallerIds = ('8042349010', '2402107143');
 my $CARRFACTOR = 1.07; # factor covering the gap between our duration calc and the carrier's
 
 # attempt to start asterisk (no harm if it is already started)
@@ -297,6 +296,7 @@ sub look_for_work {
 			and AG_Status = 'A'
 			and AG_MustLogin = 'Y'
 			and PJ_Type = 'C' 
+			and length(PJ_OrigPhoneNr) = 10
 			and (PJ_timeleft = 'Running*' or PJ_timeleft = 'No agents ready')", { Slice => {}});
 
 	for my $agdb (@$aref) {
@@ -318,6 +318,7 @@ sub look_for_work {
 			$agents{$agdb->{'AG_Number'}} = {
 				'AG_Number' => $agdb->{'AG_Number'}, # back ref
 				'Status' => 'New',
+				'CallBackCID' => $aref->{'PJ_OrigPhoneNr'},
 				'UpdateFlag' => 1,
 				'Calls'			=> 0,
 				'CallDuration'	=> 0,
@@ -373,14 +374,6 @@ sub look_for_work {
 				for my $c (keys %$aref) {
 					$projectQs{$agloc->{'AG_Project'}}{$c} = $aref->{$c};
 				}
-
-				my $CID = DialerUtils::determine_CID_for_project($dbh, $aref->{'PJ_OrigPhoneNr'},
-					$aref->{'PJ_CustNumber'});
-				if ((defined($aref->{'PJ_OrigPhoneNr'})) && ($aref->{'PJ_OrigPhoneNr'} ne $CID)) {
-					$log->debug("Reseller default CID $CID used for project " .
-						$aref->{'PJ_Number'});
-				}
-				$projectQs{$agloc->{'AG_Project'}}{'PJ_OrigPhoneNr'} = $CID;
 
 				$log->info("Project " . $agloc->{'AG_Project'} .
 					" has been created.");
@@ -451,7 +444,7 @@ sub call_an_agent {
 		$called = 1;
 		$ast->originate_basic($ag->{'AG_Project'}, $ag->{'AG_CallBack'}, $ag, $chan, $carr,
 			[ "AG_Number=$anum" ],
-			's', '1', 'callagent', $sysCallerIds[0], 32, $aid, 0);
+			's', '1', 'callagent', $ag->{'CallBackCID'}, 32, $aid, 0);
 		$log->info("$desc called via $chan aid=$aid");
 		$ag->{'Status'} = 'Called';
 		$ag->{'OriginateActionId'} = $aid;
@@ -586,31 +579,13 @@ sub originate {
 	my $aid = $ast->originate_action_id();
 	my $context = 'pjtypeC' . $q->{'PJ_Type2'};
 
-	my $callerid = $q->{'PJ_OrigPhoneNr'};
-	if ((! defined($callerid)) || ($callerid !~ /\d{10}/)) {
-		$callerid = $ast->select_system_callerid($num);
-		$log->debug("CALLER_ID: Project $pjnum has no caller id, chose system: $callerid");
-	} else {
-		# ensure the project callerid is interstate
-### removed 28Sep10 ###		if ($ast->areacode2state(substr($callerid,0,3)) eq
-### removed 28Sep10 ###				$ast->areacode2state(substr($num,0,3))) {
-### removed 28Sep10 ###			$log->debug("CALLER_ID: Project $pjnum has caller id $callerid in the same"
-### removed 28Sep10 ###				. " state (" . $ast->areacode2state(substr($callerid,0,3)) .
-### removed 28Sep10 ###				") as the prospect number $num");
-### removed 28Sep10 ###			$callerid = $ast->select_system_callerid($num);
-### removed 28Sep10 ###		} else {
-			$log->debug("CALLER_ID: using Project $pjnum caller id $callerid " .
-				"for prospect number $num");
-### removed 28Sep10 ###		}
-	}
-
 	$q->{'ListOriginations'}{$num} = 1;
 	$q->{'LastCall'} = [gettimeofday()];
 
 	$o_time = $now;
 	$ast->originate_basic($pjnum, $num, $q, $chan, $Carrier, 
 		[ "QueueName=pjq$pjnum", "ProspectNumber=$num", "PJ_Number=$pjnum", "PJ_Record=" . $q->{'PJ_Record'} ],
-		's', '1', $context, $callerid, 32, $aid, 3600);
+		's', '1', $context, $q->{'PJ_OrigPhoneNr'}, 32, $aid, 3600);
 
 	$q->{'DialingCount'}++; # keeps track of prediction
 }

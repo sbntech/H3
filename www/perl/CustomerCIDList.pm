@@ -33,22 +33,25 @@ sub allow_cid {
 sub disallow_cid {
 	my $dbh = shift;
 	my $data = shift;
-
+	
+	my $crow = $dbh->selectrow_hashref("select count(*) as UsedCount
+		 from project where 
+		 PJ_CustNumber = " . $data->{'CO_Number'} . 
+		 " and PJ_OrigPhoneNr = '" . $data->{'CC_CallerId'} . "'");
+	my $UsedCount = $crow->{'UsedCount'};
+	
+	if ((defined($UsedCount)) and ($UsedCount > 0)) {
+		$data->{'Processing_Error'} = "Attempt to disallow " . $data->{'CC_CallerId'} .
+			" on customer " . $data->{'CO_Number'} .
+			" not permitted since it is used on $UsedCount projects";
+		return;
+	}
+		 
 	my $sql = "delete from custcallerid where CC_CallerId = '" . 
 		$data->{'CC_CallerId'} . "' and CC_Customer = '" .
 		$data->{'CO_Number'} . "'";
 
 	$dbh->do($sql);
-
-	my $pcnt = $dbh->do("update project set PJ_OrigPhoneNr = null where
-			PJ_OrigPhoneNr = '" . $data->{'CC_CallerId'} . 
-			"' and PJ_CustNumber = " . $data->{'CO_Number'});
-
-	print STDERR "Disallowed customer "	. $data->{'CO_Number'} . 
-		" caller id [" . $data->{'CC_CallerId'} . "]: $pcnt projects affected\n";
-
-	delete $data->{'RC_CallerId'};
-	delete $data->{'RC_DefaultFlag'};
 }
 
 sub handler {
@@ -78,13 +81,14 @@ sub handler {
 			}
 		}
 
-		$data->{'X_AllowSql'} = "select CC_Customer, CC_CallerId, CC_CreatedOn
+		$data->{'X_AllowSql'} = "select CC_Customer, CC_CallerId, CC_CreatedOn,
+			(select count(*) from project where PJ_CustNumber = CC_Customer and PJ_OrigPhoneNr = CC_CallerId) as UsedCount
 			from custcallerid where CC_Customer = " . $data->{'CO_Number'};
 		my $res = $dbh->selectall_arrayref($data->{'X_AllowSql'}, { Slice => {} });
 		$data->{'AllowedList'} = $res;
 
 		$data->{'X_NotAllowSql'} = "select RC_CallerId from rescallerid where
-			RC_Reseller = " . $data->{'ContextCustomer'}{'CO_ResNumber'} . " and RC_DefaultFlag = 'N' and 
+			RC_Reseller = " . $data->{'ContextCustomer'}{'CO_ResNumber'} . " and 
 			not exists(select 'x' from custcallerid where CC_CallerId = RC_CallerId and CC_Customer = " . $data->{'CO_Number'} . ")";
 		$res = $dbh->selectall_arrayref($data->{'X_NotAllowSql'}, { Slice => {} });
 		$data->{'NotAllowedList'} = $res;
