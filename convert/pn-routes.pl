@@ -59,7 +59,7 @@ while ($running > 1) {
 	printf "$pjnum (%s for %s-%s) [$rowcount rows est.]\n", 
 		$ci->{'PJ_Description'}, $ci->{'PJ_CustNumber'}, $ci->{'CO_Name'};
 
-	my $stmt = $dbh->prepare("select * from $tblname where PN_Status != 'X' or PN_CallResult = 'XR' or PN_CallResult = 'XF'");
+	my $stmt = $dbh->prepare("select * from $tblname");
 	$stmt->execute();
 	my $changes = 0;
 	my $scrubbed = 0;
@@ -76,7 +76,6 @@ while ($running > 1) {
 		my $number = $pn->{'PN_PhoneNumber'};
 		my $nn = $r->lookup_number($number, $ci->{'PJ_CustNumber'}, $ci->{'CO_ResNumber'});
 
-		my $StatusClause = "PN_Status = 'X', PN_CallResult = 'XR', ";
 
 		my $OldAlt;
 		if ((defined($pn->{'PN_AltCarriers'})) && (length($pn->{'PN_AltCarriers'}) > 0)) {
@@ -85,15 +84,15 @@ while ($running > 1) {
 			$OldAlt = 'null';
 		}
 
+		my $StatusClause = "PN_Status = 'X', PN_CallResult = 'XR', "; # unroutable (default)
 		if ((defined($nn)) && ($nn->{'Routable'} == 1)) {
-		
+			# routable ...
 			if ((defined($nn->{'ScrubType'})) && (length($nn->{'ScrubType'}) == 2)) {
+				# ... but scrubbed
 				$StatusClause = "PN_Status = 'X', PN_CallResult = '" . $nn->{'ScrubType'} . "', ";
 				$scrubbed++;
-			} elsif ($pn->{'PN_Status'} eq 'X') {
-				# for when we are re-routing a previously unroutable number.
-				$StatusClause = "PN_Status = 'R', PN_CallResult = null, ";
 			} else {
+				# ... not scrubbed
 				$StatusClause = '';
 			}
 		}
