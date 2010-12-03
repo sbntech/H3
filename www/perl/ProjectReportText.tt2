@@ -54,7 +54,7 @@
 <table>
 <tr><td style="width: 200px">Call Attempts</td><td style="text-align:right; width:25px">[% ag.RE_Calls %]</td><td style="width: 70px"/></tr>
 [% SET AgentMinutes = ag.RE_Tot_Sec div 60 %]
-[% SET StandbyMinutes = ag.RE_AS_Minutes div 60 %]
+[% SET StandbyMinutes = ag.RE_AS_Seconds div 60 %]
 [% IF ag.RE_Calls > 0 %]
 [% SET ConnPercent = (100 * ag.RE_Connectedagent) / ag.RE_Calls %]
 [% SET ANPercent = (100 * ag.RE_Agentnoanswer) / ag.RE_Calls %]
