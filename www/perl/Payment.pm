@@ -324,7 +324,7 @@ sub handler {
 							if ($data->{'PayType'} eq 'CARL') {
 								$smtp->cc('support@bullseyebroadcast.com');
 							} else {
-								$smtp->cc('janneke@jannekesmit.com');
+								$smtp->cc('support@quickdials.com');
 							}
 						}
 						$smtp->data();
@@ -370,7 +370,7 @@ sub handler {
 							if ($data->{'PayType'} eq 'CARL') {
 								$smtp->cc('support@bullseyebroadcast.com');
 							} else {
-								$smtp->cc('janneke@jannekesmit.com');
+								$smtp->cc('support@quickdials.com');
 							}
 						}
 
