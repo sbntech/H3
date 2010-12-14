@@ -332,6 +332,7 @@ sub readqfile {
 		$proj->{'RS_RoundedDuration'}{$result->{'AgentNumber'}} = 0 unless defined($proj->{'RS_RoundedDuration'}{$result->{'AgentNumber'}});
 		$proj->{'CO_RoundedIPDuration'}{$result->{'AgentNumber'}} = 0 unless defined($proj->{'CO_RoundedIPDuration'}{$result->{'AgentNumber'}});
 		$proj->{'RS_RoundedIPDuration'}{$result->{'AgentNumber'}} = 0 unless defined($proj->{'RS_RoundedIPDuration'}{$result->{'AgentNumber'}});
+		$proj->{'StandbyIPDuration'}{$result->{'AgentNumber'}} = 0 unless defined($proj->{'StandbyIPDuration'}{$result->{'AgentNumber'}});
 		$proj->{'MachineDuration'}{$result->{'AgentNumber'}} = 0 unless defined($proj->{'MachineDuration'}{$result->{'AgentNumber'}});
 		$proj->{'StandbyDuration'}{$result->{'AgentNumber'}} = 0 unless defined($proj->{'StandbyDuration'}{$result->{'AgentNumber'}});
 
@@ -439,8 +440,7 @@ sub readqfile {
 		}
 		if (($result->{'ActualDuration'} > 0) && ($result->{'DispositionCode'} eq 'AS')) { 
 			if ($result->{'VOIPCall'}) {
-				$proj->{'CO_RoundedIPDuration'}{$result->{'AgentNumber'}} += $result->{'ActualDuration'};
-				$proj->{'RS_RoundedIPDuration'}{$result->{'AgentNumber'}} += $result->{'ActualDuration'};
+				$proj->{'StandbyIPDuration'}{$result->{'AgentNumber'}} += $result->{'ActualDuration'};
 				flog('DEBUG', "    Standby time was on IP: " . $result->{'ActualDuration'});
 			} else {
 				$proj->{'StandbyDuration'}{$result->{'AgentNumber'}} += $result->{'ActualDuration'};
@@ -833,6 +833,7 @@ sub do_queue {
 			flog('DEBUG', "CO_RoundedDuration=" . $proj->{'CO_RoundedDuration'}{$Agent} . 
 							"  CO_RoundedIPDuration=" . $proj->{'CO_RoundedIPDuration'}{$Agent} .
 							"  StandbyDuration=" . $proj->{'StandbyDuration'}{$Agent} .
+							"  StandbyIPDuration=" . $proj->{'StandbyIPDuration'}{$Agent} .
 							"  RS_RoundedDuration=" . $proj->{'RS_RoundedDuration'}{$Agent} . 
 							"  RS_RoundedIPDuration=" . $proj->{'RS_RoundedIPDuration'}{$Agent});
 
@@ -840,7 +841,7 @@ sub do_queue {
 			my $cost = 0;
 			if ($c->{'CO_Billingtype'} eq 'T') { # time based i.e. per-minute
 				$cost = (($proj->{'CO_RoundedDuration'}{$Agent} + $proj->{'StandbyDuration'}{$Agent}) * $c->{'CO_Rate'})/60 +
-						($proj->{'CO_RoundedIPDuration'}{$Agent} * $c->{'CO_AgentIPRate'})/60;
+						(($proj->{'CO_RoundedIPDuration'}{$Agent} + $proj->{'StandbyIPDuration'}{$Agent}) * $c->{'CO_AgentIPRate'})/60;
 			} elsif ($c->{'CO_Billingtype'} eq 'F') { # fixed per answered call
 				$cost = $reprows{$Agent}{'RE_Answered'} * $c->{'CO_Rate'};
 			} elsif ($c->{'CO_Billingtype'} eq 'C') { # fixed per agent connect
@@ -858,18 +859,18 @@ sub do_queue {
 			if ($c->{'CO_ResNumber'} > 1) {
 				my $r = $resellers{$c->{'CO_ResNumber'}};
 				$cost = (($proj->{'RS_RoundedDuration'}{$Agent} + $proj->{'StandbyDuration'}{$Agent}) * $r->{'RS_Rate'})/60 +
-						($proj->{'RS_RoundedIPDuration'}{$Agent} * $r->{'RS_AgentIPRate'})/60;
+						(($proj->{'RS_RoundedIPDuration'}{$Agent} + $proj->{'StandbyIPDuration'}{$Agent}) * $r->{'RS_AgentIPRate'}) /60;
 				$r->{'Cost'} += $cost;
 				$reprows{$Agent}{'RE_Res_Tot_cost'} += $cost; # for this report line
 				flog('DEBUG',"Reseller " . $c->{'CO_ResNumber'} . " Billed Amount: $cost (using RS_Rate=" .
 					$r->{'RS_Rate'} . " and RS_AgentIPRate=" . $r->{'RS_AgentIPRate'} . ")");
 			}
 
-			$reprows{$Agent}{'RE_Res_Sec'} += $proj->{'RS_RoundedDuration'}{$Agent};
-			$reprows{$Agent}{'RE_Tot_Sec'} += $proj->{'CO_RoundedDuration'}{$Agent};
+			$reprows{$Agent}{'RE_Res_Sec'} += $proj->{'RS_RoundedDuration'}{$Agent} + $proj->{'RS_RoundedIPDuration'}{$Agent};
+			$reprows{$Agent}{'RE_Tot_Sec'} += $proj->{'CO_RoundedDuration'}{$Agent} + $proj->{'CO_RoundedIPDuration'}{$Agent};
 			$reprows{$Agent}{'RE_Tot_Live_Sec'} += $proj->{'CO_RoundedDuration'}{$Agent} - $proj->{'MachineDuration'}{$Agent};
 			$reprows{$Agent}{'RE_Tot_Mach_Sec'} += $proj->{'MachineDuration'}{$Agent};
-			$reprows{$Agent}{'RE_AS_Seconds'} += $proj->{'StandbyDuration'}{$Agent};
+			$reprows{$Agent}{'RE_AS_Seconds'} += $proj->{'StandbyDuration'}{$Agent} + $proj->{'StandbyIPDuration'}{$Agent};
 
 			# update the report
 			my $check = "RE_Agent:$Agent\nRE_Calls:" . $reprows{$Agent}{'RE_Calls'} . "\n"; # for testing
