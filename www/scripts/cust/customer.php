@@ -42,6 +42,9 @@ if ($_SESSION["L_Level"] >= 4) { ?>
 <table cellspacing=1>
 <tr><th class="basiclist-row">Balance</th><td class="basiclist-right"><? echo round($row['CO_Credit'],2) ?></td></tr>
 <tr><th class="basiclist-row">Authorized Agents</th><td class="basiclist-right"><? echo $row['CO_AuthorizedAgents'] ?></td></tr>
+<tr><th class="basiclist-row">Supervisor Spy Code</th><td class="basiclist-right"><? 
+echo 103 + ($CO_Number % 53) * $CO_Number ;
+?></td></tr>
 <tr><th class="basiclist-row">Time Zone</th><td class="basiclist"><? 
 	$TZlookup['0'] = 'Eastern';
 	$TZlookup['-1'] = 'Central';
