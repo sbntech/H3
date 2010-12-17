@@ -56,5 +56,10 @@ Registered as Hans Smit, SBN Peripherals Inc etc. used hans@sbndials.com
 /var/lib/asterisk/licenses/G729-713C1F6A.lic on w7
 
 
-
+--- Notes on the test environment
+emma -
+	/home/grant/H3 gets rsynced not git pulled. rsync -av 10.10.10.6:/home/grant/H3/ /home/grant/H3/
+	runs the asterisk carrier config but with bindport=8060 commented out in sip.conf. sed -i /home/grant/H3/asterisk/carrier-config/sip.conf -e 's/^bindport=/; &/'
+swift -
+	runs the b1-ap, b1-db and dialer/coldcaller stuff
 
