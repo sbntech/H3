@@ -1,10 +1,6 @@
 CURRENT:
 * remove CityVoice as a carrier
-* make CID a required value on a project
-	update project set PJ_Status = 'B' where PJ_Status = 'A' and (PJ_OrigPhoneNr is null or PJ_OrigPhoneNr = '');
-	alter table rescallerid drop column RC_DefaultFlag;
 * setup a server for AMD testing
-* ChanSpy changes
 monthly-ap.pl (monthly processing for seat charges etc)
 jannekesmit.com
 payment gateway
