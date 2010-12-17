@@ -8,6 +8,7 @@ DIALERTYPE=$1
 function stop_mysql {
 
 	echo "Stopping mysql ..."
+	rm /etc/cron.d/GLM-backup-mysql
 	#service mysql stop
 	killall mysqld
 	sleep 1
@@ -26,6 +27,8 @@ function stop_mysql {
 function start_mysql {
 
 	echo "Preparing mysql ..."
+	echo "removing mysql log files ..."
+	rm -r /var/log/mysql/*
 	echo "... Mounting tempfs on /var/lib/mysql"
 	mount -t tmpfs -o size=400M,mode=755,uid=mysql,gid=mysql mysql_tmpfs /var/lib/mysql
 	echo "... Copying database data"
@@ -36,13 +39,21 @@ function start_mysql {
 	mysqld_safe &
 
 	echo ".. showing outcome"
+	ps -ef | grep mysql
+	echo
 	df -h | grep mysql
+	echo
 	ls /var/lib/mysql
+
 	echo "= = = = = = mysql started"
+	echo "*/5 * * * * root rsync -aq /var/lib/mysql/ /root/mysql" > /etc/cron.d/GLM-backup-mysql
 }
 
 function stopall {
 	echo "Stopping..."
+
+	echo "dialer cronjobs..."
+	rm /etc/cron.d/GLM-dialer
 
 	echo "AsteriskColdCaller..."
 	killall AsteriskColdCaller.pl
@@ -158,6 +169,8 @@ case $1 in
 		# start the LoadLeads.pl
 		./LoadLeads.pl 5
 
+		echo -e "* * * * * root /home/grant/H3/convert/voiceprompts-rsync.sh"  > /etc/cron.d/GLM-dialer
+
 		if [ "$DIALERTYPE" = "astdialer" ]
 		then
 			echo "starting AsteriskDialer.pl"
@@ -169,7 +182,7 @@ case $1 in
 		then
 			echo "starting AsteriskColdCaller.pl"
 			/home/grant/H3/convert/AstRecordings.pl
-			/home/grant/H3/convert/AsteriskColdCaller.pl
+			/home/grant/H3/convert/AsteriskColdCaller.pl Z
 			/home/grant/H3/convert/AstAgentsGen.pl
 		elif [ "$DIALERTYPE" = "nulldialer" ]
 		then
@@ -185,10 +198,14 @@ case $1 in
 			done
 		fi
 
-		sleep 3
+		sleep 3 ; 
+		echo "number-herlper.pl"
 		./number-helper.pl
+		echo "allocator.pl"
 		./allocator.pl
+		echo "CallResultProcessing.pl"
 		./CallResultProcessing.pl
+		echo "FastAgiServer.pm"
 		./FastAgiServer.pm
 
 		;;

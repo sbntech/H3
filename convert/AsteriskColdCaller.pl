@@ -76,8 +76,8 @@ my $REALTIME_STATS_FOOTER = "<script>setTimeout('location.reload()',3000);</scri
 
 my $AgentCarrier = 'Z';
 my $Carrier = 'Z';
-my $ChannelTech = 'sip/roadrunner/0555';
-my $agent_chantech = 'sip/roadrunner/0555';
+my $ChannelTech = 'sip/tcarrier/0555';
+my $agent_chantech = 'sip/tcarrier/0555';
 
 if ($ARGV[0] eq 'B') {
 	$Carrier = 'B';
@@ -318,7 +318,7 @@ sub look_for_work {
 			$agents{$agdb->{'AG_Number'}} = {
 				'AG_Number' => $agdb->{'AG_Number'}, # back ref
 				'Status' => 'New',
-				'CallBackCID' => $aref->{'PJ_OrigPhoneNr'},
+				'CallBackCID' => $agdb->{'PJ_OrigPhoneNr'},
 				'UpdateFlag' => 1,
 				'Calls'			=> 0,
 				'CallDuration'	=> 0,
@@ -1304,7 +1304,7 @@ sub leave_ehandler {
 sub masquerade_ehandler {
 	my $event = shift;
 
-	# Masquerade, clone=SIP/roadrunner-00000001, clonestate=Up, original=Transfered/SIP/roadrunner-00000001, originalstate=Up, privilege=call,all, timestamp=1265064391.152650,
+	# Masquerade, clone=SIP/tcarrier-00000001, clonestate=Up, original=Transfered/SIP/tcarrier-00000001, originalstate=Up, privilege=call,all, timestamp=1265064391.152650,
 
 	my $clone = $event->{'clone'};
 
@@ -1322,9 +1322,9 @@ sub masquerade_ehandler {
 
 sub rename_ehandler {
 	my $event = shift;
-	#event ==> Rename, channel=SIP/roadrunner-00000001, newname=SIP/roadrunner-00000001<MASQ>, privilege=call,all, timestamp=1265064391.152665, uniqueid=1265064358.1, 
-	#event ==> Rename, channel=Transfered/SIP/roadrunner-00000001, newname=SIP/roadrunner-00000001, privilege=call,all, timestamp=1265064391.152674, uniqueid=1265064391.6,               	
-	#event ==> Rename, channel=SIP/roadrunner-00000001<MASQ>, newname=Transfered/SIP/roadrunner-00000001<ZOMBIE>, privilege=call,all, timestamp=1265064391.152825, uniqueid=1265064358.1, 
+	#event ==> Rename, channel=SIP/tcarrier-00000001, newname=SIP/tcarrier-00000001<MASQ>, privilege=call,all, timestamp=1265064391.152665, uniqueid=1265064358.1, 
+	#event ==> Rename, channel=Transfered/SIP/tcarrier-00000001, newname=SIP/tcarrier-00000001, privilege=call,all, timestamp=1265064391.152674, uniqueid=1265064391.6,               	
+	#event ==> Rename, channel=SIP/tcarrier-00000001<MASQ>, newname=Transfered/SIP/tcarrier-00000001<ZOMBIE>, privilege=call,all, timestamp=1265064391.152825, uniqueid=1265064358.1, 
 
 	if (defined($masquerades{$event->{'channel'}})) {
 		# step 1

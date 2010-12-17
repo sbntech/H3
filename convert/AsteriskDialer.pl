@@ -40,9 +40,9 @@ my $MAXPORTS = 500;
 my $outchan;
 my $CarrierName = 'UNKNOWN';
 if ($dialerId eq 'WTST') {
-	$CarrierID = 'F';
-	$outchan = 'sip/roadrunner/0555';
-	$CarrierName = 'Tester F';
+	$CarrierID = 'B';
+	$outchan = 'sip/tcarrier/0555';
+	$CarrierName = 'Tester B';
 	$worker0 = 'localhost'; 
 	$GRAPHDAT = "/dialer/www/fancy/asterisk.$dialerId.graph.dat";
 } elsif ($dialerId eq 'W130') {
@@ -166,6 +166,8 @@ sub graphing {
 				" ],\n";
 		close GRAPHDATA;
 		%graphstats = @nullgraphstats;
+	} else {
+		$log->error("Failed to open $GRAPHDAT for appending. $!");
 	}
 }
 
