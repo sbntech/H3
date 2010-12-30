@@ -88,7 +88,7 @@ sub redial_lives {
 
 	my $aff = $dbh->do('update projectnumbers_' . $data->{'PJ_Number'} . " set PN_Status = 'R',
 		PN_Seq = PN_Seq + floor(rand()*100000)
-		where PN_Status = 'X' and PN_DoNotCall != 'Y' and PN_Agent is null
+		where PN_Status = 'X' and PN_DoNotCall != 'Y' and (PN_Agent is null or PN_Agent = '9999')
 		and substr(PN_CallResult,1,1) = 'H' and PN_FileNumber = '$FileNumber'");
 
 	$aff = 0 unless $aff;
