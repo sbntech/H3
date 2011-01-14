@@ -49,6 +49,7 @@ if ($dialerId eq 'WTST') {
 	$CarrierID = 'B';
 	$outchan = 'sip/selway/1';
 	$CarrierName = 'SWAY B';
+	$MAXPORTS = 1480;
 } elsif ($dialerId eq 'W801') {
 	$CarrierID = 'B';
 	$outchan = 'sip/selway/1';
