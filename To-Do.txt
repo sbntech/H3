@@ -1,4 +1,7 @@
 CURRENT:
+* for HC 3 return BA code; never redial these
+* app_nv_faxdetect.c
+
 * remove CityVoice as a carrier
 * setup a server for AMD testing
 monthly-ap.pl (monthly processing for seat charges etc)

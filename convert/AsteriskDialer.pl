@@ -46,15 +46,15 @@ if ($dialerId eq 'WTST') {
 	$worker0 = 'localhost'; 
 	$GRAPHDAT = "/dialer/www/fancy/asterisk.$dialerId.graph.dat";
 } elsif ($dialerId eq 'W130') {
-	$CarrierID = 'A';
-	$outchan = 'sip/gcns/1';
-	$CarrierName = 'GCNS A';
+	$CarrierID = 'B';
+	$outchan = 'sip/selway/1';
+	$CarrierName = 'SWAY B';
 } elsif ($dialerId eq 'W801') {
 	$CarrierID = 'B';
 	$outchan = 'sip/selway/1';
 	$CarrierName = 'SWAY B';
-	$MAXPORTS = 1480;} 
-elsif ($dialerId eq 'W804') {
+	$MAXPORTS = 1480;
+} elsif ($dialerId eq 'W804') {
 	$CarrierID = 'C';
 	$outchan = 'sip/netd/1';
 	$CarrierName = 'NETD C';
