@@ -1,4 +1,4 @@
-<html>[% CustomFieldsMax = 20 %]
+<html>[% CustomFieldsMax = 60 %]
 <head>
 <title>Agent Online - [% PJ_Description %]</title>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
