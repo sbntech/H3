@@ -8,8 +8,11 @@ do
 	targetdir="/home/cust/project-$project"
 	mkdir -p $targetdir
 
+	echo "$recorddir ---> $targetdir"
+
 	for input in *.wav;
 	do
+		echo "processing $input"
 		pcmwav=$(basename "$input" .WAV).wav
 
 		# may be does not need .wav.mp3 - mp3 will be ok
