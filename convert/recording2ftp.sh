@@ -5,7 +5,7 @@ do
 	recorddir="/dialer/projects/_$project/recordings"
 	cd $recorddir
 
-	targetdir="/home/cust/project-$project"
+	targetdir="/home/cust1/project-$project"
 	mkdir -p $targetdir
 
 	echo "$recorddir ---> $targetdir"
