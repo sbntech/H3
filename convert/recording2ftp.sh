@@ -2,17 +2,14 @@
 
 for project in 239 
 do
-	recorddir="/dialer/projects/_$project/recordings"
-	cd $recorddir
-
 	targetdir="/home/cust1/project-$project"
 	mkdir -p $targetdir
 
-	echo "$recorddir ---> $targetdir"
+	recorddir="/dialer/projects/_$project/recordings"
+	cd $recorddir
 
-	for input in *.wav;
+	for input in *.wav
 	do
-		echo "processing $input"
 		pcmwav=$(basename "$input" .WAV).wav
 
 		# may be does not need .wav.mp3 - mp3 will be ok
