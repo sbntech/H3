@@ -20,7 +20,6 @@ do
 		rm $input
 		rm $pcmwav
 
-		# TODO change this to mv
-		cp $mp3 $targetdir
+		install --group=cust1 --owner=cust1 --mode=0660 --target-directory=$targetdir $mp3
 	done
 done
