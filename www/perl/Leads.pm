@@ -181,7 +181,7 @@ sub download {
 		from `projectnumbers_" .
 		$data->{'PJ_Number'} . "` where PN_FileNumber = '" .
 		$data->{'filenumber'} . "' into outfile '$dumpf'
-		fields escaped by '' terminated by ',' optionally enclosed by '' lines terminated by '\\n'");
+		fields escaped by '' terminated by ',' optionally enclosed by '\"' lines terminated by '\\n'");
 	DialerUtils::move_from_db($dumpf, $target);
 
 	system("cat $tmp $target > /tmp/$fn.csv");
