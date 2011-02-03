@@ -150,6 +150,7 @@ CREATE TABLE customer (
   CO_AuthorizedAgents int(11) not null default '0',
   CO_ResNumber tinyint(11) unsigned default '1',
   CO_Callerid text,
+  CO_IntegrationData text,
   PRIMARY KEY  (CO_Number),
   KEY CO_Name (CO_Name)
 ) ENGINE=MyISAM;
@@ -185,6 +186,7 @@ CREATE TABLE project (
   PJ_DisposDescrip text,  
   PJ_Support char(1) not null default 'C',
   PJ_CallScript text,
+  PJ_IntegrationType char(1) not null default 'N',
   PRIMARY KEY  (PJ_Number),
   KEY status (PJ_Status),
   KEY customer (PJ_CustNumber,PJ_DateStart,PJ_DateStop)

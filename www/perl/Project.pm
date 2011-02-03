@@ -48,7 +48,8 @@ sub make_sql {
 			'PJ_Weekend',
 			'PJ_User',
 			'PJ_Record',
-			'PJ_OrigPhoneNr');
+			'PJ_OrigPhoneNr',
+			'PJ_IntegrationType');
 
 	$valid = 0 if required($data,'PJ_Description') == 0;
 
@@ -88,6 +89,12 @@ sub make_sql {
 	# PJ_Status
 	if (! DialerUtils::valid_values_str($data->{'PJ_Status'}, 'A', 'B')) {
 		$data->{'PJ_Status_ERROR'} = 'Not a valid value';
+		$valid = 0;
+	}
+
+	# PJ_IntegrationType
+	if (! DialerUtils::valid_values_str($data->{'PJ_IntegrationType'}, 'N', 'K')) {
+		$data->{'PJ_IntegrationType_ERROR'} = 'Not a valid value';
 		$valid = 0;
 	}
 
@@ -519,6 +526,7 @@ sub handler {
 			}
 			$data->{'PJ_OrigPhoneNr'} = "";
 			$data->{'PJ_LastCall'} = "";
+			$data->{'PJ_IntegrationType'} = "N";
 
 			$data->{'X_Disposition0'} = 'None';
 			$data->{'X_Disposition1'} = 'Not Interested';

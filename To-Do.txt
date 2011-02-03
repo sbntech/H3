@@ -1,4 +1,7 @@
 CURRENT:
+* kazeli code on customer, crm integration flag on project.
+	alter table project add column PJ_IntegrationType char(1) not null default 'N';
+	alter table customer add CO_IntegrationData text;
 * for HC 3 return BA code; never redial these
 * app_nv_faxdetect.c
 

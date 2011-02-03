@@ -35,7 +35,7 @@ sub make_sql {
 		'CO_RoundBy', 'CO_Min_Duration', 'CO_Priority', 
 		'CO_Timezone', 'CO_Maxlines', 'CO_Checknodial', 
 		'CO_Contact', 'CO_ManagedBy', 'CO_EnableMobile', 'CO_Billingtype', 
-		'CO_OnlyColdCall');
+		'CO_OnlyColdCall', 'CO_IntegrationData');
 
 	# cleanse first
 	for my $f (@cols) {

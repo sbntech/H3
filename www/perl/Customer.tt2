@@ -78,6 +78,10 @@
 <input type="hidden" name="CO_OnlyColdCall" value="[% CO_OnlyColdCall %]"></input>
 [% END %]
 	<tr>
+		<td class="editFormLabel">Integration Data</td>
+		<td class="editFormInput"  style="vertical-align:top"><textarea rows="3" cols="65" name="CO_IntegrationData" id="CO_IntegrationData">[% CO_IntegrationData %]</textarea>[% IF CO_IntegrationData_ERROR %]<div class="editFormError">[% CO_IntegrationData_ERROR %]</div>[% END %]</td>
+	</tr>
+	<tr>
 		<td class="editFormLabel">Time Zone</td>
 		<td class="editFormInput"><select name="CO_Timezone">
 		<option value="0" [% IF CO_Timezone == 0 %]selected="true"[% END %]>Eastern</option>

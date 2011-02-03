@@ -205,6 +205,13 @@
 	</td>
 </tr>
 <tr>
+	<td style="vertical-align:top" class="editFormLabel">Use CRM Integration</td>
+	<td class="editFormInput"><select id="PJ_IntegrationType" name="PJ_IntegrationType" onchange="arrangeFields(this)">
+	<option value="N" [% IF PJ_IntegrationType == 'N' %]selected="true"[% END %]>None - Do not integrate</option>
+	<option value="K" [% IF PJ_IntegrationType == 'K' %]selected="true"[% END %]>Kazeli CRM</option>
+	</select>[% IF PJ_IntegrationType_ERROR %]<div class="editFormError">[% PJ_IntegrationType_ERROR %]</div>[% END %]</td>
+</tr>
+<tr>
 	<td style="vertical-align:top" class="editFormLabel">Call Script</td>
 	<td class="editFormInput"><textarea rows="5" cols="65" name="PJ_CallScript" id="PJ_CallScript">[% PJ_CallScript %]</textarea>
 	</td>
