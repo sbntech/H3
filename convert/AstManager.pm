@@ -803,19 +803,19 @@ sub determine_callresult {
 			my $HangupCause = $chan->{'Variables'}{'HangupCause'}{'Value'};
 			if ($HangupCause == 0) { 
 				if ($OriginateReason == 8) { 
-					$disposition = 'CB';
+					$disposition = 'BA';
 				} else {
 					$disposition = 'NA';
 				}
 			} elsif ($HangupCause == 1) { # Unallocated (unassigned) number
 				if ($OriginateReason == 8) { #Congested / unavailable
-					$disposition = 'CB';
+					$disposition = 'BA';
 				} else {
 					$disposition = 'BA';
 				}
 			} elsif ($HangupCause == 3) { # No route to destination
 				if ($OriginateReason == 8) { #Congested / unavailable
-					$disposition = 'CB';
+					$disposition = 'BA';
 				} else {
 					$disposition = 'BA';
 				}
