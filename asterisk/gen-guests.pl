@@ -43,7 +43,8 @@ for my $row (@$res) {
 		$curSpyGroup = derive_SPYGROUP($curCust);
 
 		print GEXT <<EndSpyExt
-exten => $curSpyGroup,1,ChanSpy(SIP,qwg($curSpyGroup))
+exten => $curSpyGroup,1,Set(SPYGROUP=$curSpyGroup)
+exten => $curSpyGroup,n,ChanSpy(SIP,qwg($curSpyGroup))
 
 EndSpyExt
 ;
